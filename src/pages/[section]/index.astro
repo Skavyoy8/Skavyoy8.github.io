@@ -5,7 +5,8 @@ import { TOUTES, parId, NIVEAUX } from '../../lib/sections.js';
 import { pagesDe } from '../../lib/navigation.js';
 
 export async function getStaticPaths() {
-  return TOUTES.map((section) => ({ params: { section: section.id } }));
+  // Le glossaire a sa propre page d'index, alphabétique : src/pages/glossaire/index.astro
+  return TOUTES.filter((s) => s.id !== 'glossaire').map((section) => ({ params: { section: section.id } }));
 }
 
 const { section: id } = Astro.params;

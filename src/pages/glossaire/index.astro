@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import { pagesDe } from '../../lib/navigation.js';
+import { GLOSSAIRE } from '../../lib/sections.js';
+
+const termes = (await pagesDe('glossaire')).sort((a, b) =>
+  a.data.titre.localeCompare(b.data.titre, 'fr', { sensitivity: 'base' })
+);
+
+// Regroupement par initiale, accents ignorés : « Énergie » va sous E.
+const initiale = (t) =>
+  t.normalize('NFD').replace(/[̀-ͯ]/g, '')[0].toUpperCase();
+
+const groupes = new Map();
+for (const t of termes) {
+  const lettre = initiale(t.data.titre);
+  if (!groupes.has(lettre)) groupes.set(lettre, []);
+  groupes.get(lettre).push(t);
+}
+const lettres = [...groupes.keys()].sort();
+---
+<Base titre={GLOSSAIRE.titre} description={GLOSSAIRE.resume}>
+  <article class="article">
+    <nav class="ariane" aria-label="Fil d'Ariane">
+      <a href="/">Registre</a>
+      <span class="ariane__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Glossaire</span>
+    </nav>
+
+    <h1 class="page-titre">Glossaire</h1>
+    <p class="page-resume">
+      {termes.length} termes définis en deux phrases. Dans les pages du wiki, la
+      première occurrence de chacun est liée à sa définition, avec le texte au survol.
+    </p>
+
+    <nav class="alphabet" aria-label="Aller à une lettre">
+      {lettres.map((l) => <a href={`#lettre-${l}`}>{l}</a>)}
+    </nav>
+
+    <div class="contenu" data-pagefind-body>
+      {lettres.map((lettre) => (
+        <section>
+          <h2 id={`lettre-${lettre}`}>{lettre}</h2>
+          <dl class="glossaire">
+            {groupes.get(lettre).map((t) => (
+              <>
+                <dt id={t.id}>
+                  {t.data.voir ? <a href={t.data.voir}>{t.data.titre}</a> : t.data.titre}
+                </dt>
+                <dd>{t.data.resume}</dd>
+              </>
+            ))}
+          </dl>
+        </section>
+      ))}
+    </div>
+  </article>
+</Base>

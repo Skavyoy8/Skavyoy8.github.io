@@ -413,3 +413,57 @@ h2:hover .ancre, h3:hover .ancre, .ancre:focus { opacity: 1; }
 }
 
 .discret { font-size: var(--taille-petit); color: var(--texte-faible); }
+
+/* ── Termes du glossaire ──────────────────────────────────────
+   Discret : un pointillé, pas un lien bleu. Le but est de pouvoir
+   cliquer si on bloque, pas de hacher le texte de couleurs. */
+.contenu a.terme {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--texte-faible);
+  cursor: help;
+}
+.contenu a.terme:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── Glossaire ────────────────────────────────────────────── */
+
+.alphabet {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pas-2);
+  margin: var(--pas-6) 0;
+  padding-bottom: var(--pas-4);
+  border-bottom: 1px solid var(--bordure);
+}
+.alphabet a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.9rem;
+  height: 1.9rem;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  font-family: var(--police-mono);
+  font-size: var(--taille-petit);
+  color: var(--texte-doux);
+  text-decoration: none;
+}
+.alphabet a:hover { border-color: var(--accent); color: var(--accent); }
+
+dl.glossaire { margin: var(--pas-4) 0; }
+dl.glossaire dt {
+  font-weight: 600;
+  color: var(--texte-fort);
+  margin-top: var(--pas-4);
+  scroll-margin-top: calc(var(--entete-hauteur) + 1rem);
+}
+dl.glossaire dt a { text-decoration: none; }
+dl.glossaire dt a:hover { text-decoration: underline; }
+dl.glossaire dd {
+  margin: 0.15rem 0 0;
+  color: var(--texte-doux);
+  font-size: 0.9375rem;
+}

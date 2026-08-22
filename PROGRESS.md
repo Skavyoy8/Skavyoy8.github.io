@@ -187,14 +187,22 @@ BTC *(rédigé)* · ETH · USDT · USDC · BNB · SOL · XRP · ADA · DOGE · T
 
 | Élément | Statut |
 |---|---|
-| 250 termes | 0/250 |
-| Liaison automatique des termes (1re occurrence) | à faire |
+| Termes définis | 72/250 |
+| Liaison automatique des termes (1re occurrence) | ✅ fait |
+| Page d'index alphabétique du glossaire | ✅ fait |
 | Vérification des liens internes et des sources | à faire |
 | Relecture croisée | à faire |
 
 ---
 
 ## Journal des décisions techniques
+
+### 2026-08-22 — Glossaire (avance sur la Phase 9)
+
+- **Liaison automatique bridée à trois niveaux**, sinon la fonction devient nuisible : première occurrence seulement, uniquement les termes déclarés dans le `termes:` de la page, et jamais dans un titre, un bloc de code ou un lien existant.
+- **Infobulle par l'attribut `title` natif**, donc zéro JavaScript.
+- **Détection tolérante** à la casse et aux deux apostrophes (`'` et `’`), avec frontières de mot obligatoires : « gas » ne se lie pas dans « gaspillage ».
+- Le plugin remark ne peut pas lire les collections Astro (il tourne pendant le rendu) : `scripts/glossaire.mjs` génère un index JSON au `prebuild`.
 
 ### 2026-08-22 — Phase 1
 

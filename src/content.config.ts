@@ -40,7 +40,13 @@ const fiche = base.extend({
 
 /** Un terme de glossaire : définition courte + page qui développe. */
 const terme = base.extend({
+  /** Page qui développe le terme, par exemple "/marches/spread". */
   voir: z.string().default(''),
+  /**
+   * Formes de surface à détecter dans le texte des pages, en plus du titre.
+   * « carnet d'ordres » et « carnet d'ordre » désignent la même entrée.
+   */
+  formes: z.array(z.string()).default([]),
 });
 
 /** Fabrique une collection pointant vers content/<dossier>. */

@@ -10,7 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "prebuild": "node scripts/dates-git.mjs",
+    "prebuild": "node scripts/dates-git.mjs && node scripts/glossaire.mjs",
     "postbuild": "pagefind --site dist",
     "liens": "node scripts/liens.mjs"
   },

@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import { unified, rehypeHeadingIds } from '@astrojs/markdown-remark';
 import remarkEncadres from './src/plugins/remark-encadres.mjs';
+import remarkGlossaire from './src/plugins/remark-glossaire.mjs';
 import rehypeContenu from './src/plugins/rehype-contenu.mjs';
 
 // https://astro.build/config
@@ -15,7 +16,7 @@ export default defineConfig({
     // Astro 7 a déprécié markdown.remarkPlugins / rehypePlugins : les plugins
     // se déclarent maintenant sur le processeur lui-même.
     processor: unified({
-      remarkPlugins: [remarkEncadres],
+      remarkPlugins: [remarkEncadres, remarkGlossaire],
       // rehypeHeadingIds d'abord : Astro ne pose les id de titres qu'APRÈS
       // les plugins utilisateur, or rehypeContenu en a besoin pour les ancres.
       // Astro le relancera ensuite et respectera les id déjà présents.
