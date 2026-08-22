@@ -1,0 +1,103 @@
+---
+import '@fontsource-variable/ibm-plex-sans';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/contenu.css';
+
+import Sidebar from '../components/Sidebar.astro';
+import Recherche from '../components/Recherche.astro';
+import BasculeTheme from '../components/BasculeTheme.astro';
+
+interface Props {
+  titre: string;
+  description?: string;
+}
+const { titre, description = '' } = Astro.props;
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>{titre} — Registre</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Avant le premier rendu, sinon le thème clair clignote en sombre. -->
+    <script is:inline>
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
+  </head>
+
+  <body>
+    <a class="saut-contenu" href="#contenu">Aller au contenu</a>
+
+    <header class="entete">
+      <button class="bouton-icone bouton-menu" id="bouton-menu" type="button"
+              aria-label="Ouvrir la navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+
+      <a class="entete__marque" href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <rect x="3" y="4" width="8" height="7" rx="1.5" />
+          <rect x="13" y="4" width="8" height="7" rx="1.5" />
+          <rect x="3" y="13" width="8" height="7" rx="1.5" />
+          <rect x="13" y="13" width="8" height="7" rx="1.5" />
+        </svg>
+        Registre
+      </a>
+
+      <span class="entete__espace"></span>
+      <Recherche />
+      <BasculeTheme />
+    </header>
+
+    <div class="coquille">
+      <Sidebar />
+      <main class="principal" id="contenu">
+        <slot />
+      </main>
+      <slot name="sommaire" />
+    </div>
+
+    <footer class="pied">
+      <p>
+        Wiki personnel, écrit pour comprendre le fonctionnement technique de la crypto.
+        Aucun conseil d'investissement. Données de marché : API publique
+        <a href="https://www.okx.com/docs-v5/" rel="noopener noreferrer" target="_blank">OKX v5</a>.
+      </p>
+    </footer>
+
+    <!-- Hydrate tous les blocs <div data-okx-prix="…">, qu'ils viennent
+         du composant PrixLive ou d'un fichier Markdown du vault. -->
+    <script>
+      import '../lib/prix-live.js';
+    </script>
+
+    <script>
+      // Navigation mobile.
+      const bouton = document.getElementById('bouton-menu');
+      const sidebar = document.getElementById('sidebar');
+      bouton?.addEventListener('click', () => {
+        const ouvert = sidebar?.dataset.ouvert === 'true';
+        if (sidebar) sidebar.dataset.ouvert = String(!ouvert);
+        bouton.setAttribute('aria-expanded', String(!ouvert));
+      });
+      // Un lien cliqué referme le tiroir.
+      sidebar?.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('a') && window.innerWidth < 768) {
+          sidebar.dataset.ouvert = 'false';
+          bouton?.setAttribute('aria-expanded', 'false');
+        }
+      });
+    </script>
+  </body>
+</html>

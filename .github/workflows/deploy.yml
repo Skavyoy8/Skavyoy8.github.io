@@ -1,0 +1,62 @@
+# Déploiement du wiki sur GitHub Pages.
+#
+# À faire une fois, côté GitHub : Settings → Pages → Source = « GitHub Actions ».
+# Le dépôt doit s'appeler <pseudo>.github.io pour que le site soit servi à la
+# racine du domaine (sinon les liens markdown /chemin cassent).
+#
+# Versions des actions vérifiées le 2026-08-22.
+
+name: Déploiement
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Une seule mise en ligne à la fois, sans annuler celle en cours.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Historique complet : scripts/dates-git.mjs date chaque page à
+          # partir du dernier commit qui l'a touchée. Sans ça, toutes les
+          # pages seraient datées du jour du build.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # npm enchaîne automatiquement prebuild (dates git) puis build (Astro)
+      # puis postbuild (indexation Pagefind).
+      - run: npm run build
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v5

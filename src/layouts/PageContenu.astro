@@ -1,0 +1,55 @@
+---
+import Base from './Base.astro';
+import Ariane from '../components/Ariane.astro';
+import Sommaire from '../components/Sommaire.astro';
+import MetaPage from '../components/MetaPage.astro';
+import Sources from '../components/Sources.astro';
+
+interface Props {
+  section: { id: string; titre: string };
+  donnees: any;
+  headings: { depth: number; slug: string; text: string }[];
+  maj?: Date;
+  titresPrerequis: Record<string, string>;
+  voisines: { precedente: any; suivante: any };
+}
+const { section, donnees, headings, maj, titresPrerequis, voisines } = Astro.props;
+---
+<Base titre={donnees.titre} description={donnees.resume}>
+  <article class="article">
+    <Ariane section={section} titre={donnees.titre} />
+
+    <h1 class="page-titre">{donnees.titre}</h1>
+    {donnees.resume && <p class="page-resume">{donnees.resume}</p>}
+
+    <MetaPage
+      niveau={donnees.niveau}
+      prerequis={donnees.prerequis}
+      maj={maj}
+      titresPrerequis={titresPrerequis}
+    />
+
+    <div class="contenu" data-pagefind-body>
+      <slot />
+    </div>
+
+    <Sources sources={donnees.sources} />
+
+    {(voisines.precedente || voisines.suivante) && (
+      <nav class="suite" aria-label="Pages voisines">
+        {voisines.precedente && (
+          <a href={voisines.precedente.url}>
+            <span class="suite__cle">Précédent</span>{voisines.precedente.titre}
+          </a>
+        )}
+        {voisines.suivante && (
+          <a href={voisines.suivante.url} style={!voisines.precedente ? 'grid-column: 2' : undefined}>
+            <span class="suite__cle">Suivant</span>{voisines.suivante.titre}
+          </a>
+        )}
+      </nav>
+    )}
+  </article>
+
+  <Sommaire slot="sommaire" headings={headings} />
+</Base>

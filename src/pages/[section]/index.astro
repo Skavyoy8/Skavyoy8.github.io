@@ -1,0 +1,46 @@
+---
+
+import Base from '../../layouts/Base.astro';
+import { TOUTES, parId, NIVEAUX } from '../../lib/sections.js';
+import { pagesDe } from '../../lib/navigation.js';
+
+export async function getStaticPaths() {
+  return TOUTES.map((section) => ({ params: { section: section.id } }));
+}
+
+const { section: id } = Astro.params;
+const section = parId[id];
+
+const pages = (await pagesDe(id)).sort(
+  (a, b) => (a.data.ordre ?? 999) - (b.data.ordre ?? 999) ||
+            a.data.titre.localeCompare(b.data.titre, 'fr')
+);
+---
+<Base titre={section.titre} description={section.resume}>
+  <article class="article">
+    <nav class="ariane" aria-label="Fil d'Ariane">
+      <a href="/">Registre</a>
+      <span class="ariane__sep" aria-hidden="true">/</span>
+      <span aria-current="page">{section.titre}</span>
+    </nav>
+
+    <h1 class="page-titre">{section.titre}</h1>
+    <p class="page-resume">{section.resume}</p>
+
+    <div class="contenu">
+      {pages.length === 0 ? (
+        <p>Cette section n'est pas encore écrite. Voir <a href="https://github.com">PROGRESS.md</a> pour le plan.</p>
+      ) : (
+        <ul class="liste-pages">
+          {pages.map((p) => (
+            <li>
+              <a href={`/${id}/${p.id}`}>{p.data.titre}</a>
+              <span class={`niveau niveau--${p.data.niveau}`}>{NIVEAUX[p.data.niveau]}</span>
+              {p.data.resume && <span class="liste-pages__resume">{p.data.resume}</span>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </article>
+</Base>

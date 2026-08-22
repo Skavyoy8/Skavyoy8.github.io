@@ -254,3 +254,57 @@ input, button, select { font: inherit; color: inherit; }
   .coquille { display: block; }
   body { background: #fff; color: #000; }
 }
+
+/* ── Boîte de recherche ───────────────────────────────────── */
+
+.recherche {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+}
+.recherche::backdrop { background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(2px); }
+
+.recherche__boite {
+  width: min(42rem, 100%);
+  margin: 0 auto;
+  margin-top: 8vh;
+  padding: var(--pas-4);
+  background: var(--fond-2);
+  border: 1px solid var(--bordure-forte);
+  border-radius: var(--rayon-l);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+}
+.recherche__aide {
+  margin-top: var(--pas-3);
+  font-size: 0.72rem;
+  color: var(--texte-faible);
+}
+.recherche__erreur { font-size: var(--taille-petit); color: var(--attention); }
+
+kbd {
+  font-family: var(--police-mono);
+  font-size: 0.9em;
+  padding: 0.05em 0.35em;
+  border: 1px solid var(--bordure-forte);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  background: var(--fond-creux);
+  color: var(--texte-doux);
+}
+
+/* Pagefind expose ses propres variables : on les branche sur les nôtres. */
+#recherche-ui {
+  --pagefind-ui-primary: var(--accent);
+  --pagefind-ui-text: var(--texte);
+  --pagefind-ui-background: var(--fond-2);
+  --pagefind-ui-border: var(--bordure);
+  --pagefind-ui-tag: var(--fond-creux);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: var(--rayon);
+  --pagefind-ui-font: var(--police-corps);
+}
+
+.sidebar__vide { font-size: var(--taille-menu); color: var(--texte-faible); font-style: italic; padding-left: 0; }

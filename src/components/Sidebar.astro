@@ -1,0 +1,32 @@
+---
+import { arbreNavigation } from '../lib/navigation.js';
+import { GLOSSAIRE } from '../lib/sections.js';
+
+const sections = await arbreNavigation();
+const actuel = Astro.url.pathname.replace(/\/$/, '');
+---
+<nav class="sidebar" id="sidebar" aria-label="Sommaire du site" data-ouvert="false">
+  {sections.map((section) => (
+    <div class="sidebar__section">
+      <p class="sidebar__titre">{section.titre}</p>
+      <ul>
+        {section.pages.length === 0 && (
+          <li><span class="sidebar__vide">à écrire</span></li>
+        )}
+        {section.pages.map((page) => (
+          <li>
+            <a href={page.url} aria-current={actuel === page.url ? 'page' : undefined}>
+              {page.titre}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+  <div class="sidebar__section">
+    <p class="sidebar__titre">Annexes</p>
+    <ul>
+      <li><a href={`/${GLOSSAIRE.id}`} aria-current={actuel === `/${GLOSSAIRE.id}` ? 'page' : undefined}>{GLOSSAIRE.titre}</a></li>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,29 @@
+---
+import { NIVEAUX } from '../lib/sections.js';
+
+interface Props {
+  niveau: 'bases' | 'intermediaire' | 'avance';
+  prerequis: string[];
+  maj?: Date;
+  titresPrerequis: Record<string, string>;
+}
+const { niveau, prerequis, maj, titresPrerequis } = Astro.props;
+
+const dateLisible = maj
+  ? maj.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+  : null;
+---
+<div class="meta-page">
+  <span class={`niveau niveau--${niveau}`}>{NIVEAUX[niveau]}</span>
+
+  {prerequis.length > 0 && (
+    <span class="prerequis">
+      <span class="prerequis__label">À lire avant :</span>
+      {prerequis.map((url) => (
+        <a href={url}>{titresPrerequis[url] ?? url}</a>
+      ))}
+    </span>
+  )}
+
+  {dateLisible && <span class="maj">mis à jour le {dateLisible}</span>}
+</div>

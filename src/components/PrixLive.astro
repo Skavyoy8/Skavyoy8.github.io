@@ -1,0 +1,30 @@
+---
+/**
+ * Bloc de données de marché. Aucune valeur n'est écrite en dur : tout
+ * vient de l'API publique OKX, côté client (SPEC §8).
+ *
+ * Équivalent Markdown, utilisable directement dans Obsidian :
+ *     <div data-okx-prix="BTC-USDT"></div>
+ */
+interface Props {
+  instId: string;
+}
+const { instId } = Astro.props;
+---
+<div class="live" data-okx-prix={instId} data-etat="charge">
+  <div class="live__entete">
+    <span class="live__paire">{instId}</span>
+    <span class="live__prix">—</span>
+    <span class="live__var"></span>
+  </div>
+  <div class="live__grille">
+    <div class="live__cellule"><span class="live__cle">Haut 24 h</span><span class="live__valeur" data-champ="high24h">—</span></div>
+    <div class="live__cellule"><span class="live__cle">Bas 24 h</span><span class="live__valeur" data-champ="low24h">—</span></div>
+    <div class="live__cellule"><span class="live__cle">Volume 24 h</span><span class="live__valeur" data-champ="vol24h">—</span></div>
+    <div class="live__cellule"><span class="live__cle">Ouverture 24 h</span><span class="live__valeur" data-champ="open24h">—</span></div>
+  </div>
+  <div class="live__pied">
+    <span>API publique OKX</span>
+    <span class="live__ts">chargement…</span>
+  </div>
+</div>

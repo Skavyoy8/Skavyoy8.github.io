@@ -351,3 +351,65 @@ h2:hover .ancre, h3:hover .ancre, .ancre:focus { opacity: 1; }
    de titres d'Astro ramasse le texte des descendants et le ferait
    apparaître dans les libellés du sommaire. */
 .ancre::after { content: "#"; }
+
+/* Sans JavaScript, un bloc écrit en Markdown resterait un div vide. */
+[data-okx-prix]:empty {
+  display: block;
+  padding: var(--pas-3) var(--pas-4);
+  border: 1px dashed var(--bordure-forte);
+  border-radius: var(--rayon-l);
+  color: var(--texte-faible);
+  font-size: var(--taille-petit);
+}
+[data-okx-prix]:empty::before {
+  content: "Les données de marché nécessitent JavaScript.";
+}
+
+/* ── Listes de pages (index de section) ───────────────────── */
+
+.liste-pages { list-style: none; padding: 0; }
+.liste-pages li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--pas-2) var(--pas-3);
+  padding: var(--pas-3) 0;
+  border-bottom: 1px solid var(--bordure);
+  margin: 0;
+}
+.liste-pages a { font-weight: 500; text-decoration: none; }
+.liste-pages a:hover { text-decoration: underline; }
+.liste-pages__resume { flex-basis: 100%; font-size: var(--taille-petit); color: var(--texte-faible); }
+
+/* ── Grille d'accueil ─────────────────────────────────────── */
+
+.grille-sections {
+  list-style: none;
+  padding: 0;
+  margin: var(--pas-8) 0;
+  display: grid;
+  gap: var(--pas-3);
+}
+@media (min-width: 640px) { .grille-sections { grid-template-columns: 1fr 1fr; } }
+
+.grille-sections a {
+  display: block;
+  height: 100%;
+  padding: var(--pas-4);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-l);
+  text-decoration: none;
+  background: var(--fond-alt);
+}
+.grille-sections a:hover { border-color: var(--accent); }
+.grille-sections__titre { display: block; font-weight: 600; color: var(--texte-fort); }
+.grille-sections__resume { display: block; font-size: var(--taille-petit); color: var(--texte-doux); margin-top: 0.2rem; }
+.grille-sections__compte {
+  display: block;
+  margin-top: var(--pas-2);
+  font-family: var(--police-mono);
+  font-size: 0.72rem;
+  color: var(--texte-faible);
+}
+
+.discret { font-size: var(--taille-petit); color: var(--texte-faible); }

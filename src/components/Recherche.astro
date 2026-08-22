@@ -1,0 +1,105 @@
+---
+/**
+ * Recherche Pagefind : index statique construit après le build,
+ * aucun backend. L'interface n'est chargée qu'à la première ouverture.
+ *
+ * En `astro dev` l'index n'existe pas encore : il faut avoir lancé
+ * `npm run build` au moins une fois.
+ */
+---
+<button class="bouton-icone" id="ouvrir-recherche" type="button"
+        aria-label="Rechercher (touche /)">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+       stroke-linecap="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" />
+  </svg>
+</button>
+
+<dialog id="dialogue-recherche" class="recherche" aria-label="Rechercher dans le wiki">
+  <div class="recherche__boite">
+    <div id="recherche-ui"></div>
+    <p class="recherche__aide">
+      <kbd>Échap</kbd> pour fermer · <kbd>/</kbd> ou <kbd>Ctrl</kbd>+<kbd>K</kbd> pour ouvrir
+    </p>
+  </div>
+</dialog>
+
+<script>
+  const dialogue = document.getElementById('dialogue-recherche') as HTMLDialogElement | null;
+  const bouton = document.getElementById('ouvrir-recherche');
+  let charge = false;
+
+  /**
+   * pagefind-ui.js n'est PAS un module ES : c'est un script classique qui
+   * pose window.PagefindUI. Un import() dynamique échoue silencieusement.
+   */
+  function chargerScript(src: string) {
+    return new Promise<void>((ok, ko) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = () => ok();
+      s.onerror = () => ko(new Error(`script introuvable : ${src}`));
+      document.head.append(s);
+    });
+  }
+
+  async function chargerInterface() {
+    if (charge || !dialogue) return;
+    charge = true;
+
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = '/pagefind/pagefind-ui.css';
+    document.head.append(css);
+
+    try {
+      await chargerScript('/pagefind/pagefind-ui.js');
+      const PagefindUI = (window as any).PagefindUI;
+      if (!PagefindUI) throw new Error('PagefindUI absent');
+
+      new PagefindUI({
+        element: '#recherche-ui',
+        showSubResults: true,
+        showImages: false,
+        translations: {
+          placeholder: 'Rechercher dans le wiki',
+          clear_search: 'Effacer',
+          load_more: 'Voir plus de résultats',
+          search_label: 'Rechercher',
+          zero_results: 'Aucun résultat pour [SEARCH_TERM]',
+          many_results: '[COUNT] résultats pour [SEARCH_TERM]',
+          one_result: '1 résultat pour [SEARCH_TERM]',
+          searching: 'Recherche de [SEARCH_TERM]…',
+        },
+      });
+    } catch {
+      document.getElementById('recherche-ui')!.innerHTML =
+        "<p class=\"recherche__erreur\">Index de recherche absent. La recherche n'existe qu'après un <code>npm run build</code> ; elle ne fonctionne pas en <code>astro dev</code>.</p>";
+    }
+  }
+
+  function ouvrir() {
+    if (!dialogue) return;
+    chargerInterface();
+    dialogue.showModal();
+    setTimeout(() => dialogue.querySelector('input')?.focus(), 60);
+  }
+
+  bouton?.addEventListener('click', ouvrir);
+
+  document.addEventListener('keydown', (e) => {
+    const cible = e.target as HTMLElement;
+    const saisie = /^(INPUT|TEXTAREA)$/.test(cible?.tagName) || cible?.isContentEditable;
+    if (saisie) return;
+
+    if (e.key === '/' || (e.key.toLowerCase() === 'k' && (e.ctrlKey || e.metaKey))) {
+      e.preventDefault();
+      ouvrir();
+    }
+  });
+
+  // Clic en dehors de la boîte : on ferme.
+  dialogue?.addEventListener('click', (e) => {
+    if (e.target === dialogue) dialogue.close();
+  });
+</script>

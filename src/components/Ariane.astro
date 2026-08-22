@@ -1,0 +1,14 @@
+---
+interface Props {
+  section: { id: string; titre: string };
+  titre: string;
+}
+const { section, titre } = Astro.props;
+---
+<nav class="ariane" aria-label="Fil d'Ariane">
+  <a href="/">Registre</a>
+  <span class="ariane__sep" aria-hidden="true">/</span>
+  <a href={`/${section.id}`}>{section.titre}</a>
+  <span class="ariane__sep" aria-hidden="true">/</span>
+  <span aria-current="page">{titre}</span>
+</nav>

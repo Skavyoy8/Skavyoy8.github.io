@@ -16,17 +16,18 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | Node 22 (nvm) | ✅ fait — v22.23.2 |
 | Projet Astro 7.2.4 initialisé | ✅ fait |
 | Vault Obsidian `content/` + config liens markdown | ✅ fait |
-| Vérification de l'API Astro 7 (collections, remark, rendu) | en cours |
-| Schémas Zod des collections | à faire |
-| Design system (tokens, typo, thème sombre/clair) | à faire |
-| Layouts + navigation + sommaire + fil d'Ariane | à faire |
-| Les 4 callouts (`INFO`, `CIEL`, `PIÈGE`, `À VÉRIFIER`) | à faire |
-| Composant de données live OKX | à faire |
-| Recherche Pagefind (`/` et `Ctrl+K`) | à faire |
-| Déploiement GitHub Pages | à faire |
-| **Page témoin 1** — `/okx/on-chain-off-chain` | à faire |
-| **Page témoin 2** — `/fondamentaux/hachage` | à faire |
-| **Page témoin 3** — `/cryptos/btc` | à faire |
+| Vérification de l'API Astro 7 (collections, remark, rendu) | ✅ fait — lue dans les types, pas de mémoire |
+| Schémas Zod des collections | ✅ fait |
+| Design system (tokens, typo, thème sombre/clair) | ✅ fait |
+| Layouts + navigation + sommaire + fil d'Ariane | ✅ fait |
+| Les 4 callouts (`INFO`, `CIEL`, `PIÈGE`, `À VÉRIFIER`) | ✅ fait |
+| Composant de données live OKX | ✅ fait — testé, y compris l'état dégradé |
+| Recherche Pagefind (`/` et `Ctrl+K`) | ✅ fait — testée dans le navigateur |
+| Déploiement GitHub Pages | ⚠️ écrit, pas encore poussé (dépôt à créer) |
+| Vérificateur de liens internes (`npm run liens`) | ✅ fait — bonus |
+| **Page témoin 1** — `/okx/on-chain-off-chain` | **rédigé — à valider** |
+| **Page témoin 2** — `/fondamentaux/hachage` | **rédigé — à valider** |
+| **Page témoin 3** — `/cryptos/btc` | **rédigé — à valider** |
 
 > ⛔ **Point d'arrêt.** Les 3 pages témoins doivent être validées par Luke avant d'écrire la 4e.
 
@@ -37,7 +38,7 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | # | Page | Chemin | Statut |
 |---|---|---|---|
 | 1 | Ce qu'est un exchange centralisé | `/okx/exchange-centralise` | à faire |
-| 2 | **On-chain vs off-chain** | `/okx/on-chain-off-chain` | à faire |
+| 2 | **On-chain vs off-chain** | `/okx/on-chain-off-chain` | rédigé |
 | 3 | Dépôts et retraits | `/okx/depots-retraits` | à faire |
 | 4 | Le choix du réseau | `/okx/choix-du-reseau` | à faire |
 | 5 | Custodial vs non-custodial | `/okx/custodial-non-custodial` | à faire |
@@ -57,7 +58,7 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | # | Page | Chemin | Statut |
 |---|---|---|---|
 | 1 | Qu'est-ce qu'une blockchain | `/fondamentaux/blockchain` | à faire |
-| 2 | Les fonctions de hachage | `/fondamentaux/hachage` | à faire |
+| 2 | Les fonctions de hachage | `/fondamentaux/hachage` | rédigé |
 | 3 | Cryptographie asymétrique | `/fondamentaux/cryptographie-asymetrique` | à faire |
 | 4 | Signatures numériques | `/fondamentaux/signatures` | à faire |
 | 5 | ➕ Adresses et checksums (bech32, EIP-55) | `/fondamentaux/adresses` | à faire |
@@ -180,7 +181,7 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 
 Index live filtrable : `/cryptos` — à faire
 
-BTC · ETH · USDT · USDC · BNB · SOL · XRP · ADA · DOGE · TRX · TON · AVAX · DOT · LINK · POL · LTC · BCH · SHIB · UNI · ATOM · XLM · NEAR · APT · SUI · ARB · OP · FIL · ICP · OKB · XMR — **0/30 rédigées**
+BTC *(rédigé)* · ETH · USDT · USDC · BNB · SOL · XRP · ADA · DOGE · TRX · TON · AVAX · DOT · LINK · POL · LTC · BCH · SHIB · UNI · ATOM · XLM · NEAR · APT · SUI · ARB · OP · FIL · ICP · OKB · XMR — **1/30 rédigées**
 
 ## Phase 9 — Glossaire et finitions
 
@@ -208,4 +209,8 @@ BTC · ETH · USDT · USDC · BNB · SOL · XRP · ADA · DOGE · TRX · TON · 
 - **Liaison du glossaire bridée** à la première occurrence de chaque terme, uniquement pour les termes déclarés dans `termes`, jamais dans un titre, un bloc de code ou un lien existant.
 - **Règle anti-doublon section ↔ fiche crypto :** la page de section explique le *mécanisme*, la fiche crypto donne *l'identité, les données live et les spécificités*.
 - **API OKX v5 : les 6 endpoints du §8 de SPEC.md sont vérifiés** (HTTP 200 le 2026-08-22) et le CORS est permissif — les appels côté client depuis GitHub Pages fonctionneront.
+- **Recherche Pagefind : `pagefind-ui.js` n'est pas un module ES** mais un script classique qui pose `window.PagefindUI`. Il faut l'injecter par une balise `<script>`, un `import()` dynamique échoue.
+- **Ordre des plugins rehype :** Astro n'attribue les `id` de titres qu'APRÈS les plugins utilisateur. `rehypeHeadingIds` est donc appelé explicitement en premier, et l'ancre ajoutée aux titres ne contient aucun texte — sinon son « # » se retrouverait dans les libellés du sommaire.
+- **Avertissements de collections vides tus** dans `pagesDe()` : dix sections vides produisaient des dizaines de lignes par page et noyaient les vraies erreurs.
+- **Polices auto-hébergées** (`@fontsource-variable`) plutôt que Google Fonts : pas de requête tierce, et le site marche hors ligne.
 - **5 pages ajoutées au plan §7** (marquées ➕) : mark/index/last price, unités et précision, adresses et checksums, tickSz/lotSz/minSz, étude de cas FTX.

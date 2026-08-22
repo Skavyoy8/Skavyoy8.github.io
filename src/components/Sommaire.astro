@@ -1,0 +1,20 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+const { headings } = Astro.props;
+// Seuls h2 et h3 : au-delà, un sommaire devient illisible.
+const titres = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+{titres.length > 1 && (
+  <nav class="sommaire" aria-label="Sommaire de la page">
+    <p class="sommaire__titre">Sur cette page</p>
+    <ul>
+      {titres.map((h) => (
+        <li data-profondeur={h.depth}>
+          <a href={`#${h.slug}`} data-slug={h.slug}>{h.text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
