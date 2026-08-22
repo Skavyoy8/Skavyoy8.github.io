@@ -1,8 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { unified, rehypeHeadingIds } from '@astrojs/markdown-remark';
 import remarkEncadres from './src/plugins/remark-encadres.mjs';
 import rehypeContenu from './src/plugins/rehype-contenu.mjs';
-import { rehypeHeadingIds } from '@astrojs/markdown-remark';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,11 +12,15 @@ export default defineConfig({
   site: 'https://skavyoy8.github.io',
 
   markdown: {
-    remarkPlugins: [remarkEncadres],
-    // rehypeHeadingIds d'abord : Astro ne pose les id de titres qu'APRÈS
-    // les plugins utilisateur, or rehypeContenu en a besoin pour les ancres.
-    // Astro le relancera ensuite et respectera les id déjà présents.
-    rehypePlugins: [rehypeHeadingIds, rehypeContenu],
+    // Astro 7 a déprécié markdown.remarkPlugins / rehypePlugins : les plugins
+    // se déclarent maintenant sur le processeur lui-même.
+    processor: unified({
+      remarkPlugins: [remarkEncadres],
+      // rehypeHeadingIds d'abord : Astro ne pose les id de titres qu'APRÈS
+      // les plugins utilisateur, or rehypeContenu en a besoin pour les ancres.
+      // Astro le relancera ensuite et respectera les id déjà présents.
+      rehypePlugins: [rehypeHeadingIds, rehypeContenu],
+    }),
     shikiConfig: {
       themes: { light: 'github-light', dark: 'ayu-dark' },
       wrap: false,

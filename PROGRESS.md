@@ -23,7 +23,7 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | Les 4 callouts (`INFO`, `CIEL`, `PIÈGE`, `À VÉRIFIER`) | ✅ fait |
 | Composant de données live OKX | ✅ fait — testé, y compris l'état dégradé |
 | Recherche Pagefind (`/` et `Ctrl+K`) | ✅ fait — testée dans le navigateur |
-| Déploiement GitHub Pages | ⚠️ prêt — attend `gh auth login` puis création du dépôt `Skavyoy8/Skavyoy8.github.io` |
+| Déploiement GitHub Pages | ✅ en ligne sur https://skavyoy8.github.io |
 | Vérificateur de liens internes (`npm run liens`) | ✅ fait — bonus |
 | **Page témoin 1** — `/okx/on-chain-off-chain` | **rédigé — à valider** |
 | **Page témoin 2** — `/fondamentaux/hachage` | **rédigé — à valider** |
@@ -37,18 +37,18 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 
 | # | Page | Chemin | Statut |
 |---|---|---|---|
-| 1 | Ce qu'est un exchange centralisé | `/okx/exchange-centralise` | à faire |
+| 1 | Ce qu'est un exchange centralisé | `/okx/exchange-centralise` | rédigé |
 | 2 | **On-chain vs off-chain** | `/okx/on-chain-off-chain` | rédigé |
-| 3 | Dépôts et retraits | `/okx/depots-retraits` | à faire |
-| 4 | Le choix du réseau | `/okx/choix-du-reseau` | à faire |
+| 3 | Dépôts et retraits | `/okx/depots-retraits` | rédigé |
+| 4 | Le choix du réseau | `/okx/choix-du-reseau` | rédigé |
 | 5 | Custodial vs non-custodial | `/okx/custodial-non-custodial` | à faire |
 | 6 | App OKX vs OKX Wallet | `/okx/app-vs-wallet` | à faire |
 | 7 | Proof of Reserves | `/okx/proof-of-reserves` | à faire |
-| 8 | Comptes de trading et de financement | `/okx/comptes` | à faire |
+| 8 | Comptes de trading et de financement | `/okx/comptes` | rédigé |
 | 9 | KYC | `/okx/kyc` | à faire |
 | 10 | Cadre réglementaire (MiCA, PSAN/AMF) | `/okx/cadre-reglementaire` | à faire |
-| 11 | L'API OKX v5 | `/okx/api-v5` | à faire |
-| 12 | Les frais chez OKX | `/okx/frais` | à faire |
+| 11 | L'API OKX v5 | `/okx/api-v5` | rédigé |
+| 12 | Les frais chez OKX | `/okx/frais` | rédigé |
 | 13 | OKX Pay et la carte | `/okx/pay-et-carte` | à faire |
 | 14 | Historique et controverses | `/okx/historique-controverses` | à faire |
 | 15 | ➕ Étude de cas : la faillite de FTX | `/okx/etude-ftx` | à faire |
@@ -195,6 +195,12 @@ BTC *(rédigé)* · ETH · USDT · USDC · BNB · SOL · XRP · ADA · DOGE · T
 ---
 
 ## Journal des décisions techniques
+
+### 2026-08-22 — Phase 1
+
+- **Migration de la config Markdown** : Astro 7 a déprécié `markdown.remarkPlugins` / `rehypePlugins`. Les plugins passent désormais par `markdown.processor: unified({...})` importé de `@astrojs/markdown-remark`.
+- **Les quatre hôtes de l'API OKX répondent à l'identique** (`www`, `openapi`, `my`, `eea`) — vérifié, alors que la documentation n'annonce que `openapi.okx.com`.
+- **Aucun barème de retrait par chaîne n'est écrit dans le wiki** : l'endpoint `asset/currencies` est privé et la page des frais de retrait exige une connexion. Plutôt qu'inventer un montant, les pages donnent le coût réseau brut mesuré, qui explique la cause de l'écart.
 
 ### 2026-08-22 — Phase 0
 
