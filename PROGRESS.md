@@ -94,7 +94,7 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | 12 | Le volume | `/marches/volume` | à faire |
 | 13 | Capitalisation, FDV, offre circulante | `/marches/capitalisation` | à faire |
 | 14 | La dominance | `/marches/dominance` | à faire |
-| 15 | Le vocabulaire | `/marches/vocabulaire` | à faire |
+| 15 | Le vocabulaire | `/marches/vocabulaire` | rédigé |
 | 16 | L'analyse technique | `/marches/analyse-technique` | à faire |
 | 17 | L'analyse on-chain | `/marches/analyse-on-chain` | à faire |
 
@@ -135,7 +135,7 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | 9 | Fonds d'assurance et auto-deleveraging | `/derives/adl` | à faire |
 | 10 | Open interest et ratio long/short | `/derives/open-interest` | à faire |
 | 11 | Les options | `/derives/options` | à faire |
-| 12 | « ETF » à levier vs ETF Bitcoin spot | `/derives/etf-desambiguisation` | à faire |
+| 12 | « ETF » à levier vs ETF Bitcoin spot | `/derives/etf-desambiguisation` | rédigé |
 | 13 | Rebalancing et décroissance de valeur | `/derives/decroissance-levier` | à faire |
 
 ## Phase 6 — Produits et DeFi (§7.6)
@@ -187,7 +187,7 @@ BTC *(rédigé)* · ETH · USDT · USDC · BNB · SOL · XRP · ADA · DOGE · T
 
 | Élément | Statut |
 |---|---|
-| Termes définis | 72/250 |
+| Termes définis | 99/250 |
 | Liaison automatique des termes (1re occurrence) | ✅ fait |
 | Page d'index alphabétique du glossaire | ✅ fait |
 | Vérification des liens internes et des sources | à faire |
