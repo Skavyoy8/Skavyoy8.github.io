@@ -6,10 +6,10 @@ import { rehypeHeadingIds } from '@astrojs/markdown-remark';
 
 // https://astro.build/config
 export default defineConfig({
-  // Dépôt de type « site utilisateur » : le site est servi à la racine du
-  // domaine, donc `base` reste "/" et les liens markdown [texte](/chemin)
-  // fonctionnent sans réécriture. Remplacer <pseudo> par le compte GitHub.
-  site: 'https://pseudo.github.io',
+  // Dépôt de type « site utilisateur » (Skavyoy8/Skavyoy8.github.io) : le
+  // site est servi à la racine du domaine, donc `base` reste "/" et les
+  // liens markdown [texte](/chemin) fonctionnent sans réécriture.
+  site: 'https://skavyoy8.github.io',
 
   markdown: {
     remarkPlugins: [remarkEncadres],

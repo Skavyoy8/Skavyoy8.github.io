@@ -23,7 +23,7 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | Les 4 callouts (`INFO`, `CIEL`, `PIÈGE`, `À VÉRIFIER`) | ✅ fait |
 | Composant de données live OKX | ✅ fait — testé, y compris l'état dégradé |
 | Recherche Pagefind (`/` et `Ctrl+K`) | ✅ fait — testée dans le navigateur |
-| Déploiement GitHub Pages | ⚠️ écrit, pas encore poussé (dépôt à créer) |
+| Déploiement GitHub Pages | ⚠️ prêt — attend `gh auth login` puis création du dépôt `Skavyoy8/Skavyoy8.github.io` |
 | Vérificateur de liens internes (`npm run liens`) | ✅ fait — bonus |
 | **Page témoin 1** — `/okx/on-chain-off-chain` | **rédigé — à valider** |
 | **Page témoin 2** — `/fondamentaux/hachage` | **rédigé — à valider** |
@@ -200,7 +200,7 @@ BTC *(rédigé)* · ETH · USDT · USDC · BNB · SOL · XRP · ADA · DOGE · T
 
 - **Nom du projet : Registre.** « Registre » est la traduction française de *ledger*, ce qu'est une blockchain.
 - **Node 22.23.2 via nvm.** Astro 7.2.4 exige `node >= 22.12.0` ; la machine était en 20.19.2. `prefix=/home/luke/.local` a été retiré de `~/.npmrc` (incompatible avec nvm, aucun paquet global n'y était installé — sauvegarde : `~/.npmrc.bak-avant-nvm`).
-- **Dépôt GitHub de type site utilisateur** (`<pseudo>.github.io`) pour que `base` reste `/` et que les liens markdown `[texte](/chemin)` fonctionnent sans réécriture.
+- **Dépôt GitHub de type site utilisateur** : `Skavyoy8/Skavyoy8.github.io`, site servi sur `https://skavyoy8.github.io` pour que `base` reste `/` et que les liens markdown `[texte](/chemin)` fonctionnent sans réécriture.
 - **Le contenu vit dans `content/` à la racine, pas dans `src/`.** Le vault Obsidian ne contient ainsi que du Markdown — pas de code, pas de `node_modules` sur l'écran d'un iPhone.
 - **Callouts en syntaxe Obsidian `> [!ciel]`** plutôt qu'en directives `:::`. C'est du blockquote Markdown standard : lisible partout, déjà stylé nativement dans Obsidian, restylé au build pour le site.
 - **CSS natif avec variables, pas Tailwind.** Le contenu venant du Markdown, les classes utilitaires ne s'y appliquent pas sans `@tailwindcss/typography` ; ça contredirait le « zéro dépendance inutile » du §4.
