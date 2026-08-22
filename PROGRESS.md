@@ -61,11 +61,11 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | 2 | Les fonctions de hachage | `/fondamentaux/hachage` | rédigé |
 | 3 | Cryptographie asymétrique | `/fondamentaux/cryptographie-asymetrique` | à faire |
 | 4 | Signatures numériques | `/fondamentaux/signatures` | à faire |
-| 5 | ➕ Adresses et checksums (bech32, EIP-55) | `/fondamentaux/adresses` | à faire |
+| 5 | ➕ Adresses et checksums (bech32, EIP-55) | `/fondamentaux/adresses` | rédigé |
 | 6 | Seed phrase et dérivation (BIP39/BIP32) | `/fondamentaux/seed-phrase` | à faire |
 | 7 | Le réseau pair-à-pair | `/fondamentaux/reseau-p2p` | à faire |
 | 8 | Le problème du consensus | `/fondamentaux/consensus` | à faire |
-| 9 | Proof of Work | `/fondamentaux/proof-of-work` | à faire |
+| 9 | Proof of Work | `/fondamentaux/proof-of-work` | rédigé |
 | 10 | Proof of Stake | `/fondamentaux/proof-of-stake` | à faire |
 | 11 | Anatomie d'une transaction | `/fondamentaux/transaction` | à faire |
 | 12 | ➕ Unités et précision (satoshi, wei, decimals) | `/fondamentaux/unites` | à faire |
