@@ -2,52 +2,46 @@
 titre: "C'est quoi la crypto ?"
 section: "commencer"
 ordre: 10
-resume: "De l'argent qui n'existe que sous forme de lignes dans un cahier de comptes recopié par des milliers d'ordinateurs."
+resume: "Un journal de transactions répliqué sur des milliers de machines, dont l'ordre des écritures est décidé sans serveur d'autorité."
 niveau: "bases"
 termes: []
 sources:
-  - titre: "Satoshi Nakamoto — Bitcoin, le document d'origine"
+  - titre: "Satoshi Nakamoto — Bitcoin: A Peer-to-Peer Electronic Cash System"
     url: "https://bitcoin.org/bitcoin.pdf"
 statut: "redige"
 ---
 
-**Une crypto, c'est de l'argent qui existe uniquement sous forme de lignes dans un cahier de comptes, recopié à l'identique par des milliers d'ordinateurs.**
+**Une crypto, c'est un journal de transactions répliqué sur des milliers de machines indépendantes, dont l'ordre des écritures est décidé sans serveur d'autorité.**
 
-## Le cahier
+## Le problème que ça résout
 
-Imagine un cahier. Chaque ligne dit : « Luke a envoyé 3 à Marie ».
+Une banque, c'est une base de données avec un propriétaire. Elle seule écrit dedans, et tu n'as aucun moyen de vérifier ce qu'elle y met.
 
-Il n'y a pas de solde écrit quelque part. Ton solde, c'est juste le résultat de toutes les lignes qui te concernent, additionnées.
+Répliquer cette base sur des milliers de machines règle la vérification : chacun détient l'historique complet, lisible par n'importe qui depuis 2009.
 
-D'habitude, ce cahier, c'est une banque qui le tient. Elle seule écrit dedans. Tu dois lui faire confiance, et tu n'as aucun moyen de vérifier.
+Mais ça crée le vrai problème, et c'est le seul qui compte : **sans autorité centrale, qui décide de l'ordre des écritures ?**
 
-Ce que change la crypto : **le cahier est recopié sur des milliers d'ordinateurs dans le monde.** Personne ne le possède. N'importe qui peut le lire en entier. Pour ajouter une ligne, il faut que le réseau soit d'accord.
+Si j'émets deux transactions contradictoires — les mêmes fonds vers deux destinataires — et que je les injecte simultanément à deux endroits du réseau, les deux sont valides prises isolément. Il faut trancher, sans que personne n'ait le dernier mot.
 
-## La vraie difficulté
+Toute la technique de la crypto découle de là. C'est un problème de consensus distribué, pas un problème de finance.
 
-Un cahier sans patron pose une question gênante : **qui décide de l'ordre des lignes ?**
+## Trois conséquences directes
 
-Si j'envoie les mêmes 3 pièces à deux personnes en même temps, laquelle des deux lignes compte ? Sans arbitre, les deux ont l'air valables.
+- **Aucun solde n'est stocké.** Un solde se recalcule en rejouant les transactions, comme un état dérivé d'un journal d'événements.
+- **Rien n'est secret.** L'intégralité du journal est publique. La confidentialité n'a jamais fait partie du cahier des charges.
+- **Ce n'est pas anonyme, c'est pseudonyme.** Les écritures portent des adresses au lieu d'identités, mais elles se chaînent et s'analysent.
 
-Toute la technique de la crypto est une réponse à cette seule question. Le reste — les prix, les applis, les milliers de monnaies — vient après.
+## Un transfert, étape par étape
 
-## Trois idées fausses
+Tu envoies 0,01 BTC :
 
-- **Ce n'est pas secret.** Tout est public. N'importe qui peut lire toutes les lignes depuis 2009.
-- **Ce n'est pas anonyme.** Les lignes portent des adresses au lieu de noms, mais elles se suivent à la trace.
-- **Il n'y a pas de pièce.** Rien n'est stocké nulle part. Il n'y a que des lignes.
+1. Ton portefeuille construit la transaction et la **signe** avec ta clé privée — au sens exact où tu signes un commit ou t'authentifies en SSH.
+2. Il la diffuse à ses pairs, qui la propagent de proche en proche. En quelques secondes elle a fait le tour du réseau.
+3. Une dizaine de minutes plus tard, elle est incluse dans un bloc et devient très coûteuse à annuler.
 
-## Un exemple
-
-Tu envoies 0,01 bitcoin à un ami :
-
-1. Ton téléphone écrit la ligne et la signe avec ta clé secrète.
-2. Il l'envoie à quelques ordinateurs du réseau, qui la répètent à leurs voisins. En quelques secondes, tout le monde l'a.
-3. Une dizaine de minutes plus tard, elle est inscrite pour de bon.
-
-Personne n'a autorisé quoi que ce soit. Aucun guichet n'a ouvert.
+Aucune autorisation demandée à personne. Aucun tiers dans la boucle.
 
 ## La suite
 
-- [C'est quoi une blockchain ?](/commencer/cest-quoi-une-blockchain) — le nom technique du cahier
-- [Ce qui se passe quand tu achètes sur OKX](/commencer/acheter-sur-okx) — et pourquoi ça n'a rien à voir
+- [C'est quoi une blockchain ?](/commencer/cest-quoi-une-blockchain) — la structure de données qui rend le journal infalsifiable
+- [Ce qui se passe quand tu achètes sur OKX](/commencer/acheter-sur-okx) — et pourquoi ça n'a rien à voir avec ce qui précède

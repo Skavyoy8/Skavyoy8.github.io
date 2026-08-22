@@ -2,56 +2,52 @@
 titre: "C'est quoi une blockchain ?"
 section: "commencer"
 ordre: 20
-resume: "Le cahier de comptes, découpé en pages numérotées que personne ne peut modifier après coup."
+resume: "Un journal append-only découpé en blocs, chaque bloc contenant l'empreinte du précédent. Modifier une entrée ancienne invalide tout ce qui suit."
 niveau: "bases"
 prerequis: ["/commencer/cest-quoi-la-crypto"]
 termes: ["empreinte"]
 sources:
-  - titre: "Satoshi Nakamoto — Bitcoin, le document d'origine"
+  - titre: "Satoshi Nakamoto — Bitcoin: A Peer-to-Peer Electronic Cash System"
     url: "https://bitcoin.org/bitcoin.pdf"
-  - titre: "mempool.space — état de la chaîne Bitcoin en direct"
-    url: "https://mempool.space"
+  - titre: "Bitcoin Developer Reference — Block Chain"
+    url: "https://developer.bitcoin.org/reference/block_chain.html"
 statut: "redige"
 ---
 
-**Une blockchain, c'est le cahier de comptes découpé en pages numérotées, enchaînées de façon qu'on ne puisse pas en modifier une sans casser toutes les suivantes.**
+**Une blockchain, c'est un journal append-only découpé en blocs, où chaque bloc embarque l'empreinte du précédent.**
 
-## Le problème
+## Le problème que ça résout
 
-Un cahier recopié partout, d'accord. Mais comment tu sais que personne n'a gommé une ligne d'il y a trois mois ?
+Le journal est répliqué partout. Très bien. Mais qu'est-ce qui empêche une machine de modifier une entrée vieille de trois mois dans sa copie, puis de la propager ?
 
-## Comment on l'empêche
+Il faut que toute altération d'une entrée ancienne soit détectable en temps constant, sans comparer les historiques entrée par entrée.
 
-Les lignes sont regroupées par paquets : les **blocs**. Environ 3 000 lignes par bloc sur Bitcoin, un nouveau bloc toutes les dix minutes.
+## Comment ça marche
 
-Chaque bloc contient une **empreinte** du bloc précédent : un petit code calculé à partir de tout son contenu.
+Les transactions sont groupées en **blocs** — environ 3 000 par bloc sur Bitcoin, un bloc toutes les dix minutes environ.
 
-Si tu modifies une seule ligne dans un vieux bloc, son empreinte change. Du coup le bloc suivant ne correspond plus. Du coup celui d'après non plus. **Toute la suite se casse d'un coup, et tout le monde le voit.**
+L'en-tête de chaque bloc contient l'**empreinte** du bloc précédent : une valeur de taille fixe calculée sur son contenu.
 
-C'est de là que vient le nom : une chaîne (*chain*) de blocs (*block*).
+Modifie une transaction dans un bloc ancien, et son empreinte change. L'en-tête du bloc suivant ne correspond plus. Ni celui d'après. **Toute la suite de la chaîne devient invalide d'un coup**, et n'importe quel nœud le détecte en recalculant.
 
 ## Le pont CIEL
 
 > [!ciel] Tu connais déjà ça
-> L'empreinte, c'est le `sha256sum` que tu lances après avoir téléchargé une ISO. Le site publie un code, tu le recalcules chez toi, tu compares. Si un seul octet a bougé en route, les deux codes n'ont plus rien à voir.
+> C'est la structure de l'historique Git : chaque commit référence l'empreinte de son parent, donc réécrire un commit ancien réécrit tous ses descendants — c'est exactement pour ça qu'un `rebase` change tous les identifiants en aval.
 >
-> Une blockchain fait exactement ça, mais en continu et sur tout son historique.
+> Une blockchain, c'est ça, plus deux choses : les commits sont signés, et une règle de consensus désigne la branche qui fait autorité quand deux existent.
 
-## Pourquoi personne ne triche
+## Pourquoi personne ne réécrit l'histoire
 
-Réécrire un vieux bloc ne suffit pas. Il faudrait aussi refaire tous les blocs suivants — et plus vite que le reste du monde, qui continue d'en ajouter pendant ce temps.
+Recalculer l'empreinte d'un bloc ne suffit pas : il faut refaire tous les blocs suivants, **plus vite que le reste du réseau qui continue d'en produire**. Le coût en électricité dépasse largement ce qu'on pourrait en tirer.
 
-Ça demande tellement d'électricité que ça coûterait bien plus cher que ce qu'on pourrait voler.
+Donc « immuable » n'est pas une propriété mathématique, c'est une propriété économique : trop cher pour que ça vaille le coup. La nuance a son importance, et elle disparaît dans la plupart des présentations.
 
-Donc « immuable » ne veut pas dire « mathématiquement impossible à changer ». Ça veut dire **« trop cher pour que ça vaille le coup »**. La nuance compte.
+## Où en est la chaîne
 
-## Un exemple
-
-Au moment où j'écris, la chaîne Bitcoin en est à son bloc numéro **963634**.
-
-Chacun contient l'empreinte du précédent, sans interruption depuis le premier, le 3 janvier 2009. Pour changer une ligne écrite l'an dernier, il faudrait refaire des dizaines de milliers de blocs.
+Bitcoin en est au bloc **963635** au moment où j'écris. Chacun référence le précédent sans interruption depuis le bloc 0, le 3 janvier 2009.
 
 ## La suite
 
 - [Ce qui se passe quand tu achètes sur OKX](/commencer/acheter-sur-okx)
-- [Les fonctions de hachage](/fondamentaux/hachage) — la version détaillée de l'empreinte, quand tu voudras creuser
+- [Les fonctions de hachage](/fondamentaux/hachage) — ce qu'est exactement une empreinte, et pourquoi on ne peut pas l'inverser

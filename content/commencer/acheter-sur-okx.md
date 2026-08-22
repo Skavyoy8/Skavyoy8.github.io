@@ -2,55 +2,60 @@
 titre: "Ce qui se passe quand tu achètes sur OKX"
 section: "commencer"
 ordre: 30
-resume: "Rien sur la blockchain. OKX change deux chiffres dans sa propre base de données, et c'est tout."
+resume: "Une écriture dans la base de données d'OKX, pas une transaction sur une chaîne. Ton solde est une créance, pas une détention."
 niveau: "bases"
 prerequis: ["/commencer/cest-quoi-une-blockchain"]
-termes: ["creance"]
+termes: ["creance", "txid"]
 sources:
-  - titre: "OKX — documentation officielle de l'API"
+  - titre: "OKX — API v5, documentation officielle"
     url: "https://www.okx.com/docs-v5/en/"
   - titre: "OKX — Proof of Reserves"
     url: "https://www.okx.com/proof-of-reserves"
 statut: "redige"
 ---
 
-**Quand tu achètes du bitcoin sur OKX, rien n'est écrit sur la blockchain. OKX change deux chiffres dans sa propre base de données.**
+**Un achat sur OKX est une transaction de base de données. Rien n'est écrit sur aucune chaîne.**
 
-## Pourquoi
+## Le problème que ça résout
 
-Un bloc sort toutes les dix minutes et chaque ligne écrite coûte des frais. Une plateforme qui encaisse des milliers d'ordres par seconde ne peut pas écrire chacun d'eux dans le cahier mondial. Ce serait trop lent et trop cher.
+Bitcoin encaisse quelques transactions par seconde, avec des frais à chaque écriture et plusieurs minutes avant qu'une écriture soit considérée comme acquise.
 
-Alors elle fait comme une banque : elle tient ses propres comptes, en interne.
+Un carnet d'ordres encaisse des milliers d'opérations par seconde, dont l'écrasante majorité sont des ordres annulés avant même d'être exécutés. Régler chaque exécution sur la chaîne est physiquement impossible — et sans intérêt, puisque les deux contreparties sont déjà clientes du même établissement.
+
+D'où le montage classique : on ne déplace les actifs que quand ils entrent ou sortent du périmètre. À l'intérieur, on tient des comptes.
 
 ## Les trois moments
 
-| Ce que tu fais | Ce qui se passe vraiment |
+| Ce que tu fais | Ce qui se passe |
 |---|---|
-| Tu déposes des fonds | Une vraie ligne dans le cahier mondial. Tu envoies à une adresse qui appartient à OKX. |
-| Tu achètes, tu vends | **Rien.** OKX baisse un chiffre, monte un autre. Dans sa base à elle. |
-| Tu retires | Une vraie ligne. C'est OKX qui signe, avec ses clés à elle. |
+| Dépôt | Vraie transaction on-chain. **Tu** signes, vers une adresse qui appartient à OKX. |
+| Achat, vente, annulation | **Rien on-chain.** Une écriture dans la base d'OKX. Pas de signature, pas de frais réseau, pas de TxID. |
+| Retrait | Vraie transaction on-chain. **OKX** signe, avec ses clés à elle. |
 
-Entre le dépôt et le retrait, tu peux passer 500 ordres : **zéro trace sur la blockchain.**
+Entre le dépôt et le retrait, tu peux passer 500 ordres : zéro octet écrit sur une chaîne.
 
-## Ce que tu détiens vraiment
+## Le pont CIEL
 
-C'est le point important de toute la page.
+> [!ciel] Tu connais déjà ça
+> Off-chain, c'est un commit local : rapide, gratuit, réversible, invisible pour les autres. C'est le moteur d'appariement d'OKX.
+>
+> On-chain, c'est un `push` vers un dépôt répliqué chez des milliers d'inconnus qui vérifient chaque signature. Lent, coûteux, définitif, public. C'est le dépôt et le retrait, rien d'autre.
+
+## Ce que tu détiens réellement
+
+C'est le point de la page.
 
 Ton solde affiché n'est pas une quantité de bitcoins. C'est une **créance** : une ligne dans la base d'OKX qui dit qu'ils te doivent ce montant.
 
-Tant que tout va bien, la différence ne se voit pas. Elle devient la seule chose qui compte le jour où la plateforme gèle les retraits, se fait pirater, ou fait faillite.
-
-C'est ce que veut dire la phrase qu'on lit partout : *not your keys, not your coins*. Ce n'est pas un slogan militant, c'est la description exacte de ce qui se passe.
+La différence est invisible tant que tout va bien, et devient la seule chose qui compte le jour où la plateforme gèle les retraits, se fait pirater ou dépose son bilan. « Not your keys, not your coins » n'est pas un slogan : c'est la description exacte du montage.
 
 ## Le test
 
-Après un achat, cherche un identifiant de transaction. Il n'y en a pas.
+Après un achat, cherche un identifiant de transaction. Il n'y en a pas. Après un retrait, il y en a un, cliquable vers un explorateur de blocs.
 
-Après un retrait, il y en a un, et il est cliquable vers un explorateur de blocs.
-
-Ce n'est pas un oubli d'interface : dans le premier cas, l'objet n'existe pas.
+Ce n'est pas un manque de l'interface : dans le premier cas, l'objet n'existe pas.
 
 ## La suite
 
-- [On-chain vs off-chain](/okx/on-chain-off-chain) — la version détaillée, avec le schéma
-- [Étude de cas : la faillite de FTX](/okx/etude-ftx) — ce que ça donne quand la créance ne vaut plus rien
+- [On-chain vs off-chain](/okx/on-chain-off-chain) — la version complète, avec le schéma de la frontière
+- [Custodial vs non-custodial](/okx/custodial-non-custodial) — ce que « garde » veut dire, techniquement et juridiquement
