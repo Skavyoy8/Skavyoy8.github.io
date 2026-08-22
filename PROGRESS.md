@@ -81,12 +81,12 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | # | Page | Chemin | Statut |
 |---|---|---|---|
 | 1 | Qu'est-ce qu'un marché | `/marches/marche` | à faire |
-| 2 | Le carnet d'ordres | `/marches/carnet-ordres` | à faire |
-| 3 | Le spread | `/marches/spread` | à faire |
+| 2 | Le carnet d'ordres | `/marches/carnet-ordres` | rédigé |
+| 3 | Le spread | `/marches/spread` | rédigé |
 | 4 | La liquidité | `/marches/liquidite` | à faire |
 | 5 | Ordre au marché vs ordre limite | `/marches/marche-vs-limite` | à faire |
 | 6 | Ordres avancés | `/marches/ordres-avances` | à faire |
-| 7 | Maker et taker | `/marches/maker-taker` | à faire |
+| 7 | Maker et taker | `/marches/maker-taker` | rédigé |
 | 8 | Le slippage | `/marches/slippage` | à faire |
 | 9 | ➕ tickSz, lotSz, minSz | `/marches/tick-et-lot` | à faire |
 | 10 | Les paires de trading | `/marches/paires` | à faire |
