@@ -1,0 +1,12 @@
+{
+  "accentColor": "#00e676",
+  "theme": "obsidian",
+  "baseFontSize": 16,
+  "textFontFamily": "IBM Plex Sans",
+  "monospaceFontFamily": "JetBrains Mono",
+  "interfaceFontFamily": "",
+  "enabledCssSnippets": ["crypto"],
+  "translucency": true,
+  "showViewHeader": true,
+  "nativeMenus": false
+}

@@ -1,0 +1,175 @@
+/* ═══════════════════════════════════════════════════════════
+   Thème « crypto » — accordé à kitty, Starship et au bureau.
+   Palette : Ayu Dark + accents #00E676 / #FFB300 / #22D3EE
+   ═══════════════════════════════════════════════════════════ */
+
+.theme-dark {
+  /* Fonds */
+  --background-primary:         #0B0E14;
+  --background-primary-alt:     #0E121A;
+  --background-secondary:       #11151D;
+  --background-secondary-alt:   #080B10;
+  --background-modifier-border:        #222834;
+  --background-modifier-border-hover:  #333B4A;
+  --background-modifier-border-focus:  #00E676;
+  --background-modifier-form-field:    #0E121A;
+  --background-modifier-hover:         #171C26;
+  --background-modifier-active-hover:  #1C2230;
+
+  /* Texte */
+  --text-normal:      #BFBDB6;
+  --text-muted:       #8A9199;
+  --text-faint:       #5C6773;
+  --text-accent:      #00E676;
+  --text-accent-hover:#5CFFA6;
+  --text-on-accent:   #06080C;
+  --text-selection:   rgba(255, 179, 0, 0.22);
+  --text-highlight-bg:rgba(255, 179, 0, 0.30);
+
+  /* Accent d'interface */
+  --interactive-accent:       #00E676;
+  --interactive-accent-hover: #5CFFA6;
+  --interactive-normal:       #11151D;
+  --interactive-hover:        #171C26;
+
+  /* Titres — dégradé de teinte du plus chaud au plus froid */
+  --h1-color: #FFB300;
+  --h2-color: #00E676;
+  --h3-color: #22D3EE;
+  --h4-color: #A78BFA;
+  --h5-color: #8A9199;
+  --h6-color: #5C6773;
+
+  /* Divers */
+  --link-color:        #22D3EE;
+  --link-color-hover:  #7FE8FA;
+  --link-unresolved-color: #FF5370;
+  --blockquote-border-color: #FFB300;
+  --code-background:   #06080C;
+  --code-normal:       #AAD94C;
+  --hr-color:          #222834;
+  --tag-color:         #06080C;
+  --tag-background:    #00E676;
+  --checkbox-color:    #00E676;
+  --scrollbar-thumb-bg:#222834;
+  --divider-color:     #171C26;
+  --radius-m: 4px;
+  --radius-l: 6px;
+}
+
+/* ── Typographie ─────────────────────────────────────────── */
+
+.markdown-preview-view h1,
+.markdown-source-view.mod-cm6 .HyperMD-header-1 {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  border-bottom: 2px solid var(--h1-color);
+  padding-bottom: 0.25em;
+}
+
+.markdown-preview-view h2,
+.markdown-source-view.mod-cm6 .HyperMD-header-2 {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.markdown-preview-view h3,
+.markdown-source-view.mod-cm6 .HyperMD-header-3 {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 1.05em;
+  letter-spacing: 0.06em;
+}
+
+/* ── Blocs de code ───────────────────────────────────────── */
+
+.markdown-rendered pre,
+.markdown-source-view.mod-cm6 .HyperMD-codeblock-bg {
+  border-left: 3px solid var(--interactive-accent);
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+}
+
+.markdown-rendered code {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.87em;
+}
+
+/* ── Citations ───────────────────────────────────────────── */
+
+.markdown-rendered blockquote {
+  border-left: 3px solid var(--blockquote-border-color);
+  background: var(--background-primary-alt);
+  padding: 0.6em 1em;
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+  font-style: normal;
+  color: var(--text-muted);
+}
+
+/* ── Étiquettes ──────────────────────────────────────────── */
+
+.markdown-rendered a.tag {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.76em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-decoration: none;
+}
+
+/* ── Barre latérale et onglets ───────────────────────────── */
+
+.workspace-tab-header.is-active {
+  border-top: 2px solid var(--interactive-accent);
+}
+
+.workspace-tab-header-inner-title {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.82em;
+}
+
+.nav-file-title.is-active,
+.nav-folder-title.is-active {
+  border-left: 2px solid var(--interactive-accent);
+}
+
+/* ── Tableaux ────────────────────────────────────────────── */
+
+.markdown-rendered table {
+  font-variant-numeric: tabular-nums;
+  border-collapse: collapse;
+}
+
+.markdown-rendered th {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.74em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-weight: 500;
+  border-bottom: 1px solid var(--background-modifier-border-hover);
+}
+
+.markdown-rendered td {
+  border-bottom: 1px solid var(--divider-color);
+}
+
+/* ── Cases à cocher terminées ────────────────────────────── */
+
+.markdown-rendered li.task-list-item[data-task="x"] .task-list-item-checkbox + * {
+  color: var(--text-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--text-faint);
+}
+
+/* ── Vue graphe ──────────────────────────────────────────── */
+
+.graph-view.color-fill        { color: #00E676; }
+.graph-view.color-fill-focused{ color: #FFB300; }
+.graph-view.color-line        { color: #222834; }
+.graph-view.color-text        { color: #8A9199; }
+.graph-view.color-circle      { color: #22D3EE; }

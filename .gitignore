@@ -22,3 +22,14 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# généré au build à partir de l'historique git
+src/lib/dates-git.json
+
+# index de recherche Pagefind (regénéré à chaque build)
+public/pagefind/
+
+# état local d'Obsidian : propre à chaque machine, pas à synchroniser
+content/.obsidian/workspace.json
+content/.obsidian/workspace-mobile.json
+content/.obsidian/cache

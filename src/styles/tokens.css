@@ -1,0 +1,125 @@
+/* ═══════════════════════════════════════════════════════════
+   Registre — jetons de design
+   Palette reprise du snippet Obsidian de Luke (Ayu Dark).
+   Le site et le vault ont volontairement la même identité.
+
+   Sombre par défaut (:root), clair sur [data-theme="light"].
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Fonds ─────────────────────────────────────────────── */
+  --fond:            #0b0e14;
+  --fond-alt:        #0e121a;
+  --fond-2:          #11151d;
+  --fond-creux:      #080b10;
+  --fond-survol:     #171c26;
+
+  /* ── Bordures ──────────────────────────────────────────── */
+  --bordure:         #222834;
+  --bordure-forte:   #333b4a;
+
+  /* ── Texte ─────────────────────────────────────────────── */
+  --texte:           #bfbdb6;
+  --texte-doux:      #8a9199;
+  --texte-faible:    #5c6773;
+  --texte-fort:      #e6e1d7;
+
+  /* ── Accent : une seule couleur, utilisée avec parcimonie ─ */
+  --accent:          #00e676;
+  --accent-vif:      #5cffa6;
+  --sur-accent:      #06080c;
+  --accent-voile:    rgba(0, 230, 118, 0.10);
+
+  /* ── Rôles fonctionnels — jamais décoratifs ────────────── */
+  --info:            #22d3ee;
+  --info-voile:      rgba(34, 211, 238, 0.09);
+  --attention:       #ffb300;
+  --attention-voile: rgba(255, 179, 0, 0.09);
+  --danger:          #ff5370;
+  --danger-voile:    rgba(255, 83, 112, 0.09);
+
+  /* ── Marché : hausse / baisse ──────────────────────────── */
+  --hausse:          #00e676;
+  --baisse:          #ff5370;
+
+  /* ── Code ──────────────────────────────────────────────── */
+  --code-fond:       #06080c;
+  --code-texte:      #aad94c;
+  --code-bordure:    #1b2028;
+
+  /* ── Liens ─────────────────────────────────────────────── */
+  --lien:            #22d3ee;
+  --lien-survol:     #7fe8fa;
+
+  /* ── Typographie ───────────────────────────────────────── */
+  --police-corps: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system,
+                  "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --police-mono:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
+                  Consolas, "Liberation Mono", monospace;
+
+  --taille-base:   1rem;
+  --taille-petit:  0.875rem;
+  --taille-menu:   0.9375rem;
+  --interligne:    1.65;
+
+  /* ── Mesures ───────────────────────────────────────────── */
+  --largeur-texte:   68ch;   /* ~70 caractères, cf. SPEC §9 */
+  --largeur-site:    88rem;
+  --largeur-sidebar: 17rem;
+  --largeur-sommaire: 15rem;
+
+  --pas:    0.25rem;
+  --pas-2:  0.5rem;
+  --pas-3:  0.75rem;
+  --pas-4:  1rem;
+  --pas-6:  1.5rem;
+  --pas-8:  2rem;
+  --pas-12: 3rem;
+
+  --rayon:    4px;
+  --rayon-l:  6px;
+
+  --entete-hauteur: 3.25rem;
+}
+
+/* ── Thème clair ─────────────────────────────────────────────
+   Ayu Light. L'accent vert est assombri : #00e676 sur blanc
+   descend sous 2:1 de contraste, illisible.
+   ────────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --fond:            #fcfcfc;
+  --fond-alt:        #f6f7f8;
+  --fond-2:          #f1f2f4;
+  --fond-creux:      #eceef0;
+  --fond-survol:     #e9ebee;
+
+  --bordure:         #dfe2e6;
+  --bordure-forte:   #c4c9d0;
+
+  --texte:           #3b4048;
+  --texte-doux:      #62686f;
+  --texte-faible:    #868c94;
+  --texte-fort:      #1b2026;
+
+  --accent:          #00873d;
+  --accent-vif:      #006b30;
+  --sur-accent:      #ffffff;
+  --accent-voile:    rgba(0, 135, 61, 0.08);
+
+  --info:            #0b7f92;
+  --info-voile:      rgba(11, 127, 146, 0.08);
+  --attention:       #9a6400;
+  --attention-voile: rgba(154, 100, 0, 0.09);
+  --danger:          #c22a44;
+  --danger-voile:    rgba(194, 42, 68, 0.08);
+
+  --hausse:          #00873d;
+  --baisse:          #c22a44;
+
+  --code-fond:       #f1f2f4;
+  --code-texte:      #5c6b1f;
+  --code-bordure:    #dfe2e6;
+
+  --lien:            #0b7f92;
+  --lien-survol:     #095f6d;
+}

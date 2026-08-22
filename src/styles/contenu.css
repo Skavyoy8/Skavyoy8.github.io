@@ -1,0 +1,353 @@
+/* ═══════════════════════════════════════════════════════════
+   Registre — le corps des pages : Markdown rendu, encadrés,
+   blocs de données live, mobilier de page.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Titres ───────────────────────────────────────────────── */
+
+.contenu h2, .contenu h3, .contenu h4 {
+  color: var(--texte-fort);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  scroll-margin-top: calc(var(--entete-hauteur) + 1rem);
+}
+.contenu h2 {
+  font-size: 1.4rem;
+  margin: var(--pas-12) 0 var(--pas-4);
+  padding-bottom: var(--pas-2);
+  border-bottom: 1px solid var(--bordure);
+}
+.contenu h3 { font-size: 1.125rem; margin: var(--pas-8) 0 var(--pas-3); }
+.contenu h4 { font-size: 1rem; margin: var(--pas-6) 0 var(--pas-2); color: var(--texte); }
+
+.contenu h2:first-child, .contenu h3:first-child { margin-top: 0; }
+
+.ancre {
+  margin-left: 0.4em;
+  color: var(--texte-faible);
+  text-decoration: none;
+  opacity: 0;
+  font-weight: 400;
+}
+h2:hover .ancre, h3:hover .ancre, .ancre:focus { opacity: 1; }
+
+/* ── Texte courant ────────────────────────────────────────── */
+
+.contenu p { margin: var(--pas-4) 0; }
+.contenu strong { color: var(--texte-fort); font-weight: 600; }
+
+.contenu a {
+  color: var(--lien);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.contenu a:hover { color: var(--lien-survol); }
+
+.contenu ul, .contenu ol { margin: var(--pas-4) 0; padding-left: var(--pas-6); }
+.contenu li { margin: var(--pas-2) 0; }
+.contenu li::marker { color: var(--texte-faible); }
+
+.contenu hr { border: 0; border-top: 1px solid var(--bordure); margin: var(--pas-8) 0; }
+
+/* ── Monospace : signale « objet technique exact » ────────── */
+
+.contenu code {
+  font-family: var(--police-mono);
+  font-size: 0.875em;
+  background: var(--code-fond);
+  color: var(--code-texte);
+  border: 1px solid var(--code-bordure);
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+  word-break: break-word;
+}
+
+.contenu pre {
+  font-family: var(--police-mono);
+  background: var(--code-fond);
+  border: 1px solid var(--code-bordure);
+  border-radius: var(--rayon-l);
+  padding: var(--pas-4);
+  margin: var(--pas-4) 0;
+  overflow-x: auto;
+  font-size: var(--taille-petit);
+  line-height: 1.55;
+  -webkit-overflow-scrolling: touch;
+}
+.contenu pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+  word-break: normal;
+}
+
+/* Les hashs, adresses et identifiants d'instrument */
+.hash, .adresse {
+  font-family: var(--police-mono);
+  font-size: 0.85em;
+  word-break: break-all;
+  color: var(--texte-doux);
+}
+
+/* ── Tableaux ─────────────────────────────────────────────── */
+
+.contenu .table-enveloppe {
+  overflow-x: auto;
+  margin: var(--pas-6) 0;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-l);
+  -webkit-overflow-scrolling: touch;
+}
+.contenu table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--taille-petit);
+}
+.contenu th, .contenu td {
+  padding: var(--pas-2) var(--pas-3);
+  text-align: left;
+  border-bottom: 1px solid var(--bordure);
+  vertical-align: top;
+}
+.contenu th {
+  background: var(--fond-2);
+  color: var(--texte-fort);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.contenu tbody tr:last-child td { border-bottom: 0; }
+.contenu tbody tr:hover { background: var(--fond-alt); }
+.contenu td:has(code), .contenu td.num { font-variant-numeric: tabular-nums; }
+
+/* ── Les quatre encadrés — SPEC §9 ────────────────────────── */
+
+.encadre {
+  margin: var(--pas-6) 0;
+  padding: var(--pas-4);
+  border: 1px solid var(--bordure);
+  border-left: 3px solid var(--texte-faible);
+  border-radius: var(--rayon);
+  background: var(--fond-alt);
+  font-size: 0.9375rem;
+}
+.encadre > :first-child { margin-top: 0; }
+.encadre > :last-child { margin-bottom: 0; }
+
+.encadre__titre {
+  display: flex;
+  align-items: center;
+  gap: var(--pas-2);
+  font-weight: 600;
+  font-size: var(--taille-petit);
+  letter-spacing: 0.02em;
+  margin-bottom: var(--pas-2);
+}
+.encadre__titre svg { width: 1rem; height: 1rem; flex: none; }
+
+.encadre--info      { border-left-color: var(--info);      background: var(--info-voile); }
+.encadre--info .encadre__titre { color: var(--info); }
+
+.encadre--ciel      { border-left-color: var(--accent);    background: var(--accent-voile); }
+.encadre--ciel .encadre__titre { color: var(--accent); }
+
+.encadre--piege     { border-left-color: var(--attention); background: var(--attention-voile); }
+.encadre--piege .encadre__titre { color: var(--attention); }
+
+.encadre--verifier  { border-left-color: var(--danger);    background: var(--danger-voile); }
+.encadre--verifier .encadre__titre { color: var(--danger); }
+
+/* ── Mobilier de page ─────────────────────────────────────── */
+
+.page-titre {
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: var(--texte-fort);
+  margin-bottom: var(--pas-3);
+}
+
+.page-resume {
+  font-size: 1.0625rem;
+  color: var(--texte-doux);
+  margin-bottom: var(--pas-6);
+}
+
+.meta-page {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pas-2) var(--pas-3);
+  padding-bottom: var(--pas-4);
+  margin-bottom: var(--pas-6);
+  border-bottom: 1px solid var(--bordure);
+  font-size: var(--taille-petit);
+}
+
+.niveau {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--bordure-forte);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--texte-doux);
+}
+.niveau::before {
+  content: "";
+  width: 0.4rem; height: 0.4rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.niveau--bases        { color: var(--accent);    border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.niveau--intermediaire{ color: var(--info);      border-color: color-mix(in srgb, var(--info) 40%, transparent); }
+.niveau--avance       { color: var(--attention); border-color: color-mix(in srgb, var(--attention) 40%, transparent); }
+
+.prerequis { display: flex; flex-wrap: wrap; align-items: center; gap: var(--pas-2); }
+.prerequis__label { color: var(--texte-faible); }
+.prerequis a {
+  color: var(--texte-doux);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--bordure-forte);
+}
+.prerequis a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+.maj { color: var(--texte-faible); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+/* ── Sources ──────────────────────────────────────────────── */
+
+.sources {
+  margin-top: var(--pas-12);
+  padding-top: var(--pas-6);
+  border-top: 1px solid var(--bordure);
+  font-size: var(--taille-petit);
+}
+.sources h2 {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--texte-faible);
+  border: 0;
+  margin: 0 0 var(--pas-3);
+  padding: 0;
+}
+.sources ol { padding-left: var(--pas-6); }
+.sources li { margin: var(--pas-2) 0; color: var(--texte-doux); }
+.sources a { color: var(--lien); }
+
+/* ── Schémas SVG faits main ───────────────────────────────── */
+
+.schema {
+  margin: var(--pas-8) 0;
+  padding: var(--pas-4);
+  background: var(--fond-alt);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-l);
+  overflow-x: auto;
+}
+.schema svg { width: 100%; height: auto; display: block; }
+.schema figcaption {
+  margin-top: var(--pas-3);
+  font-size: var(--taille-petit);
+  color: var(--texte-faible);
+  text-align: center;
+}
+.schema text { font-family: var(--police-mono); }
+
+/* ── Blocs de données live ────────────────────────────────── */
+
+.live {
+  margin: var(--pas-6) 0;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-l);
+  background: var(--fond-alt);
+  overflow: hidden;
+}
+
+.live__entete {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--pas-2) var(--pas-3);
+  padding: var(--pas-3) var(--pas-4);
+  border-bottom: 1px solid var(--bordure);
+}
+.live__paire {
+  font-family: var(--police-mono);
+  font-size: var(--taille-petit);
+  color: var(--texte-doux);
+}
+.live__prix {
+  font-family: var(--police-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--texte-fort);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.live__var { font-family: var(--police-mono); font-size: var(--taille-petit); font-weight: 600; }
+.live__var[data-sens="hausse"] { color: var(--hausse); }
+.live__var[data-sens="baisse"] { color: var(--baisse); }
+
+.live__grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 1px;
+  background: var(--bordure);
+}
+.live__cellule { background: var(--fond-alt); padding: var(--pas-3) var(--pas-4); }
+.live__cle {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--texte-faible);
+  margin-bottom: 0.15rem;
+}
+.live__valeur { font-family: var(--police-mono); font-variant-numeric: tabular-nums; color: var(--texte); }
+
+.live__pied {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--pas-3);
+  padding: var(--pas-2) var(--pas-4);
+  border-top: 1px solid var(--bordure);
+  font-size: 0.72rem;
+  color: var(--texte-faible);
+}
+
+/* État dégradé : l'API ne répond pas. La page reste lisible. */
+.live[data-etat="erreur"] { border-color: color-mix(in srgb, var(--attention) 35%, var(--bordure)); }
+.live[data-etat="erreur"] .live__prix { color: var(--texte-faible); }
+.live__message { padding: var(--pas-3) var(--pas-4); font-size: var(--taille-petit); color: var(--attention); }
+.live[data-etat="charge"] .live__prix { color: var(--texte-faible); }
+
+/* ── Navigation de bas de page ────────────────────────────── */
+
+.suite {
+  display: grid;
+  gap: var(--pas-3);
+  margin-top: var(--pas-8);
+}
+@media (min-width: 640px) { .suite { grid-template-columns: 1fr 1fr; } }
+.suite a {
+  display: block;
+  padding: var(--pas-3) var(--pas-4);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-l);
+  text-decoration: none;
+  color: var(--texte-doux);
+}
+.suite a:hover { border-color: var(--accent); color: var(--texte-fort); }
+.suite__cle { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--texte-faible); }
+
+/* Le « # » de l'ancre est posé en CSS, pas dans le HTML : le collecteur
+   de titres d'Astro ramasse le texte des descendants et le ferait
+   apparaître dans les libellés du sommaire. */
+.ancre::after { content: "#"; }

@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const sections = ['fondamentaux'] as const;
+  const pages = [];
+  for (const section of sections) {
+    const entrees = await getCollection(section);
+    for (const entree of entrees) {
+      pages.push({ params: { section, slug: entree.id }, props: { entree } });
+    }
+  }
+  return pages;
+}
+
+const { entree } = Astro.props;
+const { Content, headings } = await render(entree);
+---
+<html lang="fr">
+  <head><meta charset="utf-8" /><title>{entree.data.titre}</title></head>
+  <body>
+    <h1>{entree.data.titre}</h1>
+    <p>{entree.data.resume}</p>
+    <p>niveau={entree.data.niveau} statut={entree.data.statut} ordre={entree.data.ordre}</p>
+    <pre>{JSON.stringify(headings)}</pre>
+    <div class="contenu"><Content /></div>
+  </body>
+</html>

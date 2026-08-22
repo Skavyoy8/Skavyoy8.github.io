@@ -1,0 +1,13 @@
+{
+  "useMarkdownLinks": true,
+  "newLinkFormat": "absolute",
+  "alwaysUpdateLinks": true,
+  "promptDelete": false,
+  "showLineNumber": true,
+  "readableLineLength": true,
+  "strictLineBreaks": false,
+  "attachmentFolderPath": "_pieces-jointes",
+  "newFileLocation": "current",
+  "spellcheck": true,
+  "spellcheckLanguages": ["fr", "en-GB"]
+}

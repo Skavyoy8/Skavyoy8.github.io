@@ -1,43 +1,55 @@
-# Astro Starter Kit: Minimal
+# Registre
 
-```sh
-npm create astro@latest -- --template minimal
+Wiki personnel expliquant le fonctionnement **technique** de la crypto et d'OKX.
+Cahier des charges complet : [SPEC.md](SPEC.md) · Suivi : [PROGRESS.md](PROGRESS.md)
+
+## Lancer le site en local
+
+Node 22 est installé via nvm. Si `node -v` ne répond pas `v22.x`, ouvre un nouveau terminal
+(nvm se charge au démarrage du shell), puis :
+
+```bash
+cd ~/registre && npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Le site tourne alors sur http://localhost:4321 et se recharge à chaque enregistrement.
 
-## 🚀 Project Structure
+## Écrire une page
 
-Inside of your Astro project, you'll see the following folders and files:
+Tout le contenu est dans `content/`, en Markdown brut. **Ce dossier est un vault Obsidian** :
+ouvre `~/registre/content` comme vault, sur PC comme sur iPhone.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+- un fichier `.md` = une page du site
+- le dossier détermine la section : `content/okx/frais.md` → `/okx/frais`
+- les modèles de `_modeles/` remplissent le frontmatter automatiquement
+- les liens internes s'écrivent `[texte](/okx/frais)` — la config du vault force ce format,
+  pas les `[[wikilinks]]`
+
+Écris, `git add . && git commit && git push` : le site se reconstruit tout seul.
+
+## Les quatre encadrés
+
+```markdown
+> [!info] Précision utile
+> [!ciel] Le pont vers ce que tu connais déjà
+> [!piege] Erreur de compréhension classique
+> [!verifier] Information susceptible d'avoir changé
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Ils s'affichent déjà stylés dans Obsidian, et sont restylés sur le site.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Structure
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Chemin | Rôle |
+|---|---|
+| `content/` | le contenu Markdown — le vault Obsidian |
+| `src/components/` | les briques réutilisables (callouts, blocs de prix, navigation) |
+| `src/layouts/` | les gabarits de page |
+| `src/pages/` | les routes du site |
+| `src/styles/` | le design system |
+| `src/lib/okx.js` | le client de l'API publique OKX |
 
-## 🧞 Commands
+## Données de marché
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Aucun prix n'est écrit en dur. Tout vient de l'API publique OKX v5, appelée depuis le
+navigateur, sans clé API. Si l'API ne répond pas, la page reste lisible.
