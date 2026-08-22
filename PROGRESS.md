@@ -69,8 +69,8 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | 10 | Proof of Stake | `/fondamentaux/proof-of-stake` | à faire |
 | 11 | Anatomie d'une transaction | `/fondamentaux/transaction` | à faire |
 | 12 | ➕ Unités et précision (satoshi, wei, decimals) | `/fondamentaux/unites` | à faire |
-| 13 | Les frais de réseau | `/fondamentaux/frais-reseau` | à faire |
-| 14 | Mempool et confirmations | `/fondamentaux/mempool` | à faire |
+| 13 | Les frais de réseau | `/fondamentaux/frais-reseau` | rédigé |
+| 14 | Mempool et confirmations | `/fondamentaux/mempool` | rédigé |
 | 15 | ➕ Nonce, RBF et transaction bloquée | `/fondamentaux/nonce-rbf` | à faire |
 | 16 | Forks | `/fondamentaux/forks` | à faire |
 | 17 | Le trilemme | `/fondamentaux/trilemme` | à faire |
