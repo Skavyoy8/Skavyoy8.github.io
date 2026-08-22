@@ -22,6 +22,8 @@ statut: "redige"
 
 <div data-okx-prix="BTC-USDT"></div>
 
+<div data-okx-graphique="BTC-USDT"></div>
+
 **Bitcoin est un registre public répliqué, dont les écritures sont ordonnées par une compétition de calcul et dont l'unité de compte a une offre plafonnée par le protocole.**
 
 ## Fiche d'identité

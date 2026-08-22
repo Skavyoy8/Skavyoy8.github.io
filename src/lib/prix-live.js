@@ -12,8 +12,14 @@ import { ticker, instrument, variation24h, formaterPrix, formaterVolume, formate
 const RAFRAICHIR = 60_000;
 
 function squelette(instId) {
+  // Logo en CC0 (cryptocurrency-icons), servi depuis /icones/. Absent pour
+  // les actifs récents : onerror le retire plutôt que d'afficher une image
+  // cassée.
+  const base = instId.split('-')[0].toLowerCase();
   return `
     <div class="live__entete">
+      <img class="live__logo" src="/icones/${base}.svg" alt="" width="22" height="22"
+           onerror="this.remove()">
       <span class="live__paire">${instId}</span>
       <span class="live__prix">—</span>
       <span class="live__var"></span>

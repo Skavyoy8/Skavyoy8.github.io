@@ -467,3 +467,45 @@ dl.glossaire dd {
   color: var(--texte-doux);
   font-size: 0.9375rem;
 }
+
+/* ── Logo d'actif dans le bloc de prix ────────────────────── */
+.live__logo { border-radius: 50%; flex: none; align-self: center; }
+
+/* ── Graphique de prix ────────────────────────────────────── */
+
+.graphique {
+  margin: var(--pas-6) 0;
+  padding: var(--pas-3) var(--pas-4) var(--pas-2);
+  background: var(--fond-alt);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-l);
+}
+.graphique svg { width: 100%; height: auto; display: block; }
+.graphique text { font-family: var(--police-mono); }
+
+.graphique__legende {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pas-2) var(--pas-4);
+  margin: var(--pas-2) 0 0;
+  padding-top: var(--pas-2);
+  border-top: 1px solid var(--bordure);
+  font-family: var(--police-mono);
+  font-size: 0.72rem;
+  color: var(--texte-faible);
+}
+.graphique__paire { color: var(--texte-doux); }
+.graphique__var { margin-left: auto; font-weight: 600; }
+.graphique__var[data-sens="hausse"] { color: var(--hausse); }
+.graphique__var[data-sens="baisse"] { color: var(--baisse); }
+.graphique__message { margin: 0; padding: var(--pas-4) 0; font-size: var(--taille-petit); color: var(--texte-faible); text-align: center; }
+.graphique[data-etat="erreur"] { border-color: color-mix(in srgb, var(--attention) 35%, var(--bordure)); }
+
+[data-okx-graphique]:empty::before {
+  content: "Le graphique nécessite JavaScript.";
+  display: block;
+  padding: var(--pas-4);
+  font-size: var(--taille-petit);
+  color: var(--texte-faible);
+  text-align: center;
+}

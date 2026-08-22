@@ -10,9 +10,11 @@ interface Props {
   instId: string;
 }
 const { instId } = Astro.props;
+const base = instId.split('-')[0].toLowerCase();
 ---
 <div class="live" data-okx-prix={instId} data-etat="charge">
   <div class="live__entete">
+    <img class="live__logo" src={`/icones/${base}.svg`} alt="" width="22" height="22" />
     <span class="live__paire">{instId}</span>
     <span class="live__prix">—</span>
     <span class="live__var"></span>

@@ -197,6 +197,12 @@ BTC *(rédigé)* · ETH · USDT · USDC · BNB · SOL · XRP · ADA · DOGE · T
 
 ## Journal des décisions techniques
 
+### 2026-08-22 — Visuels
+
+- **Aucune photo, conformément au §9 de SPEC.md**, et pour une raison qui s'ajoute à la ligne éditoriale : une image trouvée sur le web n'est pas réutilisable juridiquement, et les banques d'images donnent le rendu « blog crypto » que le projet rejette.
+- **Logos d'actifs en CC0** (jeu `cryptocurrency-icons`) : 21 fichiers SVG copiés dans `public/icones/`, le paquet npm a été retiré ensuite. Rien n'est ajouté aux dépendances, seuls les fichiers utilisés sont versionnés (100 Ko). Les actifs récents (TON, POL, SHIB, NEAR, APT, SUI, ARB, OP, OKB) n'y figurent pas : `onerror` retire l'image plutôt que d'afficher un cadre cassé.
+- **Graphiques de prix tracés à la main en SVG** à partir des bougies de l'API, sans bibliothèque de charts — même règle que les schémas. Couleurs en variables CSS, donc lisibles en thème clair. S'insèrent depuis Obsidian avec `<div data-okx-graphique="BTC-USDT"></div>`.
+
 ### 2026-08-22 — Glossaire (avance sur la Phase 9)
 
 - **Liaison automatique bridée à trois niveaux**, sinon la fonction devient nuisible : première occurrence seulement, uniquement les termes déclarés dans le `termes:` de la page, et jamais dans un titre, un bloc de code ou un lien existant.

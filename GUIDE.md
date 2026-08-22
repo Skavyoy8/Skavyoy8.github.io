@@ -131,6 +131,16 @@ nombre de décimales pour la paire. Si l'API ne répond pas, le bloc affiche
 
 N'écris **jamais** un prix en dur dans une page.
 
+### Un graphique de prix
+
+```markdown
+<div data-okx-graphique="BTC-USDT"></div>
+```
+
+Trace les 90 derniers jours à partir des bougies de l'API. Options :
+`data-bar="1H"` pour changer la période, `data-limite="72"` pour le nombre
+de points.
+
 ### Les liens
 
 ```markdown
