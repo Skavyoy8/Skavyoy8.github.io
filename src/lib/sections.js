@@ -4,6 +4,7 @@
  * de rédaction (les phases de PROGRESS.md, elles, commencent par OKX).
  */
 export const SECTIONS = [
+  { id: 'commencer', titre: 'Commencer', resume: "Le strict nécessaire, en français simple. À lire d'abord." },
   { id: 'fondamentaux', titre: 'Fondamentaux', resume: 'Comment une blockchain fonctionne, sous le capot.' },
   { id: 'chaines',      titre: 'Les chaînes',  resume: 'Bitcoin, Ethereum, les L2, les stablecoins.' },
   { id: 'okx',          titre: 'OKX',          resume: "Ce qu'un exchange centralisé fait vraiment." },

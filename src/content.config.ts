@@ -57,6 +57,7 @@ const collection = (dossier: string, schema: z.ZodTypeAny = base) =>
   });
 
 export const collections = {
+  commencer: collection('commencer'),
   fondamentaux: collection('fondamentaux'),
   chaines: collection('chaines'),
   okx: collection('okx'),
