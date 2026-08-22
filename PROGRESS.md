@@ -41,9 +41,9 @@ Une page passe à `vérifié` quand elle coche toute la liste du §13 de SPEC.md
 | 2 | **On-chain vs off-chain** | `/okx/on-chain-off-chain` | rédigé |
 | 3 | Dépôts et retraits | `/okx/depots-retraits` | rédigé |
 | 4 | Le choix du réseau | `/okx/choix-du-reseau` | rédigé |
-| 5 | Custodial vs non-custodial | `/okx/custodial-non-custodial` | à faire |
+| 5 | Custodial vs non-custodial | `/okx/custodial-non-custodial` | rédigé |
 | 6 | App OKX vs OKX Wallet | `/okx/app-vs-wallet` | à faire |
-| 7 | Proof of Reserves | `/okx/proof-of-reserves` | à faire |
+| 7 | Proof of Reserves | `/okx/proof-of-reserves` | rédigé |
 | 8 | Comptes de trading et de financement | `/okx/comptes` | rédigé |
 | 9 | KYC | `/okx/kyc` | à faire |
 | 10 | Cadre réglementaire (MiCA, PSAN/AMF) | `/okx/cadre-reglementaire` | à faire |
