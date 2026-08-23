@@ -1,133 +1,110 @@
 ---
-titre: "On-chain vs off-chain"
+titre: "On-chain et off-chain"
 section: "okx"
 ordre: 20
-resume: "Quand tu achètes du BTC sur OKX, rien n'est écrit sur la blockchain. OKX change deux lignes dans sa base de données. C'est la page la plus importante du site."
+resume: "La différence entre ce qui est réellement inscrit sur la blockchain et ce qui n'est qu'une ligne dans la base de données d'une entreprise."
 niveau: "bases"
-prerequis: ["/fondamentaux/hachage"]
-termes: ["on-chain", "off-chain", "custody", "moteur-appariement", "txid", "confirmation", "creance"]
+prerequis: ["/commencer/acheter-sur-okx"]
+termes: ["on-chain", "off-chain", "creance", "txid", "confirmation", "moteur-appariement"]
 sources:
-  - titre: "OKX — API v5, documentation officielle (Funding, Deposit, Withdrawal)"
+  - titre: "OKX — documentation officielle de l'API"
     url: "https://www.okx.com/docs-v5/en/"
   - titre: "OKX — Proof of Reserves"
     url: "https://www.okx.com/proof-of-reserves"
-  - titre: "Satoshi Nakamoto — Bitcoin: A Peer-to-Peer Electronic Cash System"
-    url: "https://bitcoin.org/bitcoin.pdf"
 statut: "redige"
 ---
 
-**Acheter du BTC sur OKX n'écrit rien sur la blockchain : OKX débite une ligne et en crédite une autre dans sa propre base de données.**
+**On-chain veut dire « inscrit sur la blockchain », visible par tous et vérifiable par n'importe qui. Off-chain veut dire « dans les registres privés d'une entreprise », visible seulement par elle.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
-Un bloc Bitcoin sort environ toutes les dix minutes. La chaîne encaisse quelques transactions par seconde, chacune coûte des frais de réseau, et il faut attendre plusieurs blocs avant de considérer qu'une transaction ne sera pas réorganisée.
+Une blockchain traite quelques transactions par seconde et fait payer chacune d'elles. Une plateforme d'échange en traite des milliers par seconde, dont la plupart sont annulées avant d'exister.
 
-Un carnet d'ordres, lui, encaisse des milliers d'opérations par seconde, dont l'immense majorité sont des ordres annulés avant même d'être exécutés. Régler chaque exécution sur la chaîne est physiquement impossible, et n'aurait aucun intérêt : les deux contreparties sont déjà clientes du même établissement.
+Faire passer tout ça par la blockchain serait impossible. Et ce serait inutile : quand deux clients de la même plateforme échangent entre eux, rien n'a besoin de sortir de la maison. Il suffit de tenir des comptes.
 
-La solution est vieille comme la banque : on ne déplace les actifs que quand ils entrent ou sortent du système. À l'intérieur, on tient des comptes.
+C'est le même principe qu'une banque : elle ne transporte pas des billets d'un coffre à l'autre chaque fois que deux clients se virent de l'argent. Elle modifie deux lignes.
 
 ## Comment ça marche
 
 <figure class="schema">
-<svg viewBox="0 0 640 320" role="img" aria-label="Frontière entre la base de données d'OKX et la blockchain : seuls les dépôts et les retraits la traversent">
-  <line x1="345" y1="10" x2="345" y2="310" stroke="var(--bordure-forte)" stroke-width="1.5" stroke-dasharray="5 5"/>
-  <text x="14" y="22" font-size="11" fill="var(--texte-faible)">CHEZ OKX — off-chain</text>
-  <text x="358" y="22" font-size="11" fill="var(--texte-faible)">SUR LA BLOCKCHAIN — on-chain</text>
+<svg viewBox="0 0 640 300" role="img" aria-label="Séparation entre les registres privés de la plateforme et la blockchain publique : seuls les dépôts et retraits franchissent la frontière">
+  <line x1="345" y1="10" x2="345" y2="290" stroke="var(--bordure-forte)" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <text x="14" y="24" font-size="12" fill="var(--texte-doux)">CHEZ LA PLATEFORME</text>
+  <text x="14" y="40" font-size="11" fill="var(--texte-faible)">personne d'autre ne voit</text>
+  <text x="360" y="24" font-size="12" fill="var(--texte-doux)">SUR LA BLOCKCHAIN</text>
+  <text x="360" y="40" font-size="11" fill="var(--texte-faible)">tout le monde voit</text>
 
-  <rect x="14" y="36" width="310" height="150" rx="6" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="26" y="56" font-size="12" fill="var(--texte-fort)" font-weight="600">Base de données OKX</text>
-  <line x1="26" y1="64" x2="312" y2="64" stroke="var(--bordure)"/>
-  <text x="26" y="84" font-size="11" fill="var(--code-texte)">client 4021   BTC    0.01000000</text>
-  <text x="26" y="102" font-size="11" fill="var(--code-texte)">client 4021   USDT        0.00</text>
-  <text x="26" y="120" font-size="11" fill="var(--code-texte)">client 7788   BTC    0.00000000</text>
-  <text x="26" y="138" font-size="11" fill="var(--code-texte)">client 7788   USDT      769.12</text>
-  <rect x="26" y="150" width="286" height="26" rx="4" fill="var(--accent-voile)" stroke="var(--accent)"/>
-  <text x="169" y="167" font-size="11" fill="var(--accent)" text-anchor="middle">moteur d'appariement — 0 transaction on-chain</text>
+  <rect x="14" y="56" width="310" height="118" rx="6" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
+  <text x="28" y="78" font-size="12" fill="var(--texte-fort)">Sa base de données</text>
+  <line x1="28" y1="86" x2="310" y2="86" stroke="var(--bordure)"/>
+  <text x="28" y="106" font-size="11" fill="var(--code-texte)">client 4021 …… 0,010 BTC</text>
+  <text x="28" y="124" font-size="11" fill="var(--code-texte)">client 7788 …… 769,12 EUR</text>
+  <rect x="28" y="136" width="282" height="26" rx="4" fill="var(--accent-voile)" stroke="var(--accent)"/>
+  <text x="169" y="153" font-size="11" fill="var(--accent)" text-anchor="middle">achats et ventes : rien ne sort d'ici</text>
 
-  <rect x="376" y="60" width="72" height="46" rx="4" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="412" y="88" font-size="11" fill="var(--texte-doux)" text-anchor="middle">bloc n</text>
-  <rect x="460" y="60" width="72" height="46" rx="4" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="496" y="88" font-size="11" fill="var(--texte-doux)" text-anchor="middle">bloc n+1</text>
-  <rect x="544" y="60" width="72" height="46" rx="4" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="580" y="88" font-size="11" fill="var(--texte-doux)" text-anchor="middle">bloc n+2</text>
-  <path d="M448 83 L458 83 M532 83 L542 83" stroke="var(--texte-faible)" stroke-width="1.2"/>
-  <text x="496" y="126" font-size="10" fill="var(--texte-faible)" text-anchor="middle">répliqué par des milliers de nœuds</text>
+  <rect x="376" y="70" width="72" height="44" rx="4" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
+  <text x="412" y="96" font-size="11" fill="var(--texte-doux)" text-anchor="middle">bloc</text>
+  <rect x="460" y="70" width="72" height="44" rx="4" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
+  <text x="496" y="96" font-size="11" fill="var(--texte-doux)" text-anchor="middle">bloc</text>
+  <rect x="544" y="70" width="72" height="44" rx="4" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
+  <text x="580" y="96" font-size="11" fill="var(--texte-doux)" text-anchor="middle">bloc</text>
+  <path d="M448 92 L458 92 M532 92 L542 92" stroke="var(--texte-faible)" stroke-width="1.2"/>
 
-  <path d="M600 150 L330 150" stroke="var(--accent)" stroke-width="1.6" fill="none"/>
-  <path d="M338 146 L330 150 L338 154 Z" fill="var(--accent)"/>
-  <text x="470" y="144" font-size="11" fill="var(--accent)" text-anchor="middle">DÉPÔT — 1 transaction on-chain</text>
+  <path d="M600 200 L330 200" stroke="var(--accent)" stroke-width="1.6" fill="none"/>
+  <path d="M338 196 L330 200 L338 204 Z" fill="var(--accent)"/>
+  <text x="470" y="192" font-size="11" fill="var(--accent)" text-anchor="middle">DÉPÔT — inscrit sur la blockchain</text>
 
-  <path d="M330 250 L600 250" stroke="var(--info)" stroke-width="1.6" fill="none"/>
-  <path d="M592 246 L600 250 L592 254 Z" fill="var(--info)"/>
-  <text x="470" y="244" font-size="11" fill="var(--info)" text-anchor="middle">RETRAIT — 1 transaction on-chain</text>
+  <path d="M330 258 L600 258" stroke="var(--info)" stroke-width="1.6" fill="none"/>
+  <path d="M592 254 L600 258 L592 262 Z" fill="var(--info)"/>
+  <text x="470" y="250" font-size="11" fill="var(--info)" text-anchor="middle">RETRAIT — inscrit sur la blockchain</text>
 
-  <rect x="14" y="222" width="310" height="56" rx="6" fill="var(--fond-alt)" stroke="var(--bordure)"/>
-  <text x="26" y="242" font-size="11" fill="var(--texte)">10 achats, 200 ordres annulés, 3 ventes</text>
-  <text x="26" y="264" font-size="12" fill="var(--attention)">→ 0 octet écrit sur la blockchain</text>
+  <rect x="14" y="222" width="310" height="52" rx="6" fill="var(--fond-alt)" stroke="var(--bordure)"/>
+  <text x="28" y="242" font-size="11" fill="var(--texte)">10 achats, 200 ordres annulés, 3 ventes</text>
+  <text x="28" y="263" font-size="12" fill="var(--attention)">→ rien du tout sur la blockchain</text>
 </svg>
-<figcaption>Seules deux opérations traversent la frontière : le dépôt et le retrait. Tout ce qui se passe entre les deux reste une écriture comptable interne.</figcaption>
+<figcaption>Seuls le dépôt et le retrait traversent la frontière. Tout ce qui se passe entre les deux reste une écriture interne.</figcaption>
 </figure>
 
-Le parcours complet, dans l'ordre :
+Le parcours complet :
 
-1. **Le dépôt.** OKX te donne une adresse de dépôt. Tu y envoies des fonds : c'est une vraie transaction, signée par toi, diffusée sur le réseau, incluse dans un bloc. L'adresse appartient à OKX, pas à toi. Une fois le nombre de confirmations requis atteint, OKX crédite ton solde interne.
-2. **Le trade.** Ton ordre entre dans le moteur d'appariement. S'il rencontre un ordre compatible, l'exécution est enregistrée : OKX décrémente une colonne, en incrémente une autre. Aucune signature cryptographique, aucun frais de réseau, aucun TxID. C'est une transaction de base de données, au sens SQL du terme.
-3. **Le retrait.** OKX construit une transaction depuis ses propres portefeuilles, la signe avec ses propres clés, et la diffuse. C'est le seul moment où des fonds bougent réellement à cause de toi — et ce n'est pas toi qui signes.
+1. **Le dépôt.** Tu envoies des fonds à une adresse que la plateforme te fournit. C'est une vraie transaction, signée par toi, inscrite dans un bloc. L'adresse appartient à la plateforme, pas à toi.
+2. **Les achats et les ventes.** La plateforme diminue une ligne et en augmente une autre. Aucune signature, aucun frais de réseau, aucun identifiant de transaction. Ça n'existe que chez elle.
+3. **Le retrait.** La plateforme construit une transaction depuis ses propres réserves et la signe avec ses propres clés. C'est le seul moment où des fonds bougent vraiment à cause de toi — et ce n'est pas toi qui signes.
 
-La conséquence est structurelle : **ton solde affiché n'est pas une quantité de bitcoins, c'est une créance sur OKX.** Une ligne dans leur base qui dit qu'ils te doivent ce montant.
+## Un exemple concret
 
-## Le pont CIEL
+Un mois d'utilisation ordinaire :
 
-> [!ciel] Tu connais déjà ça
-> C'est la différence entre un commit local et un commit poussé.
->
-> Off-chain, c'est ton dépôt local : tu commites, tu amendes, tu rebases, tu changes d'avis. Rapide, gratuit, réversible — et personne d'autre ne le voit. C'est le moteur d'appariement d'OKX.
->
-> On-chain, c'est `git push` vers un dépôt répliqué chez des milliers d'inconnus qui vérifient chaque signature. Lent, coûteux, définitif, et public pour toujours. C'est le dépôt et le retrait.
->
-> Deuxième angle, plus proche encore de ton cours : un CEX, c'est une base de données transactionnelle classique avec une file d'ordres devant. Les propriétés ACID viennent du SGBD, pas d'un consensus distribué. Il n'y a ni nœud, ni bloc, ni preuve de travail là-dedans — juste un serveur qui a autorité sur ses propres lignes.
-
-## Exemple chiffré
-
-Un mois d'utilisation typique :
-
-| Action | Nombre | Transactions on-chain |
+| Action | Nombre | Inscrit sur la blockchain |
 |---|---|---|
-| Dépôt de 0,01 BTC | 1 | 1 |
+| Dépôt | 1 | 1 |
 | Ordres passés | 214 | 0 |
 | Ordres annulés | 198 | 0 |
-| Exécutions | 16 | 0 |
-| Retrait de 500 USDT | 1 | 1 |
+| Achats et ventes réalisés | 16 | 0 |
+| Retrait | 1 | 1 |
 | **Total** | **430 opérations** | **2** |
 
-Sur 430 opérations, deux seulement existent en dehors des serveurs d'OKX. Les 428 autres n'ont laissé aucune trace vérifiable par un tiers : elles n'existent que dans les journaux d'OKX, et tu dois les croire sur parole.
+Sur 430 opérations, deux seulement existent en dehors des serveurs de l'entreprise. Les 428 autres n'ont laissé aucune trace vérifiable par un tiers.
 
-Le test décisif : après un achat, cherche un TxID. Il n'y en a pas. Ce n'est pas un oubli d'interface — l'objet n'existe pas.
+## Comment le vérifier soi-même
 
-## Sur OKX
+Dans l'historique des dépôts et retraits, chaque ligne porte un identifiant de transaction cliquable, qui mène à un site public où l'opération est visible.
 
-- **Comptes de financement / de trading.** Cette séparation est purement interne. Transférer entre les deux est instantané et gratuit, précisément parce que rien ne bouge sur aucune chaîne.
-- **L'historique.** Dans l'historique des retraits et dépôts, chaque ligne porte un TxID cliquable vers un explorateur de blocs. Dans l'historique des ordres, aucune ligne n'en porte. La différence est visible à l'œil nu.
-- **OKX Wallet.** C'est un produit différent, non custodial, où les clés sont sur ton appareil. Les deux vivent dans la même application, ce qui entretient la confusion : d'un côté un compte chez un intermédiaire, de l'autre un vrai portefeuille.
-- **Le Proof of Reserves** existe précisément parce que les soldes sont off-chain. Si tout était on-chain, il n'y aurait rien à prouver : n'importe qui pourrait vérifier.
+Dans l'historique des achats et des ventes, aucune ligne n'en porte. La différence saute aux yeux, et elle dit tout.
 
-## Les pièges
+## Ce qu'il faut savoir
 
-> [!piege] « J'ai acheté du BTC, donc je possède du BTC »
-> Tu possèdes une créance libellée en BTC. La différence n'apparaît jamais tant que tout va bien, et devient la seule chose qui compte le jour où l'établissement fait défaut, gèle les retraits, ou se fait pirater. « Not your keys, not your coins » n'est pas un slogan militant, c'est la description exacte du montage juridique et technique.
+> [!piege] Ton solde n'est pas de la crypto
+> C'est une créance : une promesse de l'entreprise de te verser ce montant. Tant qu'elle tient ses engagements, la distinction est invisible. Le jour où elle ne les tient plus, c'est la seule qui compte.
 
 > [!piege] L'adresse de dépôt n'est pas ton portefeuille
-> Elle appartient à OKX. Y envoyer des fonds, c'est les remettre à un tiers. Elle peut être partagée avec d'autres clients, reposer sur un mémo ou un tag pour identifier le destinataire, et changer avec le temps.
+> Elle appartient à la plateforme. Elle peut changer, être partagée avec d'autres clients, ou demander un code supplémentaire selon le réseau.
 
-> [!piege] Un trade instantané n'est pas un trade « rapide grâce à la blockchain »
-> Il est instantané parce qu'il ne touche aucune blockchain. Quand on te vante la rapidité d'un exchange, on te vante la rapidité d'un SGBD.
-
-> [!verifier] Les détails d'implémentation d'OKX ne sont pas publics
-> L'architecture décrite ici est celle, standard, de tous les exchanges centralisés, et elle est cohérente avec ce que la documentation API v5 expose. Le fonctionnement interne exact du moteur d'appariement d'OKX, lui, n'est pas documenté publiquement. Sur les points spécifiques à OKX, s'en tenir à leur documentation officielle.
+> [!piege] La rapidité d'une plateforme n'a rien à voir avec la blockchain
+> Un achat est instantané parce qu'il ne touche aucune blockchain. Quand on vante la vitesse d'une plateforme, on vante celle de sa base de données.
 
 ## Pour aller plus loin
 
-- [Custodial vs non-custodial](/okx/custodial-non-custodial) — ce que « garde » veut dire juridiquement
-- [Proof of Reserves](/okx/proof-of-reserves) — ce que l'arbre de Merkle prouve, et surtout ce qu'il ne prouve pas
-- [Dépôts et retraits](/okx/depots-retraits) — les seules opérations qui traversent la frontière
-- [Les fonctions de hachage](/fondamentaux/hachage) — d'où vient le TxID
+- [Qui détient tes fonds](/okx/custodial-non-custodial) — les deux modèles, comparés
+- [Proof of Reserves](/okx/proof-of-reserves) — la tentative de rendre les réserves vérifiables
+- [Dépôts et retraits](/okx/depots-retraits) — les deux opérations qui franchissent la frontière

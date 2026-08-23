@@ -1,142 +1,99 @@
 ---
-titre: "Proof of Reserves"
+titre: "Le Proof of Reserves"
 section: "okx"
 ordre: 70
-resume: "Un arbre de Merkle qui prouve que ton solde est compté dans le total annoncé. Il ne prouve rien sur les dettes de la plateforme."
+resume: "Une méthode pour vérifier soi-même que ton solde est bien compté dans les réserves annoncées. Elle ne dit rien des dettes de la plateforme."
 niveau: "intermediaire"
-prerequis: ["/okx/on-chain-off-chain", "/fondamentaux/hachage"]
-termes: ["merkle", "empreinte", "sha-256", "creance", "on-chain", "off-chain"]
+prerequis: ["/okx/on-chain-off-chain"]
+termes: ["merkle", "empreinte", "creance", "custody"]
 sources:
   - titre: "OKX — Proof of Reserves"
     url: "https://www.okx.com/proof-of-reserves"
-  - titre: "Satoshi Nakamoto — Bitcoin, section 7 (arbre de Merkle)"
+  - titre: "Satoshi Nakamoto — le document qui a lancé Bitcoin (2008)"
     url: "https://bitcoin.org/bitcoin.pdf"
-  - titre: "NIST — FIPS 180-4, Secure Hash Standard (SHA-256)"
-    url: "https://csrc.nist.gov/pubs/fips/180-4/upd1/final"
 statut: "redige"
 ---
 
-**Le Proof of Reserves est un arbre de hachages qui te permet de vérifier que ton solde est bien compté dans le total que la plateforme affirme détenir, sans révéler les soldes des autres clients.**
+**Le Proof of Reserves permet à chaque client de vérifier que son solde est bien compté dans le total que la plateforme affirme détenir — sans que personne voie les soldes des autres.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
-Les soldes d'un exchange sont off-chain : des lignes dans sa base de données. Rien ne prouve qu'en face de la somme de ces lignes, il y a réellement des fonds.
+Les soldes d'une plateforme sont des lignes dans sa base de données. Rien ne prouve qu'en face, il y a réellement des fonds.
 
-L'exchange pourrait publier son total et l'adresse de ses portefeuilles. Ça prouve qu'il détient quelque chose, mais pas que ton compte à toi est compté dedans — ni que le total correspond à la somme des comptes clients.
+Elle pourrait publier la liste complète de ses clients et de leurs avoirs : ça règlerait la question, et ça exposerait la fortune de millions de personnes.
 
-Il pourrait publier la liste complète des soldes : ça règle tout, et ça expose les avoirs de millions de gens.
+Elle pourrait ne publier qu'un total : mais rien ne dirait que ton compte à toi est compté dedans.
 
-L'arbre de Merkle résout exactement cette tension : **prouver qu'un élément appartient à un ensemble, sans publier l'ensemble.**
+Le Proof of Reserves résout exactement cette tension : **prouver qu'un élément fait partie d'un ensemble, sans montrer l'ensemble.**
 
 ## Comment ça marche
 
-Chaque client devient une feuille : l'empreinte de son identifiant et de son solde. On hache ensuite les feuilles deux à deux, puis les résultats deux à deux, jusqu'à une valeur unique — la **racine**, publiée.
+Chaque compte est transformé en une empreinte — un code court qui dépend du solde, mais dont on ne peut pas retrouver le solde.
+
+Ces empreintes sont ensuite combinées deux par deux, puis les résultats combinés deux par deux à leur tour, et ainsi de suite jusqu'à obtenir **une seule valeur finale**, que la plateforme publie.
 
 <figure class="schema">
-<svg viewBox="0 0 640 260" role="img" aria-label="Arbre de Merkle à quatre feuilles, avec le chemin de vérification de la première feuille mis en évidence">
+<svg viewBox="0 0 640 250" role="img" aria-label="Les empreintes des comptes sont combinées deux à deux jusqu'à une valeur unique publiée">
   <rect x="230" y="14" width="180" height="34" rx="4" fill="var(--accent-voile)" stroke="var(--accent)" stroke-width="1.5"/>
-  <text x="320" y="30" font-size="11" fill="var(--accent)" text-anchor="middle" font-weight="600">RACINE publiée</text>
-  <text x="320" y="43" font-size="10" fill="var(--texte-doux)" text-anchor="middle">36c31e71…</text>
+  <text x="320" y="36" font-size="12" fill="var(--accent)" text-anchor="middle" font-weight="600">valeur finale publiée</text>
+  <path d="M290 48 L165 82 M350 48 L475 82" stroke="var(--texte-faible)" stroke-width="1.2" fill="none"/>
 
-  <path d="M290 48 L165 80 M350 48 L475 80" stroke="var(--texte-faible)" stroke-width="1.2" fill="none"/>
+  <rect x="80" y="82" width="170" height="30" rx="4" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
+  <text x="165" y="101" font-size="11" fill="var(--texte-doux)" text-anchor="middle">combinaison</text>
+  <rect x="390" y="82" width="170" height="30" rx="4" fill="var(--attention-voile)" stroke="var(--attention)" stroke-width="1.5"/>
+  <text x="475" y="96" font-size="11" fill="var(--attention)" text-anchor="middle">combinaison</text>
+  <text x="475" y="108" font-size="9" fill="var(--texte-faible)" text-anchor="middle">on te la donne</text>
 
-  <rect x="80" y="80" width="170" height="30" rx="4" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="165" y="99" font-size="10" fill="var(--texte-doux)" text-anchor="middle">N12  3c715c9e…</text>
+  <path d="M125 112 L60 150 M205 112 L270 150 M435 112 L400 150 M515 112 L575 150" stroke="var(--texte-faible)" stroke-width="1.2"/>
 
-  <rect x="390" y="80" width="170" height="30" rx="4" fill="var(--attention-voile)" stroke="var(--attention)" stroke-width="1.5"/>
-  <text x="475" y="94" font-size="10" fill="var(--attention)" text-anchor="middle">N34  e17afbf0…</text>
-  <text x="475" y="106" font-size="9" fill="var(--texte-faible)" text-anchor="middle">fourni</text>
+  <rect x="8" y="150" width="112" height="40" rx="4" fill="var(--accent-voile)" stroke="var(--accent)" stroke-width="1.5"/>
+  <text x="64" y="175" font-size="11" fill="var(--accent)" text-anchor="middle">ton compte</text>
+  <rect x="216" y="150" width="112" height="40" rx="4" fill="var(--attention-voile)" stroke="var(--attention)" stroke-width="1.5"/>
+  <text x="272" y="168" font-size="11" fill="var(--attention)" text-anchor="middle">un voisin</text>
+  <text x="272" y="182" font-size="9" fill="var(--texte-faible)" text-anchor="middle">on te la donne</text>
+  <rect x="344" y="150" width="112" height="40" rx="4" fill="var(--fond-2)" stroke="var(--bordure)"/>
+  <text x="400" y="175" font-size="11" fill="var(--texte-faible)" text-anchor="middle">jamais vu</text>
+  <rect x="520" y="150" width="112" height="40" rx="4" fill="var(--fond-2)" stroke="var(--bordure)"/>
+  <text x="576" y="175" font-size="11" fill="var(--texte-faible)" text-anchor="middle">jamais vu</text>
 
-  <path d="M125 110 L60 148 M205 110 L270 148 M435 110 L400 148 M515 110 L575 148" stroke="var(--texte-faible)" stroke-width="1.2" fill="none"/>
-
-  <rect x="8" y="148" width="112" height="42" rx="4" fill="var(--accent-voile)" stroke="var(--accent)" stroke-width="1.5"/>
-  <text x="64" y="164" font-size="10" fill="var(--accent)" text-anchor="middle">F1 — toi</text>
-  <text x="64" y="178" font-size="9" fill="var(--texte-doux)" text-anchor="middle">808f14f4…</text>
-
-  <rect x="216" y="148" width="112" height="42" rx="4" fill="var(--attention-voile)" stroke="var(--attention)" stroke-width="1.5"/>
-  <text x="272" y="164" font-size="10" fill="var(--attention)" text-anchor="middle">F2</text>
-  <text x="272" y="178" font-size="9" fill="var(--texte-faible)" text-anchor="middle">fourni</text>
-
-  <rect x="344" y="148" width="112" height="42" rx="4" fill="var(--fond-2)" stroke="var(--bordure)"/>
-  <text x="400" y="171" font-size="10" fill="var(--texte-faible)" text-anchor="middle">F3 — jamais vu</text>
-
-  <rect x="520" y="148" width="112" height="42" rx="4" fill="var(--fond-2)" stroke="var(--bordure)"/>
-  <text x="576" y="171" font-size="10" fill="var(--texte-faible)" text-anchor="middle">F4 — jamais vu</text>
-
-  <text x="320" y="220" font-size="11" fill="var(--texte-doux)" text-anchor="middle">Pour prouver que F1 est dans l'arbre, il suffit de F2 et N34.</text>
-  <text x="320" y="238" font-size="11" fill="var(--texte-faible)" text-anchor="middle">Les soldes de F3 et F4 ne sont jamais divulgués.</text>
+  <text x="320" y="222" font-size="11" fill="var(--texte-doux)" text-anchor="middle">Deux valeurs suffisent pour relier ton compte au total publié.</text>
+  <text x="320" y="240" font-size="11" fill="var(--texte-faible)" text-anchor="middle">Les soldes des autres ne sont jamais révélés.</text>
 </svg>
-<figcaption>Le chemin de Merkle : deux empreintes suffisent à relier ta feuille à la racine, sur un arbre de quatre feuilles.</figcaption>
+<figcaption>Chacun peut vérifier sa propre présence sans rien apprendre sur les autres.</figcaption>
 </figure>
 
-## Le pont CIEL
+Pour vérifier, la plateforme te donne quelques valeurs intermédiaires. Tu refais les combinaisons toi-même, et si tu retombes sur la valeur publiée, c'est que ton compte est bien compté dedans.
 
-> [!ciel] Tu connais déjà ça
-> C'est la vérification d'intégrité partielle. Un client BitTorrent ne retélécharge pas le fichier entier pour valider un morceau : il remonte l'arbre de hachage jusqu'à la racine. Git fait pareil avec ses arbres d'objets.
->
-> Ici, le « morceau » c'est ton solde, et la « racine » est publiée par l'exchange. Tu vérifies ton appartenance à l'ensemble sans jamais voir l'ensemble.
+## Un exemple concret
 
-## Exemple chiffré
+Le nombre de valeurs à te fournir croît très lentement avec le nombre de clients :
 
-Quatre clients. Chaque feuille est le SHA-256 de l'identifiant et du solde :
-
-```bash
-printf 'client:4021|BTC:0.01000000' | sha256sum
-printf 'client:7788|BTC:0.50000000' | sha256sum
-```
-
-Valeurs réelles obtenues :
-
-```
-F1  808f14f4c75338a2387adfcb9aafa1cbb82d86fa781acffc6280906a846138a4
-F2  30a389dd32916cfbe0e704599d3c5e242a2f42992e56a5239e85c68dac50b52b
-F3  660983b47351cd6952011d6ea578383cfe9b767fef7ebe7bfd4cae4ccb49c11e
-F4  9fd28f645ce43cc863aa01c6c2561dbe59d8b402782b84ba3f927fa86c23d7b7
-```
-
-On hache les concaténations deux à deux :
-
-```
-N12    = SHA-256(F1 ‖ F2) = 3c715c9e20f97d5b650f8658e3b08a528aa19da6a03cb2778190433ce7c8e040
-N34    = SHA-256(F3 ‖ F4) = e17afbf06a8b395416dcc284c55276006416f6c96eeb81355e682710e35c8604
-RACINE = SHA-256(N12 ‖ N34) = 36c31e71a2ec18cf0d515c6679b4a4757b9845edc860e53d7dec60afc0768f62
-```
-
-Tu es le client 4021. On te donne **deux** empreintes : F2 et N34. Tu recalcules ta feuille, puis `SHA-256(F1 ‖ F2)`, puis `SHA-256(N12 ‖ N34)`. Si tu retombes sur la racine publiée, ton solde est bien dans l'arbre.
-
-Vérifié : le recalcul donne exactement `36c31e71…`. Et tu n'as jamais vu les soldes de F3 ni de F4.
-
-Le coût de la preuve croît en logarithme du nombre de clients :
-
-| Clients | Empreintes à fournir |
+| Nombre de clients | Valeurs nécessaires pour se vérifier |
 |---|---|
-| 4 | 2 |
 | 1 000 | 10 |
 | 1 000 000 | 20 |
 | 50 000 000 | 26 |
 
-Vingt-six valeurs pour vérifier son appartenance parmi cinquante millions. C'est ce qui rend la structure utilisable.
+Vingt-six valeurs suffisent pour se retrouver parmi cinquante millions de comptes. C'est ce qui rend la méthode utilisable en pratique.
 
-## Sur OKX
+## Ce que ça ne prouve pas
 
-OKX publie périodiquement une racine de Merkle et les adresses de ses portefeuilles, avec un outil de vérification et les données permettant de recalculer son chemin soi-même. Le principe est le même chez tous les exchanges qui pratiquent l'exercice.
+C'est la partie la plus importante de la page, et la plus souvent passée sous silence.
 
-## Les pièges
+> [!piege] Rien sur les dettes
+> La méthode prouve ce que la plateforme **possède**. Elle ne dit rien de ce qu'elle **doit** : emprunts, engagements, fonds dus à des tiers. Une entreprise peut détenir un milliard, le prouver parfaitement, et en devoir deux.
 
-> [!piege] Ça ne prouve rien sur les dettes
-> C'est la limite centrale, et elle est décisive. L'arbre prouve l'**actif** : « voici ce que nous détenons, et ton solde est compté dedans ». Il ne dit rien du **passif** : emprunts, engagements, fonds dus à des tiers. Une plateforme peut détenir un milliard, le prouver proprement, et en devoir deux.
+> [!piege] Une photo à un instant donné
+> Rien n'empêche d'emprunter des fonds la veille de la vérification et de les rendre le lendemain. Sans contrôle indépendant des mouvements autour de la date, la preuve ne porte que sur un instant.
 
-> [!piege] Ça ne vaut que pour un instant précis
-> C'est un instantané. Rien n'empêche d'emprunter des fonds la veille de la photo et de les rendre le lendemain. Sans attestation indépendante des mouvements autour de la date, la preuve porte sur une seconde de l'année.
+> [!piege] Publier n'est pas prouver
+> Tant que tu n'as pas refait le calcul toi-même, tu fais confiance sur parole — ce que la procédure était précisément censée éviter. Très peu de gens le font.
 
-> [!piege] Une racine non vérifiée ne sert à rien
-> Publier une racine, ce n'est pas prouver. Tant que tu ne recalcules pas ton propre chemin, tu fais confiance sur parole — exactement ce que la procédure était censée éviter.
-
-> [!verifier] Fréquence et méthode évoluent
-> La périodicité des publications, le format des données et l'outil de vérification changent au fil du temps. Se reporter à la page officielle avant de vérifier.
+> [!verifier] La méthode évolue
+> Fréquence des publications, format des données et outil de vérification changent au fil du temps. Se reporter à la page officielle de la plateforme.
 
 ## Pour aller plus loin
 
-- [On-chain vs off-chain](/okx/on-chain-off-chain) — pourquoi cette preuve doit exister
-- [Les fonctions de hachage](/fondamentaux/hachage) — ce qui rend l'arbre infalsifiable
-- [Étude de cas : la faillite de FTX](/okx/etude-ftx) — le passif que l'arbre ne montre pas
+- [On-chain et off-chain](/okx/on-chain-off-chain) — pourquoi cette preuve doit exister
+- [Qui détient vraiment tes fonds](/okx/custodial-non-custodial)
+- [Les fonctions de hachage](/fondamentaux/hachage) — ce qui rend les empreintes fiables
