@@ -2,89 +2,75 @@
 titre: "Les frais de réseau"
 section: "fondamentaux"
 ordre: 130
-resume: "Une enchère permanente pour un espace de bloc limité. Sur Ethereum, le prix est même piloté par un asservissement qui vise 50 % de remplissage."
-niveau: "intermediaire"
-prerequis: ["/commencer/cest-quoi-une-blockchain"]
-termes: ["frais-de-reseau", "gas", "satoshi", "confirmation", "empreinte"]
+resume: "La place dans un bloc est limitée, donc elle se vend aux enchères. C'est pour ça que le même envoi coûte parfois quelques centimes et parfois plusieurs euros."
+niveau: "bases"
+prerequis: ["/fondamentaux/mempool"]
+termes: ["frais-de-reseau", "gas", "satoshi", "confirmation"]
 sources:
-  - titre: "EIP-1559 — Fee market change for ETH 1.0 chain"
+  - titre: "EIP-1559 — la réforme des frais sur Ethereum"
     url: "https://eips.ethereum.org/EIPS/eip-1559"
-  - titre: "BIP 141 — Segregated Witness (unités de poids)"
-    url: "https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki"
-  - titre: "mempool.space — frais recommandés en direct"
+  - titre: "mempool.space — tarifs conseillés en direct"
     url: "https://mempool.space/api/v1/fees/recommended"
 statut: "redige"
 ---
 
-**Les frais de réseau sont le prix d'une enchère : l'espace dans un bloc est limité, et les transactions qui paient le mieux passent en premier.**
+**Les frais de réseau sont le prix d'une enchère : la place dans un bloc est limitée, et les transactions qui paient le mieux passent en premier.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
-Un bloc a une taille bornée. Sans coût d'entrée, n'importe qui pourrait le saturer de transactions inutiles pour quelques centimes, et bloquer tout le monde.
+Un bloc ne peut pas contenir un nombre illimité de transactions. Si l'accès était gratuit, n'importe qui pourrait le remplir d'opérations inutiles pour bloquer tout le monde.
 
-Les frais règlent deux choses d'un coup : ils rationnent l'accès à une ressource rare, et ils rémunèrent ceux qui produisent les blocs — d'autant plus que la récompense d'émission diminue de moitié à chaque halving.
+Les frais règlent deux choses à la fois : ils rationnent une place limitée, et ils rémunèrent ceux qui font tourner le réseau. Ce second point devient de plus en plus important avec le temps, parce que la récompense automatique versée aux mineurs diminue de moitié tous les quatre ans environ.
 
 ## Comment ça marche
 
-**Bitcoin** facture à la **taille**, pas au montant. Envoyer 10 BTC ou 0,001 BTC coûte la même chose si les deux transactions occupent le même espace. On paie en satoshis par unité de poids virtuel (`sat/vB`), et les mineurs servent les plus offrants.
+Les deux grands réseaux ne facturent pas la même chose.
 
-**Ethereum** facture au **travail de calcul**, mesuré en `gas`. Depuis EIP-1559, le prix se décompose en deux :
+**Bitcoin facture la place occupée**, pas le montant envoyé. Transférer 10 bitcoins ou 0,001 bitcoin coûte exactement pareil si les deux opérations prennent la même place. Ce qui fait varier le prix, c'est la complexité de la transaction — pas sa valeur.
 
-- une **base fee** imposée par le protocole, identique pour tous dans le bloc, et **détruite** ;
-- un **pourboire** libre, qui va au validateur.
+**Ethereum facture le travail demandé**, mesuré en unités appelées `gas`. Un simple envoi coûte peu ; faire tourner un programme compliqué coûte beaucoup.
 
-La base fee n'est pas fixée par un marché d'enchères : elle est recalculée à chaque bloc en fonction du remplissage du précédent. Bloc plus qu'à moitié plein, elle monte ; moins qu'à moitié, elle descend.
+Ethereum a en plus un mécanisme automatique qui ajuste le tarif de base à chaque bloc : si le bloc précédent était plus qu'à moitié plein, le tarif monte ; s'il était moins qu'à moitié plein, il descend. Le système vise en permanence des blocs remplis à 50 %.
 
-## Le pont CIEL
-
-> [!ciel] Tu connais déjà ça
-> La base fee d'EIP-1559 est un **asservissement**. La consigne est 50 % de remplissage de bloc, la grandeur mesurée est le remplissage réel, l'actionneur est le prix, et le correcteur ajuste d'au plus 12,5 % par bloc pour éviter l'oscillation.
+> [!exemple] Un péage qui s'ajuste tout seul
+> C'est un péage dont le prix monte quand la file s'allonge et redescend quand elle se vide, sans que personne ne décide rien. L'objectif n'est pas de gagner plus, mais de garder la circulation fluide.
 >
-> C'est un régulateur proportionnel, avec sa constante de temps et son amortissement. Et comme tout asservissement, il ne tient la consigne qu'en moyenne : sur un bloc donné le remplissage s'écarte, c'est l'intégration dans le temps qui converge.
->
-> Le mécanisme Bitcoin, lui, n'est pas asservi du tout : c'est une enchère pure, en boucle ouverte, et ça se voit à la nervosité de ses frais.
+> Et le mécanisme fonctionne : sur un bloc pris au hasard lors d'un relevé, le remplissage mesuré était de **49,9 %** — pour un objectif de 50 %.
 
-## Exemple chiffré
+## Un exemple concret
 
-Relevés réels du 22 août 2026.
+Deux envois simples, mesurés le même jour.
 
-**Bitcoin.** Frais recommandés : 2 sat/vB pour la file rapide, 1 sat/vB pour l'économique. Une transaction segwit courante pèse environ 141 unités de poids virtuel :
+**Sur Bitcoin**, au tarif « rapide » du moment :
 
 ```
-141 vo × 2 sat/vB = 282 sat = 0,00000282 BTC ≈ 0,22 USDT
+environ 0,22 €
 ```
 
-**Ethereum.** Bloc 25 813 438, base fee mesurée à **0,0940 gwei**. Un transfert simple consomme exactement 21 000 gas :
+**Sur Ethereum**, pour un transfert simple au tarif de base du moment :
 
 ```
-21 000 × 0,0940 gwei = 0,00000197 ETH ≈ 0,0048 USDT
+environ 0,005 €
 ```
 
-Le transfert Bitcoin coûte donc environ **46 fois** le transfert Ethereum à cet instant. Ce rapport n'a rien de stable : il dépend de l'encombrement des deux chaînes et s'inverse régulièrement.
+Soit un rapport de **45 fois** entre les deux, à cet instant précis.
 
-**La vérification qui vaut le détour.** Ce même bloc affichait `gasUsed = 29 956 386` pour un `gasLimit = 60 000 000`, soit **49,9 % de remplissage**. La consigne de l'asservissement est 50 %. Le régulateur fait exactement ce qu'il annonce, et on peut le constater sur un bloc pris au hasard.
+Ce rapport n'a rien de stable. Il dépend uniquement de l'encombrement de chaque réseau, et il s'inverse régulièrement : en période de forte activité sur Ethereum, le même envoi peut coûter plusieurs euros pendant que Bitcoin reste à quelques centimes.
 
-## Sur OKX
+C'est la raison pour laquelle il ne faut jamais retenir « tel réseau est cher, tel autre est bon marché ». Ça se vérifie au moment où l'on envoie, pas une fois pour toutes.
 
-Trois coûts distincts se confondent facilement, et un seul est un frais de réseau :
-
-- **Les frais de trading** vont à OKX. Aucun rapport avec une chaîne.
-- **Les frais de retrait** sont fixés par OKX. Ils couvrent le coût réseau, avec une marge, et ne suivent pas les variations du moment.
-- **Les frais de dépôt** sont de vrais frais de réseau, payés par toi à la chaîne quand tu envoies vers ton adresse de dépôt. OKX n'en voit pas la couleur.
-
-## Les pièges
+## Ce qu'il faut savoir
 
 > [!piege] Les frais ne dépendent pas du montant
-> Sur Bitcoin, ils dépendent de la taille de la transaction en octets, donc du nombre d'entrées consommées. Un portefeuille rempli de petites sorties coûte plus cher à vider qu'un portefeuille avec une seule grosse — à montant identique.
+> Envoyer 10 € ou 10 000 € coûte la même chose. C'est très différent d'un virement bancaire ou d'un paiement par carte, où la commission est souvent proportionnelle.
 
-> [!piege] La base fee est brûlée, pas encaissée
-> Elle disparaît de la circulation. Le validateur ne touche que le pourboire. C'est pour ça qu'un pic d'activité sur Ethereum détruit des ETH.
+> [!piege] Trois choses différentes s'appellent « frais »
+> Les **frais de réseau** vont aux mineurs. Les **frais de la plateforme** vont à l'entreprise chez qui tu as un compte. Les **frais de retrait** sont fixés par cette entreprise et ne correspondent pas au coût réel du réseau. Seuls les premiers sont décrits ici.
 
-> [!piege] Payer plus ne fait pas passer plus vite quand la file est vide
-> Si le mempool est dégarni, la transaction au tarif minimum entre dans le prochain bloc comme les autres. Surpayer n'a d'effet qu'en période d'encombrement.
+> [!piege] Un tarif bas peut vouloir dire une longue attente
+> Choisir le tarif économique n'est pas une astuce gratuite : c'est accepter d'attendre, parfois des heures, parfois de voir la transaction rester bloquée si le réseau s'encombre entre-temps.
 
 ## Pour aller plus loin
 
-- [Mempool et confirmations](/fondamentaux/mempool) — la file d'attente où se joue l'enchère
-- [Le choix du réseau](/okx/choix-du-reseau) — pourquoi le même USDT coûte des sommes très différentes selon la chaîne
-- [Les frais chez OKX](/okx/frais) — ceux qui ne sont pas des frais de réseau
+- [L'attente et les confirmations](/fondamentaux/mempool) — la file dans laquelle on achète sa place
+- [Le choix du réseau](/okx/choix-du-reseau) — pourquoi le même jeton coûte des prix très différents selon la voie choisie

@@ -11,45 +11,20 @@ Construire un wiki personnel, en français, qui explique **comment fonctionne te
 
 ---
 
-## 2. À qui ce site s'adresse (lis attentivement, ça conditionne tout le ton)
+## 2. À qui ce site s'adresse
 
-Un seul lecteur : Luke, 18 ans, élève en Terminale Bac Pro CIEL (Cybersécurité, Informatique, Réseaux, Électronique), en France.
+**Un débutant complet, arrivé là parce qu'il veut comprendre comment marche la crypto.**
 
-**Ce qu'il maîtrise déjà :**
-- réseaux : IP, IPv6, client/serveur, protocoles, notion de nœud et de propagation
-- systèmes : Linux, machines virtuelles, ligne de commande
-- sécurité : bases offensives via TryHackMe, énumération, notion de vulnérabilité
-- développement : HTML/CSS, Git et GitHub (niveau débutant mais réel), Obsidian
-- électronique et signal analogique/numérique
+On ne suppose chez lui aucune connaissance préalable : ni en finance, ni en informatique, ni en cryptographie. Il n'a pas de métier particulier, pas de cursus particulier, et le site ne s'adresse à personne en particulier. C'est un site public sur le fonctionnement de la crypto.
 
-**Ce qu'il ne maîtrise pas :**
-- absolument tout le vocabulaire financier, sans exception
-- la mécanique des marchés
-- la crypto au-delà de l'usage basique de l'app OKX
+**Conséquences sur la rédaction :**
 
-**Conséquence directe sur la rédaction :**
+- Chaque terme technique est expliqué à sa première apparition, qu'il vienne de la finance ou de l'informatique. Aucun n'est présumé connu.
+- Les comparaisons se prennent dans la vie courante, pas dans un domaine professionnel. Pas d'analogie qui suppose de savoir ce qu'est un checksum, une clé SSH, un VLAN ou un asservissement.
+- Le ton reste adulte et précis. Simple ne veut pas dire enfantin : on explique sans prendre de haut, et sans métaphore approximative qui devrait être défaite trois paragraphes plus loin.
+- On préfère une phrase courte et exacte à une phrase longue et prudente.
 
-Ne vulgarise **jamais** la partie technique. Il n'a pas besoin qu'on lui explique ce qu'est un serveur, une base de données ou une requête HTTP. Utilise le vocabulaire informatique normal.
-
-À l'inverse, ne présuppose **rien** du côté finance. Le mot « liquidité », « position », « spread » ou « collatéral » doit être défini la première fois qu'il apparaît.
-
-**Le levier de personnalisation le plus important : ancre chaque concept crypto sur un concept CIEL qu'il connaît déjà.** Exemples de ponts à exploiter systématiquement :
-
-| Concept crypto | Ancrage à utiliser |
-|---|---|
-| Fonction de hachage | checksum, empreinte de fichier, intégrité |
-| Chaînage des blocs | chaîne d'intégrité, journal append-only |
-| Clé privée / publique | TLS, SSH, paire de clés |
-| Nœud, propagation P2P | hôte réseau, broadcast, protocole de gossip |
-| Consensus | élection de leader, tolérance aux pannes, systèmes distribués |
-| Matching engine d'un CEX | base de données + file d'attente, transactions ACID |
-| API REST/WebSocket OKX | client/serveur, polling vs push |
-| Signature de transaction | signature numérique, non-répudiation |
-| Merkle tree (Proof of Reserves) | arbre de hachage, vérification d'intégrité partielle |
-| Smart contract | programme déterministe sur machine virtuelle (EVM ≈ VM) |
-| Phishing crypto, approbations | sécurité applicative, principe du moindre privilège |
-
-Ces ponts ne sont pas décoratifs : ce sont eux qui rendent le site *personnalisé*. Chaque page de fondamentaux doit en contenir au moins un, dans un encadré dédié.
+> Le site a d'abord été écrit avec des encadrés « CIEL » qui rattachaient chaque notion crypto à une notion de cybersécurité, réseau ou électronique. **Cette approche a été abandonnée** : elle rendait le site illisible pour qui n'a pas ce bagage. Il n'en reste rien.
 
 ---
 
@@ -118,38 +93,38 @@ L'objectif : Luke est sur OKX, il comprend un truc, il l'écrit sur son téléph
 
 ## 6. Modèle de page
 
-Frontmatter obligatoire sur chaque page de contenu :
+Frontmatter obligatoire — seul `titre` est réellement exigé par le schéma, le reste a des valeurs par défaut :
 
 ```yaml
 ---
 titre: "Le funding rate"
 section: "derives"
-ordre: 4
-resume: "Le mécanisme qui force le prix d'un perpétuel à coller au prix spot."
-niveau: "intermediaire"        # bases | intermediaire | avance
-prerequis: ["/derives/perpetuels", "/marches/carnet-ordres"]
-termes: ["funding-rate", "perpetuel", "arbitrage"]
+ordre: 40
+resume: "Le mécanisme qui force le prix d'un perpétuel à coller au prix du marché."
+niveau: "bases"              # bases | intermediaire | avance
+prerequis: ["/derives/perpetuels"]
+termes: ["funding-rate", "perpetuel"]
 sources:
-  - titre: "OKX — Funding rate calculation"
+  - titre: "OKX — Funding rate"
     url: "https://..."
-  - titre: "..."
-    url: "https://..."
-maj: 2026-08-22
-statut: "redige"               # ebauche | redige | verifie
+statut: "redige"             # ebauche | redige | verifie
 ---
 ```
 
-Structure du corps, dans cet ordre :
+Structure du corps :
 
 1. **En une phrase** — la définition la plus courte possible, en gras.
-2. **Le problème que ça résout** — pourquoi ce truc existe. Personne ne comprend une solution sans connaître le problème.
-3. **Comment ça marche** — le cœur technique, avec schéma SVG quand il y a une structure ou un flux.
-4. **Encadré CIEL** — le pont vers un concept qu'il connaît déjà (§2).
-5. **Exemple chiffré concret** — avec de vrais nombres, calculés pas à pas.
-6. **Sur OKX précisément** — où ça se trouve dans l'app/l'interface, comment ça s'appelle chez eux, les différences avec la théorie générale.
-7. **Les pièges** — erreurs de compréhension classiques, faux amis de vocabulaire.
-8. **Pour aller plus loin** — liens internes vers les pages liées.
-9. **Sources** — généré automatiquement depuis le frontmatter.
+2. **Pourquoi ça existe** — le problème que ça résout. Personne ne comprend une solution sans connaître le problème.
+3. **Comment ça marche** — l'explication, avec un schéma SVG quand il y a un flux ou une structure à montrer.
+4. **Un exemple concret** — de vrais nombres, calculés pas à pas.
+5. **Sur OKX** — seulement quand le sujet a une contrepartie dans l'application. Section facultative.
+6. **Ce qu'il faut savoir** — les erreurs de compréhension classiques, en encadrés `PIÈGE`.
+7. **Pour aller plus loin** — liens internes.
+8. **Sources** — généré automatiquement depuis le frontmatter.
+
+Quatre encadrés disponibles : `INFO` (précision utile), `EXEMPLE` (une illustration concrète), `PIÈGE` (erreur classique), `À VÉRIFIER` (information susceptible d'avoir changé).
+
+**Longueur cible : 500 à 900 mots.** Au-delà, découper.
 
 ---
 
@@ -356,7 +331,7 @@ Le site doit avoir l'air d'une documentation technique sérieuse, pas d'un blog 
 - **Aucune image bitmap décorative.** Les seuls visuels sont des schémas SVG faits main qui expliquent quelque chose.
 - **Callouts** — quatre types, quatre styles distincts :
   - `INFO` — précision utile
-  - `CIEL` — l'encadré de pont vers ses connaissances (§2), c'est la signature du site
+  - `EXEMPLE` — une illustration concrète
   - `PIÈGE` — erreur de compréhension classique ou faux ami de vocabulaire
   - `À VÉRIFIER` — information susceptible d'avoir changé, avec lien vers la source primaire
 - **Indicateur de niveau** visible en haut de page (bases / intermédiaire / avancé) et liste des prérequis cliquables
@@ -422,7 +397,6 @@ Maintenir `PROGRESS.md` à jour en permanence : liste de toutes les pages prévu
 - [ ] elle commence par une définition en une phrase
 - [ ] elle explique le problème avant la solution
 - [ ] elle contient au moins un exemple chiffré concret
-- [ ] elle contient un encadré CIEL quand c'est pertinent
 - [ ] elle dit où ça se trouve dans OKX quand c'est applicable
 - [ ] elle a un schéma SVG s'il y a un flux, une structure ou une hiérarchie à montrer
 - [ ] elle cite au moins deux sources primaires

@@ -1,61 +1,79 @@
 ---
-titre: "Ce qui se passe quand tu achètes sur OKX"
+titre: "Ce qui se passe quand tu achètes sur une plateforme"
 section: "commencer"
 ordre: 30
-resume: "Une écriture dans la base de données d'OKX, pas une transaction sur une chaîne. Ton solde est une créance, pas une détention."
+resume: "Rien n'est écrit sur la blockchain. La plateforme modifie deux chiffres dans sa propre base, et ce que tu détiens n'est pas de la crypto mais une promesse."
 niveau: "bases"
 prerequis: ["/commencer/cest-quoi-une-blockchain"]
 termes: ["creance", "txid"]
 sources:
-  - titre: "OKX — API v5, documentation officielle"
+  - titre: "OKX — documentation officielle de l'API"
     url: "https://www.okx.com/docs-v5/en/"
   - titre: "OKX — Proof of Reserves"
     url: "https://www.okx.com/proof-of-reserves"
 statut: "redige"
 ---
 
-**Un achat sur OKX est une transaction de base de données. Rien n'est écrit sur aucune chaîne.**
+**Quand tu achètes du bitcoin sur une plateforme comme OKX, Binance ou Coinbase, rien n'est écrit sur la blockchain. La plateforme change deux chiffres dans sa propre base de données.**
 
-## Le problème que ça résout
+## Pourquoi ça marche comme ça
 
-Bitcoin encaisse quelques transactions par seconde, avec des frais à chaque écriture et plusieurs minutes avant qu'une écriture soit considérée comme acquise.
+Une blockchain est lente et coûteuse par nature : une dizaine de minutes par bloc sur Bitcoin, et des frais à chaque écriture.
 
-Un carnet d'ordres encaisse des milliers d'opérations par seconde, dont l'écrasante majorité sont des ordres annulés avant même d'être exécutés. Régler chaque exécution sur la chaîne est physiquement impossible — et sans intérêt, puisque les deux contreparties sont déjà clientes du même établissement.
+Une plateforme d'échange traite des milliers d'ordres par seconde, dont la plupart sont annulés avant même d'être exécutés. Écrire tout ça sur la blockchain serait impossible techniquement, et absurde financièrement.
 
-D'où le montage classique : on ne déplace les actifs que quand ils entrent ou sortent du périmètre. À l'intérieur, on tient des comptes.
+Alors elle fait comme une banque : elle tient ses propres comptes, en interne, et ne touche à la blockchain que quand des fonds entrent ou sortent réellement.
 
-## Les trois moments
+## Comment ça marche
 
-| Ce que tu fais | Ce qui se passe |
+Trois moments, et deux seulement concernent la blockchain :
+
+| Ce que tu fais | Ce qui se passe vraiment |
 |---|---|
-| Dépôt | Vraie transaction on-chain. **Tu** signes, vers une adresse qui appartient à OKX. |
-| Achat, vente, annulation | **Rien on-chain.** Une écriture dans la base d'OKX. Pas de signature, pas de frais réseau, pas de TxID. |
-| Retrait | Vraie transaction on-chain. **OKX** signe, avec ses clés à elle. |
+| **Tu déposes** | Une vraie transaction sur la blockchain. Tu envoies des fonds vers une adresse qui appartient à la plateforme. |
+| **Tu achètes ou tu vends** | **Rien du tout.** La plateforme diminue un chiffre et en augmente un autre, dans sa base à elle. |
+| **Tu retires** | Une vraie transaction. C'est la plateforme qui la signe, avec ses propres secrets. |
 
-Entre le dépôt et le retrait, tu peux passer 500 ordres : zéro octet écrit sur une chaîne.
+Entre ton dépôt et ton retrait, tu peux passer cinq cents ordres : **aucune trace n'apparaîtra jamais sur la blockchain.**
 
-## Le pont CIEL
+## Ce que tu détiens vraiment
 
-> [!ciel] Tu connais déjà ça
-> Off-chain, c'est un commit local : rapide, gratuit, réversible, invisible pour les autres. C'est le moteur d'appariement d'OKX.
+C'est le point important de cette page, et il vaut pour toutes les plateformes.
+
+Le chiffre affiché sur ton compte n'est pas une quantité de bitcoins. C'est une **promesse** : une ligne dans la base de données de l'entreprise, qui dit qu'elle te doit ce montant.
+
+Tant que tout va bien, la différence ne se voit pas. Tu peux retirer, ça marche, la question ne se pose pas.
+
+Elle devient la seule chose qui compte le jour où l'entreprise suspend les retraits, se fait pirater, ou fait faillite. À ce moment-là, tu n'es pas propriétaire de crypto : tu es un créancier parmi des millions d'autres, et tu attends ton tour.
+
+C'est ce que résume la phrase qu'on croise partout dans le milieu : *not your keys, not your coins* — « pas tes clés, pas tes pièces ». Ce n'est pas un slogan militant, c'est la description exacte de la situation.
+
+> [!exemple] Le test qui ne trompe pas
+> Après un achat, cherche un identifiant de transaction. Il n'y en a pas.
 >
-> On-chain, c'est un `push` vers un dépôt répliqué chez des milliers d'inconnus qui vérifient chaque signature. Lent, coûteux, définitif, public. C'est le dépôt et le retrait, rien d'autre.
+> Après un retrait, il y en a un, et tu peux le coller dans un site public pour voir l'opération.
+>
+> Ce n'est pas un oubli de l'application : dans le premier cas, il n'y a rien à identifier, parce que rien n'a eu lieu sur la blockchain.
 
-## Ce que tu détiens réellement
+## Est-ce que c'est grave ?
 
-C'est le point de la page.
+Non, pas en soi. C'est un arbitrage, et il a deux faces.
 
-Ton solde affiché n'est pas une quantité de bitcoins. C'est une **créance** : une ligne dans la base d'OKX qui dit qu'ils te doivent ce montant.
+**Sur une plateforme**, tu délègues la garde. Tu perds ton téléphone, tu récupères ton compte. Tu te fais avoir par un faux site, un blocage peut te sauver. En échange, tu dépends entièrement du sérieux et de la solidité de l'entreprise.
 
-La différence est invisible tant que tout va bien, et devient la seule chose qui compte le jour où la plateforme gèle les retraits, se fait pirater ou dépose son bilan. « Not your keys, not your coins » n'est pas un slogan : c'est la description exacte du montage.
+**Dans ton propre portefeuille**, tu détiens réellement les fonds et personne ne peut te les bloquer. En échange, une erreur est définitive, et personne ne viendra t'aider.
 
-## Le test
+Il n'y a pas de bonne réponse universelle. Il y a juste une chose à savoir : ce n'est pas la même chose, et beaucoup de gens l'apprennent au mauvais moment.
 
-Après un achat, cherche un identifiant de transaction. Il n'y en a pas. Après un retrait, il y en a un, cliquable vers un explorateur de blocs.
+## Ce qu'il faut savoir
 
-Ce n'est pas un manque de l'interface : dans le premier cas, l'objet n'existe pas.
+> [!piege] L'adresse de dépôt n'est pas ton portefeuille
+> Elle appartient à la plateforme. Y envoyer des fonds, c'est les confier à quelqu'un d'autre.
 
-## La suite
+> [!piege] « Instantané » ne veut pas dire « efficace grâce à la blockchain »
+> Un achat est instantané précisément parce qu'il ne touche aucune blockchain. La rapidité d'une plateforme est celle de sa base de données, rien de plus.
 
-- [On-chain vs off-chain](/okx/on-chain-off-chain) — la version complète, avec le schéma de la frontière
-- [Custodial vs non-custodial](/okx/custodial-non-custodial) — ce que « garde » veut dire, techniquement et juridiquement
+## Pour aller plus loin
+
+- [On-chain vs off-chain](/okx/on-chain-off-chain) — la version détaillée, avec le schéma
+- [Qui détient tes fonds](/okx/custodial-non-custodial) — les deux modèles comparés en détail

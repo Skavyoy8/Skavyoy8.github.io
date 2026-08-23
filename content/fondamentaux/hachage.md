@@ -2,126 +2,79 @@
 titre: "Les fonctions de hachage"
 section: "fondamentaux"
 ordre: 20
-resume: "Transformer n'importe quelle donnée en une empreinte de taille fixe et impossible à inverser. C'est la brique sur laquelle tout le reste est posé."
+resume: "Transformer n'importe quelle donnée en un code court, unique en pratique, et impossible à remonter à l'envers. C'est la brique sur laquelle tout le reste est posé."
 niveau: "bases"
-prerequis: []
-termes: ["hachage", "sha-256", "empreinte", "collision", "effet-avalanche", "preimage", "merkle"]
+prerequis: ["/commencer/cest-quoi-une-blockchain"]
+termes: ["hachage", "sha-256", "empreinte", "collision", "effet-avalanche", "merkle"]
 sources:
-  - titre: "NIST — FIPS 180-4, Secure Hash Standard (SHA-256)"
+  - titre: "NIST — la norme officielle qui définit SHA-256"
     url: "https://csrc.nist.gov/pubs/fips/180-4/upd1/final"
-  - titre: "Satoshi Nakamoto — Bitcoin: A Peer-to-Peer Electronic Cash System"
+  - titre: "Satoshi Nakamoto — le document qui a lancé Bitcoin (2008)"
     url: "https://bitcoin.org/bitcoin.pdf"
-  - titre: "Bitcoin Developer Reference — Block Chain"
-    url: "https://developer.bitcoin.org/reference/block_chain.html"
 statut: "redige"
 ---
 
-**Une fonction de hachage transforme une donnée de n'importe quelle taille en une empreinte de taille fixe, sans moyen connu de faire le chemin inverse.**
+**Une fonction de hachage transforme n'importe quelle donnée en un code de longueur fixe, appelé empreinte, sans qu'on sache faire le chemin inverse.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
-Tu veux prouver que deux fichiers sont identiques sans les comparer octet par octet. Tu veux détecter qu'un fichier a été modifié sans garder une copie de l'original. Tu veux relier des blocs de données entre eux de façon qu'on ne puisse pas en retoucher un seul sans que ça se voie.
+Trois besoins, une seule réponse.
 
-Les trois problèmes ont la même solution : calculer une empreinte courte, déterministe, et telle que la moindre modification de l'entrée produise une empreinte totalement différente.
+Tu veux **vérifier que deux fichiers sont identiques** sans les comparer entièrement. Tu veux **détecter qu'un document a été modifié** sans garder une copie de l'original pour comparer. Tu veux **relier des blocs entre eux** de façon qu'on ne puisse pas en retoucher un sans que ça se voie.
+
+Dans les trois cas, il suffit de savoir calculer un petit code qui dépend de la totalité du contenu, et qui change du tout au tout dès qu'on touche à quoi que ce soit.
 
 ## Comment ça marche
 
-SHA-256 est normalisée par le NIST dans FIPS 180-4. Elle prend une suite d'octets de longueur quelconque et rend toujours **256 bits**, soit 32 octets, soit 64 caractères en hexadécimal.
+SHA-256 est la fonction utilisée par Bitcoin. Elle est définie par une norme publique du NIST, l'organisme américain de normalisation. Elle accepte n'importe quoi en entrée — un mot, un film, un fichier vide — et rend toujours **64 caractères**.
 
-<figure class="schema">
-<svg viewBox="0 0 640 250" role="img" aria-label="Trois entrées de tailles très différentes passent par SHA-256 et produisent trois empreintes de taille identique">
-  <text x="10" y="18" font-size="11" fill="var(--texte-faible)">ENTRÉE — taille quelconque</text>
-  <text x="255" y="18" font-size="11" fill="var(--texte-faible)">FONCTION</text>
-  <text x="430" y="18" font-size="11" fill="var(--texte-faible)">SORTIE — toujours 32 octets</text>
-
-  <rect x="10" y="34" width="150" height="22" rx="3" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="20" y="49" font-size="12" fill="var(--texte)">8 octets</text>
-
-  <rect x="10" y="92" width="150" height="76" rx="3" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="20" y="135" font-size="12" fill="var(--texte)">1,4 Go</text>
-
-  <rect x="10" y="204" width="150" height="14" rx="3" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="20" y="215" font-size="11" fill="var(--texte-doux)">0 octet</text>
-
-  <path d="M165 45 L245 100 M165 130 L245 130 M165 211 L245 160"
-        stroke="var(--texte-faible)" stroke-width="1.2" fill="none"/>
-
-  <rect x="250" y="86" width="130" height="88" rx="6" fill="var(--accent-voile)" stroke="var(--accent)" stroke-width="1.5"/>
-  <text x="315" y="126" font-size="14" fill="var(--accent)" text-anchor="middle" font-weight="600">SHA-256</text>
-  <text x="315" y="146" font-size="10" fill="var(--texte-doux)" text-anchor="middle">déterministe</text>
-
-  <path d="M385 110 L425 55 M385 130 L425 130 M385 150 L425 205"
-        stroke="var(--texte-faible)" stroke-width="1.2" fill="none"/>
-
-  <rect x="428" y="44" width="202" height="22" rx="3" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="436" y="59" font-size="11" fill="var(--code-texte)">c83fa1db…72800325</text>
-
-  <rect x="428" y="119" width="202" height="22" rx="3" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="436" y="134" font-size="11" fill="var(--code-texte)">9f60d83e…b5691202</text>
-
-  <rect x="428" y="194" width="202" height="22" rx="3" fill="var(--fond-2)" stroke="var(--bordure-forte)"/>
-  <text x="436" y="209" font-size="11" fill="var(--code-texte)">e3b0c442…7852b855</text>
-</svg>
-<figcaption>La taille de l'entrée n'a aucune influence sur la taille de la sortie. Même une entrée vide produit une empreinte de 32 octets.</figcaption>
-</figure>
-
-Quatre propriétés font l'intérêt de la chose :
+Quatre propriétés en font l'intérêt :
 
 | Propriété | Ce que ça veut dire |
 |---|---|
-| Déterminisme | La même entrée donne toujours exactement la même empreinte, sur n'importe quelle machine. |
-| Résistance à la préimage | À partir d'une empreinte, on ne sait pas retrouver l'entrée autrement qu'en essayant toutes les entrées possibles. |
-| Résistance à la collision | On ne sait pas fabriquer deux entrées différentes qui donnent la même empreinte. |
-| Effet avalanche | Changer un seul bit de l'entrée change environ la moitié des bits de la sortie. |
+| **Toujours pareil** | La même entrée donne toujours la même empreinte, sur n'importe quel ordinateur, aujourd'hui comme dans dix ans. |
+| **Sens unique** | À partir de l'empreinte, on ne sait pas retrouver l'entrée. Il faudrait essayer toutes les possibilités, une par une. |
+| **Pas de doublon connu** | Personne ne sait fabriquer deux entrées différentes qui donneraient la même empreinte. |
+| **Effet avalanche** | Changer un seul caractère change environ la moitié de l'empreinte. |
 
-## Le pont CIEL
+## Un exemple concret
 
-> [!ciel] Tu connais déjà ça
-> C'est exactement le `sha256sum` que tu lances après avoir téléchargé une ISO Debian ou Kali. Le site publie l'empreinte, tu la recalcules sur ton fichier, tu compares. Si un octet a été modifié en route — corruption réseau ou miroir compromis — les deux chaînes n'ont plus rien à voir.
+Deux mots qui ne diffèrent que par une majuscule :
+
+```
+Registre  →  c83fa1db7c07b7214d8d16dc50e7a2cd075005197267fa1da276b28a72800325
+registre  →  9f60d83e92d7ca4f038d58765514e5a84ddfa3ab9629cfb38e3f6c2ab5691202
+```
+
+Une seule lettre a changé de casse. Les deux résultats n'ont **pas un seul caractère en commun au début**, ni de ressemblance nulle part.
+
+C'est ça, l'effet avalanche, et c'est ce qui rend le procédé utile : il n'existe aucune notion de « presque pareil ». Deux empreintes sont identiques, ou totalement différentes. On ne peut donc pas s'approcher progressivement d'un résultat visé.
+
+> [!exemple] L'ordre de grandeur
+> Une empreinte SHA-256 peut prendre environ 10⁷⁷ valeurs différentes — un 1 suivi de 77 zéros.
 >
-> Une blockchain fait la même chose, mais en continu : chaque bloc contient l'empreinte du bloc précédent. Modifier une transaction ancienne change l'empreinte de son bloc, donc celle du suivant, donc toute la suite. C'est un `sha256sum` chaîné sur tout l'historique.
+> C'est à peu près le nombre d'atomes qui composent l'univers observable. Chercher une entrée qui donnerait une empreinte imposée revient à fouiller un espace de cette taille, un élément à la fois.
 
-## Exemple chiffré
+## À quoi ça sert dans la crypto
 
-Deux chaînes qui ne diffèrent que par une majuscule :
+- **Relier les blocs.** Chaque bloc contient l'empreinte du précédent. C'est ce qui rend la chaîne infalsifiable.
+- **Identifier une transaction.** Le code que tu colles dans un site public pour suivre un virement est l'empreinte de cette transaction.
+- **Fabriquer les adresses.** Une adresse est obtenue en hachant plusieurs fois une clé publique.
+- **Miner.** Les mineurs cherchent, par essais successifs, une empreinte inférieure à un seuil donné. C'est tout le travail.
 
-```bash
-printf 'Registre' | sha256sum
-printf 'registre' | sha256sum
-```
-
-Sortie réelle :
-
-```
-c83fa1db7c07b7214d8d16dc50e7a2cd075005197267fa1da276b28a72800325  -
-9f60d83e92d7ca4f038d58765514e5a84ddfa3ab9629cfb38e3f6c2ab5691202  -
-```
-
-Un seul bit change dans l'entrée — la différence entre `R` (0x52) et `r` (0x72) tient au bit 5. Les deux empreintes n'ont aucun préfixe commun. C'est l'effet avalanche : il n'existe aucune notion de « proximité » entre deux empreintes. On ne peut pas s'approcher progressivement d'une cible.
-
-Un ordre de grandeur pour la résistance à la préimage : une empreinte SHA-256 a 2²⁵⁶ valeurs possibles, soit environ 1,2 × 10⁷⁷. Le nombre d'atomes dans l'univers observable est estimé autour de 10⁸⁰. Chercher une entrée qui donne une empreinte imposée revient à fouiller un espace du même ordre de grandeur.
-
-## Sur OKX
-
-Tu croises des empreintes SHA-256 à trois endroits, sans que l'interface emploie jamais le mot « hachage » :
-
-- **Le TxID d'un retrait.** Quand tu retires du BTC, OKX affiche un identifiant de transaction de 64 caractères hexadécimaux : c'est le double SHA-256 de la transaction sérialisée. C'est ce que tu colles dans un explorateur de blocs pour vérifier toi-même.
-- **Le Proof of Reserves.** OKX publie un arbre de Merkle, une structure entièrement construite avec des empreintes, qui permet de vérifier que ton solde est bien inclus dans le total annoncé sans révéler les soldes des autres clients.
-- **Les adresses de dépôt.** Une adresse Bitcoin dérive de la clé publique par des fonctions de hachage successives, pas de la clé publique elle-même.
-
-## Les pièges
+## Ce qu'il faut savoir
 
 > [!piege] Hacher n'est pas chiffrer
-> Un chiffrement est réversible avec la bonne clé : c'est son but. Un hachage ne l'est pas, il n'y a pas de clé et pas de déchiffrement. Une empreinte n'est pas « du texte chiffré » : l'information de départ n'est plus là, on l'a détruite en la compressant sur 32 octets.
+> Chiffrer est réversible : avec la bonne clé, on retrouve le message. Hacher ne l'est pas, et il n'y a aucune clé. L'information de départ n'est plus là du tout — elle a été réduite à 64 caractères, ce qui détruit forcément la quasi-totalité du contenu.
 
-> [!piege] « Un hash est unique » est faux
-> Il y a une infinité d'entrées possibles pour un nombre fini d'empreintes, donc des collisions existent forcément. La propriété réelle est plus faible et plus utile : personne ne sait *en fabriquer une*. Pour MD5 et SHA-1, on sait le faire aujourd'hui — c'est pour ça qu'on ne les utilise plus pour la sécurité.
+> [!piege] « Une empreinte est unique » est faux
+> Il y a une infinité d'entrées possibles pour un nombre fini d'empreintes. Des doublons existent donc forcément. La vraie propriété est plus modeste et plus utile : **personne ne sait en fabriquer un**. Pour des fonctions plus anciennes comme MD5 et SHA-1, on sait le faire aujourd'hui — c'est pourquoi elles ont été abandonnées.
 
-> [!piege] Le double SHA-256 de Bitcoin
-> Bitcoin n'applique pas SHA-256 une fois mais deux, sur le résultat de la première passe. Si tu recalcules à la main l'empreinte d'un bloc et que tu ne retrouves pas la valeur de l'explorateur, c'est probablement ça — plus le fait que l'affichage est en boutisme inversé.
+> [!piege] Le résultat n'a rien d'aléatoire
+> Il en a l'air, mais il est parfaitement déterminé. La même entrée donnera toujours exactement le même résultat. C'est justement ce qui permet à des milliers d'ordinateurs de vérifier la même chose et de tomber d'accord.
 
 ## Pour aller plus loin
 
-- [Qu'est-ce qu'une blockchain](/fondamentaux/blockchain) — comment le chaînage se construit concrètement
-- [Cryptographie asymétrique](/fondamentaux/cryptographie-asymetrique) — l'autre brique, celle qui prouve qui tu es
-- [Proof of Reserves](/okx/proof-of-reserves) — l'arbre de Merkle en pratique
+- [C'est quoi une blockchain ?](/commencer/cest-quoi-une-blockchain) — le chaînage des blocs par l'empreinte
+- [Adresses et sommes de contrôle](/fondamentaux/adresses) — comment une adresse est fabriquée
+- [Proof of Work](/fondamentaux/proof-of-work) — la recherche d'empreinte qui protège le réseau

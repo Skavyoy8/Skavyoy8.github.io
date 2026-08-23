@@ -14,20 +14,16 @@ statut: "ebauche"
 
 **En une phrase.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
 ## Comment ça marche
 
-## Le pont CIEL
+## Un exemple concret
 
-> [!ciel] Tu connais déjà ça
+> [!exemple]
 > 
 
-## Exemple chiffré
-
-## Sur OKX
-
-## Les pièges
+## Ce qu'il faut savoir
 
 > [!piege] 
 > 

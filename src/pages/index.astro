@@ -12,19 +12,30 @@ const total = Object.values(compte).reduce((a, b) => a + b, 0);
 ---
 <Base titre="Accueil" description="Wiki technique sur le fonctionnement de la crypto et d'OKX.">
   <article class="article">
-    <h1 class="page-titre">Registre</h1>
+    <h1 class="page-titre">Comment marche la crypto</h1>
     <p class="page-resume">
-      Comment fonctionne, techniquement, tout ce qu'on croise sur OKX et dans
-      l'univers crypto — de la fonction de hachage au funding rate d'un perpétuel.
+      Un site pour comprendre, expliqué depuis le début, sans rien supposer de connu.
     </p>
 
     <div class="contenu">
       <p>
-        Ce wiki est écrit pour <strong>comprendre</strong>, pas pour investir. Il ne
-        contient aucun conseil, aucune stratégie et aucun avertissement moralisateur.
-        Le risque y est traité comme de la mécanique : une formule, un exemple chiffré,
-        un fait.
+        Ce site explique <strong>comment ça fonctionne</strong>. Il ne donne aucun
+        conseil, ne recommande rien à acheter et n'a rien à te vendre. Chaque
+        affirmation s'appuie sur une source, et les chiffres sont calculés, pas
+        recopiés.
       </p>
+
+      <p>
+        Si tu n'y connais rien, commence par ces trois pages, dans l'ordre :
+      </p>
+
+      <ol class="depart">
+        <li><a href="/commencer/cest-quoi-la-crypto">C'est quoi la crypto ?</a></li>
+        <li><a href="/commencer/cest-quoi-une-blockchain">C'est quoi une blockchain ?</a></li>
+        <li><a href="/commencer/acheter-sur-okx">Ce qui se passe quand tu achètes sur une plateforme</a></li>
+      </ol>
+
+      <p>Ensuite, pioche selon ce qui t'intéresse :</p>
 
       <ul class="grille-sections">
         {SECTIONS.map((s) => (

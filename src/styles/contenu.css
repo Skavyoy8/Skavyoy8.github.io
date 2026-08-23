@@ -151,8 +151,8 @@ h2:hover .ancre, h3:hover .ancre, .ancre:focus { opacity: 1; }
 .encadre--info      { border-left-color: var(--info);      background: var(--info-voile); }
 .encadre--info .encadre__titre { color: var(--info); }
 
-.encadre--ciel      { border-left-color: var(--accent);    background: var(--accent-voile); }
-.encadre--ciel .encadre__titre { color: var(--accent); }
+.encadre--exemple   { border-left-color: var(--accent);    background: var(--accent-voile); }
+.encadre--exemple .encadre__titre { color: var(--accent); }
 
 .encadre--piege     { border-left-color: var(--attention); background: var(--attention-voile); }
 .encadre--piege .encadre__titre { color: var(--attention); }
@@ -509,3 +509,7 @@ dl.glossaire dd {
   color: var(--texte-faible);
   text-align: center;
 }
+
+/* Les trois pages de départ, sur l'accueil */
+.depart { margin: var(--pas-4) 0; padding-left: var(--pas-6); }
+.depart li { margin: var(--pas-2) 0; font-size: 1.0625rem; }

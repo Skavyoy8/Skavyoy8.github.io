@@ -1,10 +1,10 @@
 /**
  * Transforme les callouts de syntaxe Obsidian en encadrés stylés.
  *
- *   > [!ciel] Titre optionnel
+ *   > [!exemple] Titre optionnel
  *   > le texte
  *
- * devient <aside class="encadre encadre--ciel"> avec un titre.
+ * devient <aside class="encadre encadre--exemple"> avec un titre.
  *
  * Pourquoi cette syntaxe plutôt que des directives `:::` : c'est un
  * blockquote Markdown standard. Obsidian le stylise nativement sur
@@ -16,9 +16,9 @@
  */
 
 const TYPES = {
-  info: { classe: 'info', libelle: 'Info' },
-  note: { classe: 'info', libelle: 'Info' },
-  ciel: { classe: 'ciel', libelle: 'Tu connais déjà ça' },
+  info: { classe: 'info', libelle: 'Bon à savoir' },
+  note: { classe: 'info', libelle: 'Bon à savoir' },
+  exemple: { classe: 'exemple', libelle: 'En clair' },
   piege: { classe: 'piege', libelle: 'Piège' },
   'piège': { classe: 'piege', libelle: 'Piège' },
   attention: { classe: 'piege', libelle: 'Piège' },
@@ -59,7 +59,7 @@ export default function remarkEncadres() {
         // produire un encadré muet, et on prévient dans la console du build.
         console.warn(
           `[encadres] type inconnu « ${cle} » dans ${fichier?.path ?? 'un fichier'} — ` +
-            `types acceptés : info, ciel, piege, verifier`
+            `types acceptés : info, exemple, piege, verifier`
         );
         return;
       }

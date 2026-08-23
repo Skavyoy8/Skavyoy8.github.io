@@ -2,52 +2,73 @@
 titre: "C'est quoi une blockchain ?"
 section: "commencer"
 ordre: 20
-resume: "Un journal append-only découpé en blocs, chaque bloc contenant l'empreinte du précédent. Modifier une entrée ancienne invalide tout ce qui suit."
+resume: "La façon de ranger le registre qui rend impossible de modifier une vieille ligne sans que tout le monde s'en aperçoive."
 niveau: "bases"
 prerequis: ["/commencer/cest-quoi-la-crypto"]
 termes: ["empreinte"]
 sources:
-  - titre: "Satoshi Nakamoto — Bitcoin: A Peer-to-Peer Electronic Cash System"
+  - titre: "Satoshi Nakamoto — le document qui a lancé Bitcoin (2008)"
     url: "https://bitcoin.org/bitcoin.pdf"
-  - titre: "Bitcoin Developer Reference — Block Chain"
-    url: "https://developer.bitcoin.org/reference/block_chain.html"
+  - titre: "mempool.space — état de la chaîne Bitcoin en direct"
+    url: "https://mempool.space"
 statut: "redige"
 ---
 
-**Une blockchain, c'est un journal append-only découpé en blocs, où chaque bloc embarque l'empreinte du précédent.**
+**Une blockchain est un registre découpé en pages numérotées, reliées entre elles de telle sorte qu'on ne peut pas en modifier une seule sans casser toutes les suivantes.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
-Le journal est répliqué partout. Très bien. Mais qu'est-ce qui empêche une machine de modifier une entrée vieille de trois mois dans sa copie, puis de la propager ?
+Le registre est recopié sur des milliers d'ordinateurs. Très bien. Mais qu'est-ce qui empêche l'un d'eux de modifier discrètement une ligne vieille de trois mois dans sa copie, puis de prétendre que c'est la bonne version ?
 
-Il faut que toute altération d'une entrée ancienne soit détectable en temps constant, sans comparer les historiques entrée par entrée.
+Il fallait un moyen de repérer instantanément toute modification du passé — sans avoir à comparer des millions de lignes une par une.
 
 ## Comment ça marche
 
-Les transactions sont groupées en **blocs** — environ 3 000 par bloc sur Bitcoin, un bloc toutes les dix minutes environ.
+Les transactions sont rassemblées par paquets qu'on appelle des **blocs**. Sur Bitcoin, un nouveau bloc est ajouté toutes les dix minutes environ, et contient quelques milliers de transactions.
 
-L'en-tête de chaque bloc contient l'**empreinte** du bloc précédent : une valeur de taille fixe calculée sur son contenu.
+Le mécanisme tient dans une seule idée. Chaque bloc contient une **empreinte** du bloc précédent : un petit code, d'une soixantaine de caractères, calculé à partir de la totalité de son contenu.
 
-Modifie une transaction dans un bloc ancien, et son empreinte change. L'en-tête du bloc suivant ne correspond plus. Ni celui d'après. **Toute la suite de la chaîne devient invalide d'un coup**, et n'importe quel nœud le détecte en recalculant.
+Cette empreinte a une propriété particulière : elle change complètement à la moindre modification. Changez une virgule dans le bloc, et l'empreinte n'a plus rien à voir avec la précédente.
 
-## Le pont CIEL
+Alors si quelqu'un modifie une transaction dans un vieux bloc :
 
-> [!ciel] Tu connais déjà ça
-> C'est la structure de l'historique Git : chaque commit référence l'empreinte de son parent, donc réécrire un commit ancien réécrit tous ses descendants — c'est exactement pour ça qu'un `rebase` change tous les identifiants en aval.
->
-> Une blockchain, c'est ça, plus deux choses : les commits sont signés, et une règle de consensus désigne la branche qui fait autorité quand deux existent.
+- l'empreinte de ce bloc change ;
+- le bloc suivant, qui contenait l'ancienne empreinte, ne correspond plus ;
+- le bloc d'après non plus, et ainsi de suite jusqu'à aujourd'hui.
 
-## Pourquoi personne ne réécrit l'histoire
+**Toute la suite s'écroule d'un coup**, et n'importe quel ordinateur du réseau s'en rend compte en une fraction de seconde.
 
-Recalculer l'empreinte d'un bloc ne suffit pas : il faut refaire tous les blocs suivants, **plus vite que le reste du réseau qui continue d'en produire**. Le coût en électricité dépasse largement ce qu'on pourrait en tirer.
+C'est de là que vient le nom : une chaîne (*chain*) de blocs (*block*).
 
-Donc « immuable » n'est pas une propriété mathématique, c'est une propriété économique : trop cher pour que ça vaille le coup. La nuance a son importance, et elle disparaît dans la plupart des présentations.
+> [!exemple] L'image du sceau de cire
+> C'est le principe d'un document dont chaque page porte le sceau de la précédente. Retirer ou modifier une page casse la continuité des sceaux, et ça se voit immédiatement, sans avoir à relire le document.
 
-## Où en est la chaîne
+## Pourquoi personne ne triche
 
-Bitcoin en est au bloc **963635** au moment où j'écris. Chacun référence le précédent sans interruption depuis le bloc 0, le 3 janvier 2009.
+Recalculer l'empreinte d'un bloc modifié ne suffit pas. Il faudrait aussi refaire **tous les blocs suivants** — et plus vite que le reste du monde, qui continue d'en ajouter pendant ce temps.
 
-## La suite
+Or produire un bloc coûte une quantité considérable d'électricité. Rattraper des mois de retard coûterait bien plus cher que ce qu'on pourrait espérer voler.
 
-- [Ce qui se passe quand tu achètes sur OKX](/commencer/acheter-sur-okx)
-- [Les fonctions de hachage](/fondamentaux/hachage) — ce qu'est exactement une empreinte, et pourquoi on ne peut pas l'inverser
+Ce point mérite d'être bien compris, parce qu'on lit souvent que la blockchain est « inviolable » :
+
+> [!info] « Immuable » veut dire trop cher, pas impossible
+> Rien dans les mathématiques n'interdit de réécrire l'histoire. Ce qui l'interdit, c'est le coût. C'est une garantie économique, pas une garantie absolue — et elle tient tant que personne ne peut mobiliser plus de puissance que le reste du réseau réuni.
+
+## Un exemple concret
+
+Au moment où cette page a été mise à jour, la chaîne Bitcoin en était à son bloc numéro **963718**.
+
+Chacun de ces blocs contient l'empreinte du précédent, sans interruption depuis le tout premier, daté du 3 janvier 2009. Pour modifier une transaction faite l'an dernier, il faudrait refaire environ cinquante mille blocs, plus vite que la planète entière.
+
+## Ce qu'il faut savoir
+
+> [!piege] Une blockchain ne vérifie pas ce qui est vrai
+> Elle garantit qu'une ligne écrite n'a pas été modifiée après coup. Elle ne garantit pas que cette ligne disait quelque chose de vrai au départ. Inscrire un mensonge dans une blockchain le rend permanent, pas exact.
+
+> [!piege] Toutes les blockchains ne se valent pas
+> Le principe est le même partout, la sécurité non. Elle dépend de la puissance ou des sommes engagées pour protéger le réseau. Une petite chaîne peu défendue peut être réécrite pour un coût modeste — c'est déjà arrivé plusieurs fois.
+
+## Pour aller plus loin
+
+- [Ce qui se passe quand tu achètes sur une plateforme](/commencer/acheter-sur-okx)
+- [Les fonctions de hachage](/fondamentaux/hachage) — comment l'empreinte est calculée

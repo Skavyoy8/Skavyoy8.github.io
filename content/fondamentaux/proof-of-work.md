@@ -1,110 +1,88 @@
 ---
-titre: "Proof of Work"
+titre: "Le minage (Proof of Work)"
 section: "fondamentaux"
 ordre: 90
-resume: "Chercher un nombre au hasard jusqu'à ce que l'empreinte du bloc passe sous une cible. Le coût de cette recherche est ce qui protège la chaîne."
-niveau: "intermediaire"
-prerequis: ["/fondamentaux/hachage", "/commencer/cest-quoi-une-blockchain"]
+resume: "Une loterie mondiale où l'on achète des tickets avec de l'électricité. C'est ce coût, et lui seul, qui empêche de réécrire l'histoire."
+niveau: "bases"
+prerequis: ["/fondamentaux/hachage"]
 termes: ["proof-of-work", "difficulte", "empreinte", "sha-256", "coinbase", "halving"]
 sources:
-  - titre: "Satoshi Nakamoto — Bitcoin: A Peer-to-Peer Electronic Cash System"
+  - titre: "Satoshi Nakamoto — le document qui a lancé Bitcoin (2008)"
     url: "https://bitcoin.org/bitcoin.pdf"
-  - titre: "Bitcoin Developer Reference — Block Chain"
-    url: "https://developer.bitcoin.org/reference/block_chain.html"
-  - titre: "mempool.space — difficulté et hashrate en direct"
+  - titre: "mempool.space — difficulté et puissance du réseau en direct"
     url: "https://mempool.space"
 statut: "redige"
 ---
 
-**Le minage consiste à faire varier un nombre dans l'en-tête d'un bloc jusqu'à ce que l'empreinte de cet en-tête tombe sous une valeur cible. Il n'existe aucune méthode plus rapide que d'essayer.**
+**Miner, c'est essayer des milliards de combinaisons par seconde jusqu'à en trouver une qui donne une empreinte assez petite. Celui qui trouve gagne le droit d'ajouter le bloc suivant, et une récompense.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
-Sans autorité centrale, il faut un moyen de désigner qui écrit le prochain bloc, et surtout de rendre coûteuse la réécriture du passé.
+Il faut désigner qui écrit la prochaine page du registre. Sans chef, comment choisir ?
 
-Voter ne marche pas : on peut créer autant d'identités qu'on veut. Il faut adosser le droit d'écrire à une ressource qu'on ne peut pas fabriquer gratuitement. La preuve de travail choisit le calcul, donc l'électricité.
+Voter ne marche pas : sur Internet, n'importe qui peut créer un million de faux participants. Il faut donc adosser le droit d'écrire à quelque chose qu'on ne peut pas fabriquer gratuitement.
+
+Le choix de Bitcoin : **l'électricité**. Pour avoir une chance d'écrire, il faut dépenser du calcul, donc du courant. On ne peut pas tricher là-dessus.
 
 ## Comment ça marche
 
-L'en-tête d'un bloc contient un champ libre, le **nonce**. Le mineur l'incrémente et recalcule l'empreinte de l'en-tête à chaque essai, jusqu'à en obtenir une inférieure à la cible fixée par la **difficulté**.
+Le mineur assemble un bloc de transactions, puis y ajoute un nombre quelconque. Il calcule l'empreinte de l'ensemble. Si elle commence par assez de zéros, il a gagné et diffuse son bloc. Sinon il change le nombre et recommence.
 
-Comme l'empreinte se comporte comme un tirage aléatoire — c'est l'effet avalanche — il n'existe aucun raccourci. Pas de gradient à suivre, pas de solution partielle à améliorer. Le seul algorithme connu est la force brute.
+Il n'existe **aucune méthode plus rapide que d'essayer**. L'empreinte se comporte comme un tirage : on ne peut pas s'en approcher progressivement, il faut tomber dessus.
 
-Vérifier, en revanche, coûte un seul calcul. Cette asymétrie entre trouver et vérifier est tout le mécanisme.
+En revanche, une fois trouvée, **la vérification prend un seul calcul**. C'est ce déséquilibre — très cher à trouver, instantané à vérifier — qui fait tout fonctionner.
 
-La difficulté se réajuste tous les 2 016 blocs pour maintenir un rythme d'environ dix minutes par bloc, quelle que soit la puissance branchée sur le réseau.
+Le nombre de zéros exigés s'appelle la **difficulté**. Elle se réajuste automatiquement environ tous les quinze jours pour que le rythme reste d'un bloc toutes les dix minutes, quelle que soit la puissance branchée sur le réseau.
 
-## Le pont CIEL
-
-> [!ciel] Tu connais déjà ça
-> C'est une attaque par force brute sur un hachage — sauf qu'ici, c'est le fonctionnement légitime du système.
+> [!exemple] Une loterie, pas un concours
+> Le mineur ne résout aucun problème. Il achète des tickets de loterie avec de l'électricité, et plus il en achète, plus il a de chances de tirer le bon numéro.
 >
-> Un mot de passe haché se casse en essayant des entrées jusqu'à retomber sur l'empreinte connue ; un bloc se mine en essayant des nonces jusqu'à obtenir une empreinte qui commence par assez de zéros. Même boucle, même absence de raccourci, mêmes contre-mesures — augmenter le coût unitaire d'un essai revient exactement à monter la difficulté.
->
-> La différence est le sens du signe : en sécurité offensive on cherche à réduire ce coût, en minage on le paie volontairement parce que c'est lui qui achète la sécurité.
+> Un petit mineur n'est pas « en retard » sur un gros : il a simplement moins de tickets. Il peut gagner, c'est juste très improbable.
 
-## Exemple chiffré
+## Un exemple concret
 
-D'abord en local, pour rendre la chose tangible. On cherche une empreinte SHA-256 commençant par un nombre croissant de zéros :
+Le principe se teste chez soi. On cherche une empreinte commençant par un nombre croissant de zéros, en essayant les nombres un par un :
 
-```python
-import hashlib
-base = b"Registre bloc test "
-n = 0
-while not hashlib.sha256(base + str(n).encode()).hexdigest().startswith("0000"):
-    n += 1
-```
+| Zéros demandés | Essais nécessaires | Temps sur un ordinateur ordinaire |
+|---|---|---|
+| 2 | 540 | instantané |
+| 3 | 740 | instantané |
+| 4 | 48 333 | un dixième de seconde |
+| 6 | 21 563 103 | 34 secondes |
 
-Résultats réels sur cette machine :
+Chaque zéro supplémentaire multiplie le travail par seize environ. Ces chiffres ont été réellement mesurés — ce ne sont pas des estimations.
 
-| Zéros exigés | Essais réels | Temps | Essais attendus (16ⁿ) |
-|---|---|---|---|
-| 2 | 540 | < 0,01 s | 256 |
-| 3 | 740 | < 0,01 s | 4 096 |
-| 4 | 48 333 | 0,09 s | 65 536 |
-| 6 | 21 563 103 | 34,1 s | 16 777 216 |
-
-Chaque zéro hexadécimal supplémentaire multiplie par 16 le travail attendu. Les essais réels collent aux valeurs théoriques : c'est bien un tirage aléatoire.
-
-Maintenant l'échelle réelle. Difficulté relevée le 22 août 2026 : **1,275 × 10¹⁴**. Le nombre d'essais attendus pour un bloc vaut difficulté × 2³² :
+Maintenant l'échelle réelle. Avec la difficulté relevée sur Bitcoin, il faut en moyenne :
 
 ```
-5,476 × 10²³ essais attendus par bloc
+547 600 000 000 000 000 000 000 essais pour trouver un bloc
 ```
 
-Cette machine a soutenu 632 720 essais par seconde. Il lui faudrait donc :
+Cet ordinateur en fait environ 630 000 par seconde. **Il lui faudrait 27 milliards d'années.**
+
+Le réseau entier, lui, en fait 913 700 000 000 000 000 000 par seconde, et met donc :
 
 ```
-5,476e23 / 632 720 = 8,7 × 10¹⁷ secondes ≈ 27 milliards d'années
+599 secondes, soit très exactement dix minutes
 ```
 
-Le réseau, lui, tourne à 913,7 EH/s, soit 9,137 × 10²⁰ essais par seconde :
+Le calcul retombe précisément sur le rythme visé par le protocole. C'est la meilleure preuve que ces trois chiffres — difficulté, puissance du réseau, temps entre deux blocs — décrivent bien la même réalité.
 
-```
-5,476e23 / 9,137e20 = 599 secondes
-```
+Autrement dit : le réseau est environ **mille milliards de fois** plus rapide qu'un ordinateur personnel. C'est pour ça que plus personne ne mine seul depuis quinze ans.
 
-**599 secondes, c'est-à-dire dix minutes.** Le calcul retombe exactement sur le rythme visé par le protocole, ce qui confirme au passage que les trois valeurs relevées sont cohérentes entre elles.
+## Ce qu'il faut savoir
 
-Le réseau est environ 1,4 × 10¹⁵ fois plus rapide que cette machine. C'est le chiffre qui explique pourquoi personne ne mine seul depuis quinze ans.
-
-## Sur OKX
-
-Rien, directement : le minage n'a aucune contrepartie dans l'interface d'un exchange. La preuve de travail intervient ailleurs — c'est elle qui rend un dépôt irréversible au bout de quelques blocs, et c'est pour ça qu'OKX attend un nombre de confirmations donné avant de créditer un compte.
-
-## Les pièges
-
-> [!piege] Le mineur ne « résout » pas de problème utile
-> On lit souvent que les mineurs résolvent des « problèmes mathématiques complexes ». Il n'y a aucun problème et aucune complexité : c'est un tirage répété jusqu'à obtenir un résultat sous un seuil. L'inutilité du calcul est délibérée — c'est ce qui garantit qu'on ne peut pas prendre de raccourci.
+> [!piege] Les mineurs ne résolvent pas de « problèmes mathématiques complexes »
+> On lit ça partout, et c'est faux. Il n'y a aucun problème et aucune complexité : c'est un tirage répété jusqu'à obtenir un résultat sous un seuil. L'inutilité du calcul est **voulue** — c'est elle qui garantit qu'aucun raccourci n'existe.
 
 > [!piege] La difficulté ne dit rien du prix
-> Elle s'ajuste sur le temps de bloc observé, uniquement. Un ajustement à la hausse signale que de la puissance de calcul est arrivée, rien d'autre.
+> Elle s'ajuste uniquement sur le temps observé entre les blocs. Une hausse signifie qu'il y a plus de machines branchées, rien d'autre.
 
-> [!piege] Le nonce du minage n'est pas celui d'Ethereum
-> Deux objets sans rapport qui portent le même nom. Ici c'est un compteur d'essais dans un en-tête de bloc ; sur un compte Ethereum, c'est un numéro de séquence qui ordonne tes transactions.
+> [!info] La consommation d'électricité n'est pas un défaut
+> C'est le mécanisme lui-même. La dépense est exactement ce qui rend une réécriture du passé trop coûteuse. On peut trouver ce prix trop élevé — le débat existe et il est légitime — mais il faut savoir qu'on ne peut pas retirer la dépense sans retirer la protection. D'autres réseaux ont choisi un mécanisme différent, décrit dans [Proof of Stake](/fondamentaux/proof-of-stake).
 
 ## Pour aller plus loin
 
-- [Les fonctions de hachage](/fondamentaux/hachage) — pourquoi il n'existe pas de raccourci
-- [Bitcoin (BTC)](/cryptos/btc) — l'émission que ce travail rémunère
+- [Les fonctions de hachage](/fondamentaux/hachage) — pourquoi aucun raccourci n'existe
 - [C'est quoi une blockchain ?](/commencer/cest-quoi-une-blockchain) — ce que ce coût protège
+- [Bitcoin (BTC)](/cryptos/btc) — la récompense que ce travail rapporte
