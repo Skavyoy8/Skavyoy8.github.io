@@ -2,76 +2,67 @@
 titre: "Le spread"
 section: "marches"
 ordre: 30
-resume: "L'écart entre le meilleur prix d'achat et le meilleur prix de vente. C'est un coût que tu payes sans qu'il apparaisse jamais sur une facture."
+resume: "L'écart entre le prix d'achat et le prix de vente. Un coût que tu payes toujours, et qui n'apparaît sur aucune facture."
 niveau: "bases"
 prerequis: ["/marches/carnet-ordres"]
-termes: ["spread", "liquidite", "carnet-ordres", "maker", "taker"]
+termes: ["spread", "liquidite", "carnet-ordres"]
 sources:
-  - titre: "OKX — API v5, endpoint market/books"
+  - titre: "OKX — documentation officielle de l'API"
     url: "https://www.okx.com/docs-v5/en/"
-  - titre: "OKX — Order Execution Policy"
+  - titre: "OKX — règles d'exécution des ordres"
     url: "https://tr.okx.com/en/help/order-execution-policy"
 statut: "redige"
 ---
 
-**Le spread est l'écart entre le meilleur prix d'achat et le meilleur prix de vente d'un carnet d'ordres.**
+**Le spread est l'écart entre le prix auquel on peut acheter tout de suite et celui auquel on peut vendre tout de suite. Il se paie sans jamais apparaître comme un frais.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
-Il ne résout rien : c'est une conséquence, pas un dispositif. Personne ne fixe le spread. Il apparaît mécaniquement dès qu'il existe un écart entre ce que le vendeur le moins cher demande et ce que l'acheteur le plus généreux propose.
+Personne ne le décide. Il apparaît tout seul, parce qu'il y a toujours un écart entre ce que le vendeur le moins cher demande et ce que l'acheteur le plus généreux propose.
 
-Ce qu'il faut comprendre, c'est ce qu'il **coûte** et ce qu'il **révèle**.
+Ce qui est intéressant, c'est ce qu'il **coûte** et ce qu'il **révèle**.
 
 ## Comment ça marche
 
-Si tu achètes puis revends immédiatement, sans que le marché ait bougé, tu perds le spread. Tu as acheté au prix des vendeurs et revendu au prix des acheteurs.
+Si tu achètes puis revends immédiatement, sans que le marché ait bougé d'un centime, **tu perds le spread**. Tu as acheté au prix des vendeurs et revendu au prix des acheteurs.
 
-C'est un coût de transaction invisible : il n'apparaît sur aucune ligne, aucun relevé, aucun décompte de frais. Il est déjà dans le prix.
+C'est un coût réel, mais il n'apparaît sur aucune ligne de frais, aucun récapitulatif, aucun relevé. Il est déjà contenu dans le prix qu'on t'affiche.
 
-Sa taille traduit directement l'état du marché : plus il y a de participants prêts à se placer des deux côtés, plus l'écart se resserre. Un spread large signale qu'il n'y a personne, ou que personne ne veut s'engager — typiquement en pleine panique, ou sur une paire que personne n'échange.
+Sa taille dit quelque chose du marché : plus il y a de participants prêts à acheter et à vendre en permanence, plus l'écart se resserre. Un écart large veut dire qu'il n'y a presque personne — ou que plus personne ne veut s'engager, ce qui arrive en période de panique.
 
-## Le pont CIEL
-
-> [!ciel] Tu connais déjà ça
-> C'est une marge d'hystérésis. Entre le seuil de déclenchement montant et le seuil descendant d'un comparateur, il existe une zone morte où rien ne bascule. Le carnet fonctionne pareil : entre le meilleur bid et le meilleur ask, aucune transaction ne peut avoir lieu.
+> [!exemple] Le bureau de change
+> C'est exactement le principe d'un bureau de change qui affiche « nous achetons à 1,05 € — nous vendons à 1,09 € ».
 >
-> Et comme en électronique, la largeur de la zone morte est une caractéristique du système, pas un réglage qu'on choisit : elle dépend de qui participe.
+> Si tu changes puis rechanges immédiatement, tu perds 4 centimes par unité, sans qu'aucune commission ne t'ait été facturée. La différence vit dans les deux prix affichés.
 
-## Exemple chiffré
+## Un exemple concret
 
-Relevé réel sur BTC-USDT, le 22 août 2026 :
+Relevé réel sur le bitcoin :
 
 ```
-meilleur bid   77 137,4 USDT
-meilleur ask   77 137,5 USDT
-spread          0,1 USDT   =  0,00013 %
+on peut vendre à   77 235,10 $
+on peut acheter à  77 235,20 $
+écart               0,10 $  soit 0,00013 %
 ```
 
-Un aller-retour immédiat de 1 BTC te coûte donc 0,1 USDT en spread. Sur 77 137 USDT engagés, c'est négligeable — c'est ce que veut dire « paire très liquide ».
+Un aller-retour immédiat sur un bitcoin entier coûte donc 10 centimes. Négligeable — c'est ce que veut dire « marché très liquide ».
 
-Maintenant l'ordre de grandeur inverse. Sur une paire confidentielle, un spread de 1 % n'a rien d'exceptionnel. Le même aller-retour immédiat coûterait alors 1 % du montant engagé, **avant** le moindre frais de trading. Soit, sur 1 000 euros, 10 euros perdus sans que rien n'ait bougé et sans qu'aucune ligne de frais n'apparaisse.
+Maintenant l'autre extrême. Sur une monnaie confidentielle, un écart de 1 % n'a rien d'exceptionnel. Le même aller-retour immédiat coûterait alors 1 % du montant, **avant tout frais de la plateforme**. Sur 1 000 €, cela fait 10 € perdus sans que rien n'ait bougé et sans qu'aucune ligne de frais n'apparaisse.
 
-Le rapport entre les deux situations est de l'ordre de 7 000 pour un, sur la même plateforme, le même jour.
+Entre les deux situations, il y a un facteur de l'ordre de sept mille — sur le même site, le même jour.
 
-## Sur OKX
-
-Le spread ne s'affiche pas comme une valeur. Il se lit au milieu du carnet : c'est l'écart entre le premier chiffre rouge et le premier chiffre vert. Sur les paires principales il est souvent d'un seul pas de cotation — le `tickSz`, la granularité minimale de prix de l'instrument, que l'endpoint `public/instruments` donne pour chaque paire.
-
-Quand le spread vaut exactement un tick, il ne peut mécaniquement pas être plus serré.
-
-## Les pièges
+## Ce qu'il faut savoir
 
 > [!piege] « Zéro frais » ne veut pas dire gratuit
-> Un service de conversion sans commission affichée se rémunère sur le spread qu'il applique. Le coût existe toujours ; il a simplement quitté la ligne « frais » pour entrer dans le prix. Le seul moyen de le mesurer est de comparer le prix proposé avec le carnet au même instant.
+> Les fonctions de conversion rapide, présentées sans commission, se rémunèrent en général sur un spread élargi. Le coût existe toujours, il a juste changé de nom. Pour le mesurer, il faut comparer le prix proposé avec celui du carnet au même moment.
 
-> [!piege] Le spread se creuse quand tu en as le plus besoin
-> Il est étroit quand tout est calme, et s'élargit brutalement quand le marché s'agite — précisément parce que les participants qui le tenaient serré retirent leurs ordres. C'est un fait de structure, pas une malveillance.
+> [!piege] Le spread se creuse au pire moment
+> Il est étroit quand tout est calme, et s'élargit brutalement quand le marché s'agite — précisément parce que ceux qui le tenaient serré retirent leurs offres.
 
-> [!piege] Un spread serré ne signifie pas un carnet profond
-> Ce sont deux propriétés indépendantes. Le meilleur ask peut être à un tick du meilleur bid pour une quantité minuscule, et le carnet s'effondrer au deuxième niveau. Voir l'exemple du [carnet d'ordres](/marches/carnet-ordres), où vingt niveaux ne totalisent que 1,13 BTC.
+> [!piege] Un écart serré ne veut pas dire un gros volume disponible
+> Les deux meilleurs prix peuvent être collés l'un à l'autre pour une quantité minuscule, et le marché s'effondrer dès la deuxième offre. Voir [d'où vient le prix](/marches/carnet-ordres).
 
 ## Pour aller plus loin
 
-- [Le carnet d'ordres](/marches/carnet-ordres) — d'où vient l'écart
-- [Maker et taker](/marches/maker-taker) — qui paie le spread et qui l'encaisse
-- [Les frais chez OKX](/okx/frais) — le coût qui, lui, est facturé
+- [D'où vient le prix](/marches/carnet-ordres) — l'origine de l'écart
+- [Les frais d'une plateforme](/okx/frais) — les coûts qui, eux, sont facturés

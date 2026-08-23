@@ -9,18 +9,18 @@ termes: ["bullish", "bearish", "bull-run", "bear-market", "ath", "atl", "dip", "
 sources:
   - titre: "OKX — API v5, données de marché publiques"
     url: "https://www.okx.com/docs-v5/en/"
-  - titre: "AMF — mise en garde sur les actifs numériques"
+  - titre: "AMF — autorité des marchés financiers"
     url: "https://www.amf-france.org/fr"
 statut: "redige"
 ---
 
-**Le vocabulaire crypto mélange trois choses : des termes financiers standards, du jargon de forum, et du marketing déguisé en analyse. Cette page trie.**
+**Le vocabulaire crypto mélange trois choses : des termes financiers normaux, du jargon de forum, et du marketing déguisé en analyse. Cette page fait le tri.**
 
-## Le problème que ça résout
+## Pourquoi cette page
 
-Une bonne partie de ce lexique n'est pas de la technique : c'est du signalement d'appartenance. Ne pas le comprendre coupe de la lecture des interfaces et des discussions ; le prendre au sérieux mène à confondre une opinion avec une mesure.
+Une bonne partie de ces mots ne décrit rien. Ils servent à montrer qu'on fait partie du groupe.
 
-Le tri qui suit indique, pour chaque famille, ce qui correspond à une grandeur observable et ce qui n'en est pas une.
+Ne pas les comprendre empêche de suivre une discussion. Les prendre au sérieux fait confondre une opinion avec une information. Pour chaque terme, la question posée ici est simple : **est-ce que ça désigne quelque chose de mesurable, ou est-ce que ça désigne un avis ?**
 
 ## Le sens du marché
 
@@ -89,25 +89,25 @@ Les deux animaux viennent, selon l'explication habituelle, de leur façon d'atta
 | **Exit scam** | Un service encaisse les dépôts puis ferme. |
 | **Honeypot** | Jeton dont le contrat autorise l'achat mais empêche la revente. Vérifiable en lisant le contrat. |
 
-Ces quatre-là désignent des mécanismes précis, pas des impressions. Ils sont traités en détail dans [les arnaques classiques](/securite/arnaques).
+Ces quatre-là désignent des mécanismes précis, pas des impressions. Ce sont les seuls termes de forum de cette page qui décrivent quelque chose de concret.
 
 ## Exemple chiffré
 
 Prenons « whale », le seul terme du lot qu'on puisse rendre mesurable.
 
-Sur BTC-USDT, relevé le 22 août 2026, les vingt premiers niveaux du carnet côté vente totalisent **1,13 BTC**, soit environ 87 000 USDT. Sur la paire la plus liquide de la plateforme.
+Sur le bitcoin, le marché le plus actif qui existe, les vingt meilleures offres de vente réunies représentaient **2,5 bitcoins** lors d'un relevé, soit environ 194 000 dollars.
 
-Un ordre au marché de 2 BTC — environ 154 000 USDT — épuise ces vingt niveaux et continue de monter. À cette profondeur, le seuil pour « déplacer le prix » se situe donc autour de la centaine de milliers d'euros.
+Autrement dit : un ordre d'achat de 200 000 dollars suffit à épuiser ces offres et à faire monter le prix. C'est là que se situe le seuil, sur le marché le plus profond du secteur.
 
-Sur une paire confidentielle, avec un carnet cent fois plus fin, quelques milliers d'euros produisent le même effet. Le mot ne désigne pas une fortune : il désigne un rapport entre une taille d'ordre et une profondeur de carnet.
+Sur une monnaie confidentielle, avec un carnet cent fois plus fin, **quelques milliers d'euros produisent le même effet**. Le mot ne désigne donc pas une fortune : il désigne un rapport entre une taille d'ordre et la profondeur du marché visé.
 
-## Sur OKX
+## Où l'on rencontre quoi
 
-Les interfaces emploient les termes standards — long, short, spot, levier, liquidation — et pas le jargon de forum. Le lexique communautaire vit dans les discussions, les réseaux et les contenus promotionnels, pas dans les outils.
+Les applications sérieuses emploient les termes standards — long, short, spot, levier, liquidation — et jamais le jargon de forum. Celui-ci vit dans les réseaux sociaux, les groupes de discussion et les contenus promotionnels.
 
-C'est un indice utile : plus un texte emploie de vocabulaire tribal, moins il transporte d'information vérifiable.
+C'est un repère utile : **plus un texte emploie de vocabulaire de tribu, moins il transporte d'information vérifiable.**
 
-## Les pièges
+## Ce qu'il faut savoir
 
 > [!piege] Le vocabulaire sert souvent à éviter un chiffre
 > « Ça a beaucoup monté » remplace un pourcentage sur une période donnée. « Une whale a acheté » remplace une taille d'ordre rapportée à une profondeur. Chaque fois qu'un terme du tableau remplace une mesure, on peut demander la mesure.

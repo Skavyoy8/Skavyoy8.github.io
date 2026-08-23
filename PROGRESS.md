@@ -197,6 +197,17 @@ BTC *(rédigé)* · ETH · USDT · USDC · BNB · SOL · XRP · ADA · DOGE · T
 
 ## Journal des décisions techniques
 
+### 2026-08-23 — Refonte éditoriale complète
+
+- **Le site ne s'adresse plus à un lecteur en particulier.** C'est un site public sur le fonctionnement de la crypto, pour un débutant complet, sans bagage supposé ni en finance ni en informatique.
+- **Les encadrés CIEL sont supprimés du système et des 22 pages qui en avaient un.** Ils rattachaient chaque notion à un cursus cybersécurité-réseau-électronique et rendaient le site illisible pour qui n'a pas ce bagage. Un encadré `EXEMPLE` les remplace : il illustre au lieu de rattacher.
+- **Toutes les analogies supposant un bagage technique ont disparu** : `sha256sum`, clé SSH, `git rebase`, VLAN, asservissement, IEEE 754. Les comparaisons viennent désormais de la vie courante — clé de RIB, bureau de change, péage, vide-grenier, coffre à la maison.
+- **Longueur ramenée à 500-900 mots par page** (moyenne mesurée : 747), contre 1 400 à 3 400 auparavant. Seule exception assumée : le lexique des marchés, qui est une page de référence en tableaux.
+- **Sections renommées en langage courant** : « Comment ça marche », « Les plateformes », « Les prix », « Se protéger », « Impôts », « Les réseaux ».
+- **Accueil refait** autour d'un parcours de départ en trois pages.
+- SPEC.md §2, §6, §9 et §13 réécrits pour graver la nouvelle ligne.
+
+
 ### 2026-08-22 — Visuels
 
 - **Aucune photo, conformément au §9 de SPEC.md**, et pour une raison qui s'ajoute à la ligne éditoriale : une image trouvée sur le web n'est pas réutilisable juridiquement, et les banques d'images donnent le rendu « blog crypto » que le projet rejette.

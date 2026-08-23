@@ -1,88 +1,73 @@
 ---
-titre: "Le carnet d'ordres"
+titre: "D'où vient le prix"
 section: "marches"
 ordre: 20
-resume: "La liste des intentions d'achat et de vente en attente. C'est là, et nulle part ailleurs, que se forme le prix."
+resume: "Le prix n'est pas décidé par quelqu'un. Il sort d'une liste d'offres d'achat et de vente qui se rencontrent."
 niveau: "bases"
-prerequis: ["/okx/on-chain-off-chain"]
-termes: ["carnet-ordres", "spread", "liquidite", "maker", "taker", "priorite-prix-temps", "moteur-appariement"]
+prerequis: ["/okx/exchange-centralise"]
+termes: ["carnet-ordres", "spread", "liquidite", "maker", "taker", "priorite-prix-temps"]
 sources:
-  - titre: "OKX — API v5, endpoint market/books"
+  - titre: "OKX — documentation officielle de l'API"
     url: "https://www.okx.com/docs-v5/en/"
-  - titre: "OKX — Order Execution Policy (priorité prix-temps)"
+  - titre: "OKX — règles d'exécution des ordres"
     url: "https://tr.okx.com/en/help/order-execution-policy"
 statut: "redige"
 ---
 
-**Le carnet d'ordres est la liste ordonnée des ordres d'achat et de vente en attente d'exécution. Le prix affiché d'un actif n'est rien d'autre que le prix de sa dernière exécution dans ce carnet.**
+**Le prix d'une crypto n'est fixé par personne. C'est simplement le prix auquel la dernière transaction a eu lieu entre un acheteur et un vendeur.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
-Un actif n'a pas de prix intrinsèque affiché quelque part. Il faut un mécanisme qui mette en face un acheteur et un vendeur, et qui décide à quel prix ils se rencontrent — sans arbitraire, et de façon reproductible.
+Il n'y a pas de bureau où quelqu'un déciderait que le bitcoin vaut tel montant aujourd'hui. Il n'y a pas non plus de valeur officielle.
 
-Le carnet est ce mécanisme : deux files triées, et une règle d'appariement.
+Il y a des gens qui veulent acheter, d'autres qui veulent vendre, et un outil qui les met face à face : **le carnet d'ordres**.
 
 ## Comment ça marche
 
-Deux côtés, symétriques :
+Le carnet est une liste à deux colonnes, visible dans toutes les applications.
 
-- les **bids** : les acheteurs, triés du prix le plus élevé au plus bas ;
-- les **asks** : les vendeurs, triés du prix le plus bas au plus élevé.
+D'un côté, **les acheteurs**, classés du plus généreux au moins généreux. De l'autre, **les vendeurs**, classés du moins cher au plus cher.
 
-En haut de chaque pile se trouvent les deux ordres les plus agressifs. Tant que le meilleur acheteur propose moins que ce que demande le meilleur vendeur, rien ne se passe : les deux attendent. Dès qu'un ordre arrive et croise le camp d'en face, l'appariement a lieu.
+Tant que le meilleur acheteur propose moins que ce que demande le meilleur vendeur, rien ne se passe : chacun attend. Dès que quelqu'un accepte le prix d'en face, la transaction a lieu, et **ce prix devient le nouveau prix affiché**.
 
-L'ordre de service est la **priorité prix-temps** : meilleur prix d'abord, et à prix égal, le plus ancien passe en premier.
+L'ordre de service est toujours le même : le meilleur prix passe en premier, et à prix égal, celui qui est arrivé le premier.
 
-## Le pont CIEL
+> [!exemple] Comme un marché aux enchères permanent
+> Sauf qu'il n'y a pas de commissaire-priseur, et que les enchères des deux côtés sont affichées en continu, jour et nuit, pour que chacun voie ce que les autres proposent.
 
-> [!ciel] Tu connais déjà ça
-> C'est une file de priorité, avec le prix comme clé et l'horodatage comme départage. Le moteur d'appariement dépile en tête, exactement comme un ordonnanceur.
->
-> L'analogie tient jusque dans les détails : la latence compte, être arrivé en premier à prix égal a une valeur, et toute la course technologique du secteur consiste à s'insérer plus haut dans la file.
+## Un exemple concret
 
-## Exemple chiffré
+Extrait réel du carnet du bitcoin, relevé au moment d'écrire cette page :
 
-Voici un extrait réel du carnet BTC-USDT, relevé le 22 août 2026 :
-
-| Côté | Prix (USDT) | Quantité (BTC) |
+| | Prix | Quantité |
 |---|---|---|
-| ask | 77 139,2 | 0,1821 |
-| ask | 77 138,9 | 0,0825 |
-| **ask** | **77 137,5** | **0,5856** |
-| **bid** | **77 137,4** | **0,4379** |
-| bid | 77 137,0 | 0,0100 |
-| bid | 77 134,4 | 0,0699 |
+| Meilleur vendeur | 77 235,20 $ | 0,87 BTC |
+| Meilleur acheteur | 77 235,10 $ | 0,26 BTC |
 
-Le meilleur vendeur demande 77 137,5. Le meilleur acheteur propose 77 137,4. L'écart entre les deux — le **spread** — vaut **0,1 USDT**, soit 0,00013 % du prix. Personne ne peut acheter en dessous de 77 137,5 tout de suite, ni vendre au-dessus de 77 137,4.
+L'écart entre les deux — ce qu'on appelle le **spread** — vaut 10 centimes sur 77 000 dollars. Autant dire rien. C'est le signe d'un marché où beaucoup de monde participe.
 
-Maintenant le chiffre qui surprend : **les vingt premiers niveaux du côté vendeur ne totalisent que 1,13 BTC**, soit environ 87 000 USDT. Sur la paire la plus liquide de la plateforme.
+Maintenant le chiffre qui surprend : **les vingt meilleures offres de vente réunies ne représentaient que 2,5 bitcoins**, soit environ 194 000 dollars. Sur le marché le plus actif qui existe.
 
-Conséquence directe :
+Ça veut dire qu'un ordre d'achat de 200 000 dollars ne trouve pas son compte au prix affiché : il consomme les meilleures offres, puis les suivantes, plus chères, et le prix monte au fur et à mesure.
 
-- un achat au marché de **0,5 BTC** est entièrement servi au premier niveau, à 77 137,5. Aucun surcoût.
-- un achat au marché de **2 BTC** épuise les vingt niveaux et continue de grimper au-delà.
+C'est toute la différence entre un prix serré et un marché profond. **Le prix affiché ne dit rien de la quantité disponible à ce prix.**
 
-C'est toute la différence entre un carnet qui a l'air profond et un carnet qui l'est. La profondeur ne se lit pas sur le prix affiché.
+## Ce qu'il faut savoir
 
-## Sur OKX
+> [!piege] Le prix affiché n'est pas le prix que tu obtiendras
+> C'est celui de la dernière transaction. Pour acheter maintenant, il faut payer ce que demande le meilleur vendeur — toujours un peu plus.
 
-Le carnet est visible à droite de chaque paire, en mode Trading. La colonne de quantité cumulée et l'histogramme de fond représentent la profondeur — c'est elle qu'il faut regarder, pas le prix du haut.
+> [!piege] Sur une monnaie peu échangée, l'écart peut être énorme
+> Ce qui vaut 10 centimes sur le bitcoin peut représenter plusieurs pourcents sur une monnaie confidentielle. Acheter puis revendre immédiatement fait alors perdre cet écart, sans que rien n'ait bougé.
 
-L'endpoint public `market/books` renvoie les mêmes données. Chaque niveau y est un tableau de quatre valeurs : `[prix, quantité, "0", nombre d'ordres]`. La troisième est un vestige des contrats à échéance, toujours à `"0"` en spot.
+> [!piege] Les offres affichées ne sont pas des engagements
+> Elles s'annulent librement, et la plupart le sont avant d'être exécutées. Ce que tu vois à l'écran peut avoir disparu à l'instant où ton ordre arrive.
 
-## Les pièges
-
-> [!piege] Le prix affiché n'est pas un prix disponible
-> C'est celui de la dernière exécution. Le prix auquel tu peux réellement acheter maintenant, c'est le meilleur ask ; celui auquel tu peux vendre, le meilleur bid. Sur une paire peu échangée, le dernier prix peut dater d'il y a des heures et n'avoir aucun rapport avec le carnet actuel.
-
-> [!piege] Un carnet peut se vider en une seconde
-> Les ordres affichés ne sont pas des engagements : ils s'annulent librement, et la majorité le sont avant d'être exécutés. La profondeur que tu vois n'est pas garantie à l'instant où ton ordre arrive.
-
-> [!piege] Les deux côtés ne se lisent pas dans le même sens
-> Les asks sont souvent affichés du haut vers le bas en prix décroissant, ce qui met le meilleur vendeur juste au-dessus du meilleur acheteur, au milieu de l'écran. Les deux meilleurs prix sont donc collés au centre, pas aux extrémités.
+> [!piege] Chaque plateforme a son propre prix
+> Deux sites affichent des montants légèrement différents au même moment, parce qu'ils ont chacun leur carnet. Il n'existe pas de cours officiel unique.
 
 ## Pour aller plus loin
 
-- [Le spread](/marches/spread) — ce que l'écart révèle
-- [Maker et taker](/marches/maker-taker) — pourquoi le même trade coûte deux prix différents
-- [Ce qu'est un exchange centralisé](/okx/exchange-centralise) — le moteur qui traite ce carnet
+- [Le spread](/marches/spread) — le coût caché de chaque aller-retour
+- [Maker et taker](/marches/maker-taker) — pourquoi le même achat coûte deux tarifs différents
+- [Le vocabulaire des marchés](/marches/vocabulaire) — les mots qu'on lit partout

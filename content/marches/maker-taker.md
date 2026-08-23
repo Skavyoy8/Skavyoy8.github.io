@@ -2,85 +2,74 @@
 titre: "Maker et taker"
 section: "marches"
 ordre: 70
-resume: "Le même échange coûte deux tarifs différents selon que ton ordre attend dans le carnet ou le consomme."
+resume: "Le même achat coûte deux tarifs différents selon que ton ordre attend ou qu'il se sert immédiatement."
 niveau: "bases"
 prerequis: ["/marches/carnet-ordres"]
-termes: ["maker", "taker", "carnet-ordres", "liquidite", "rebate", "frais-de-trading", "spread"]
+termes: ["maker", "taker", "carnet-ordres", "liquidite", "rebate", "frais-de-trading"]
 sources:
-  - titre: "OKX — Barème des frais"
+  - titre: "OKX — barème officiel des frais"
     url: "https://www.okx.com/fees"
-  - titre: "OKX — Trading Fee Rules FAQ"
+  - titre: "OKX — règles de frais de trading"
     url: "https://www.okx.com/help/trading-fee-rules-faq"
 statut: "redige"
 ---
 
-**Un ordre qui entre dans le carnet et attend est un ordre maker. Un ordre qui s'exécute immédiatement contre le carnet est un ordre taker. Les deux ne sont pas facturés au même tarif.**
+**Un ordre qui attend dans le carnet est un ordre « maker ». Un ordre qui se sert tout de suite est un ordre « taker ». Le second coûte plus cher.**
 
-## Le problème que ça résout
+## Pourquoi ça existe
 
-Un carnet vide ne sert à rien. Pour qu'un marché fonctionne, il faut des gens qui acceptent d'afficher un prix à l'avance et d'attendre, en prenant le risque que le marché leur passe dessus.
+Un marché où personne n'affiche d'offre à l'avance ne fonctionne pas : il n'y aurait jamais rien à acheter.
 
-Ce service a une valeur, et la tarification différenciée est la façon dont la plateforme la rémunère : elle facture plus cher ceux qui consomment le carnet que ceux qui le remplissent.
+Ceux qui acceptent d'afficher un prix et d'attendre rendent donc un service — ils prennent le risque que le marché leur passe dessus. Les plateformes les récompensent en leur facturant moins cher que ceux qui se servent immédiatement.
 
 ## Comment ça marche
 
 | | Maker | Taker |
 |---|---|---|
-| Ce que fait ton ordre | Se pose dans le carnet et attend | Frappe un ordre déjà présent |
-| Effet sur la liquidité | Il en ajoute | Il en retire |
-| Exécution | Incertaine, peut ne jamais venir | Immédiate et garantie |
-| Prix obtenu | Celui que tu as choisi | Celui du carnet, quel qu'il soit |
-| Tarif | Le moins cher, parfois négatif | Le plus cher |
+| Ton ordre | attend dans le carnet | prend une offre déjà présente |
+| Exécution | incertaine, parfois jamais | immédiate |
+| Prix obtenu | celui que tu as choisi | celui du marché |
+| Tarif | le moins cher | le plus cher |
 
-La distinction ne dépend pas du type d'ordre que tu as choisi, mais **de ce qui s'est passé à l'arrivée** :
+Ce qui détermine ton tarif, ce n'est pas le bouton sur lequel tu as cliqué, c'est **ce qui arrive à ton ordre** :
 
-- Un ordre au marché est toujours taker : il est conçu pour s'exécuter tout de suite.
-- Un ordre limite est maker **s'il ne croise pas** le camp d'en face. S'il le croise, il s'exécute immédiatement et devient taker.
+- Un ordre **au marché** est toujours taker : il est fait pour s'exécuter tout de suite.
+- Un ordre **limite** est maker s'il attend. Mais si le prix que tu fixes croise une offre déjà présente, il s'exécute immédiatement — et devient taker.
 
-Un ordre limite d'achat à 77 200 alors que le meilleur vendeur est à 77 137,5 s'exécute sur-le-champ : tu voulais poser un ordre, tu as payé le tarif taker.
-
-## Le pont CIEL
-
-> [!ciel] Tu connais déjà ça
-> Le carnet est un cache. Le maker écrit dedans, le taker fait un cache hit et repart avec la donnée immédiatement.
+> [!exemple] Le vide-grenier
+> Le maker, c'est celui qui installe son stand, affiche ses prix et attend le chaland. Le taker, c'est celui qui arrive et achète ce qui est déjà exposé.
 >
-> Le taker paie plus cher parce qu'il consomme une entrée que quelqu'un a dû préparer et maintenir à jour. Et quand le cache est vide, le tarif d'écriture devient négatif : on paie les gens pour le préchauffer — c'est exactement ce qu'est un rebate.
+> Sans stands, il n'y a pas de vide-grenier. C'est pour ça que l'organisateur fait payer moins cher ceux qui en tiennent un.
 
-## Exemple chiffré
+## Un exemple concret
 
-Un aller-retour de 10 000 USDT, avec un barème de 0,080 % en maker et 0,100 % en taker :
+Un aller-retour de 1 000 €, avec des taux courants de 0,08 % et 0,10 % :
 
-| | Achat | Vente | Total |
-|---|---|---|---|
-| Deux ordres au marché (taker/taker) | 10,00 USDT | 10,00 USDT | **20,00 USDT** |
-| Deux ordres limites non croisés (maker/maker) | 8,00 USDT | 8,00 USDT | **16,00 USDT** |
+| Façon de faire | Coût total |
+|---|---|
+| Deux ordres au marché | 2,00 € |
+| Deux ordres limites qui attendent | 1,60 € |
 
-4 USDT d'écart sur 10 000, soit 20 % de frais en moins, pour la même opération. La contrepartie est réelle : les ordres maker peuvent ne jamais s'exécuter, et le marché part parfois sans toi.
+40 centimes d'écart, soit 20 % de frais en moins pour exactement la même opération.
 
-À ces frais s'ajoute le spread, qui n'apparaît sur aucune ligne : sur BTC-USDT il valait 0,1 USDT le 22 août 2026, soit environ 0,013 USDT sur 10 000 engagés — négligeable ici, mais dominant sur une paire peu échangée.
+La contrepartie est réelle : un ordre qui attend peut ne jamais s'exécuter, et le marché peut partir sans toi.
 
-> [!verifier] Les barèmes changent
-> Les taux ci-dessus servent d'ordre de grandeur pour le calcul. Les valeurs réelles dépendent du palier, de l'entité juridique et du type d'instrument, et OKX les ajuste régulièrement. À relever sur la page officielle des frais avant tout calcul sérieux.
+> [!verifier] Les taux ci-dessus sont des ordres de grandeur
+> Ils servent à illustrer le calcul. Les vrais dépendent de la plateforme, du volume échangé et du pays. À relever sur la page officielle des frais.
 
-## Sur OKX
+## Ce qu'il faut savoir
 
-Le type d'ordre se choisit à la saisie : « Marché » est toujours taker, « Limite » peut être l'un ou l'autre. Une option post-only, selon les interfaces, annule l'ordre au lieu de l'exécuter s'il devait croiser le carnet — c'est la seule façon d'avoir la garantie du tarif maker.
+> [!piege] Un ordre limite n'est pas automatiquement au tarif réduit
+> C'est l'erreur la plus fréquente. Si ton prix croise une offre existante, tu payes le tarif le plus cher, quel que soit le type d'ordre choisi.
 
-Le récapitulatif d'exécution indique lequel des deux tarifs a été appliqué. C'est là qu'on découvre parfois qu'un ordre limite est parti en taker.
+> [!piege] Économiser des frais ne compense pas un mauvais prix
+> Gagner 0,02 % en attendant, puis voir le marché bouger de 1 %, n'est pas une économie. Les deux chiffres ne jouent pas dans la même catégorie.
 
-## Les pièges
-
-> [!piege] Un ordre limite n'est pas automatiquement maker
-> C'est l'erreur la plus fréquente. Ce qui compte est de savoir si l'ordre croise le carnet à l'arrivée, pas le bouton sur lequel tu as cliqué.
-
-> [!piege] Le tarif maker ne compense pas un mauvais prix
-> Économiser 0,02 % de frais en attendant, puis se faire dépasser de 0,5 % par le marché, n'est pas une économie. Les deux effets sont d'ordres de grandeur différents.
-
-> [!piege] Maker et taker ne sont pas des rôles, mais des états
-> Le même participant est maker sur un ordre et taker sur le suivant. Ce n'est pas un statut de compte.
+> [!piege] Ce ne sont pas des statuts
+> Le même utilisateur est maker sur un ordre et taker sur le suivant. Ça décrit ce qu'a fait un ordre, pas qui tu es.
 
 ## Pour aller plus loin
 
-- [Le carnet d'ordres](/marches/carnet-ordres) — ce que l'un remplit et l'autre vide
-- [Le spread](/marches/spread) — l'autre coût, celui qui ne se facture pas
-- [Les frais chez OKX](/okx/frais) — les paliers et leur calcul
+- [D'où vient le prix](/marches/carnet-ordres) — le carnet que l'un remplit et l'autre vide
+- [Les frais d'une plateforme](/okx/frais) — tous les coûts, réunis
+- [Le spread](/marches/spread) — celui qui n'est jamais facturé

@@ -1,116 +1,76 @@
 ---
-titre: "« ETF » : deux produits sans aucun rapport"
+titre: "Les produits « x3 » et pourquoi ils fondent"
 section: "derives"
 ordre: 120
-resume: "Un ETF Bitcoin au comptant et un token à levier « x3 » portent le même mot et n'ont rien en commun. Le second perd de la valeur même quand le prix ne bouge pas."
-niveau: "intermediaire"
-prerequis: ["/okx/on-chain-off-chain"]
-termes: ["etf", "token-a-levier", "decroissance", "levier", "creance", "custody", "spot"]
+resume: "Un produit qui promet de multiplier les variations par trois perd de la valeur avec le temps, même quand le prix de départ ne bouge pas."
+niveau: "bases"
+prerequis: ["/marches/carnet-ordres"]
+termes: ["etf", "token-a-levier", "decroissance", "levier", "creance", "spot"]
 sources:
-  - titre: "OKX — API v5, liste publique des instruments"
+  - titre: "OKX — documentation officielle de l'API"
     url: "https://www.okx.com/docs-v5/en/"
   - titre: "AMF — autorité des marchés financiers"
     url: "https://www.amf-france.org/fr"
-  - titre: "ESMA — autorité européenne des marchés financiers"
-    url: "https://www.esma.europa.eu/"
 statut: "redige"
 ---
 
-**Un ETF Bitcoin au comptant est un fonds coté qui détient réellement des bitcoins. Un « token à levier x3 » est un produit dérivé rebalancé chaque jour qui perd de la valeur avec le temps. Les deux portent le mot ETF dans le langage courant, et n'ont rien en commun.**
+**Un produit « x3 » multiplie par trois la variation d'une journée, pas celle de la période. Sur plusieurs semaines, il perd de la valeur même si le prix de départ n'a pas bougé.**
 
-## Le problème que ça résout
+## Pourquoi cette page
 
-Cette page n'explique pas un mécanisme : elle sépare deux objets que le vocabulaire courant confond, et dont la confusion coûte cher.
+Deux choses très différentes portent le même mot dans les discussions.
 
-Le sigle ETF signifie *exchange-traded fund*, fonds négocié en bourse. Il désigne un produit financier régulé, qui détient un panier d'actifs et dont les parts s'échangent comme une action.
+**Un ETF au comptant** est un fonds réglementé, coté en bourse, qui détient réellement des bitcoins. C'est un produit encadré par un régulateur, conçu pour être conservé.
 
-Certaines plateformes crypto ont repris le mot pour des jetons qui ne sont ni des fonds, ni négociés en bourse, ni régulés de la même façon.
+**Un « token à levier x3 »** est un jeton émis par une plateforme, qui n'est ni un fonds, ni coté en bourse, ni encadré de la même façon. Il est conçu pour une journée.
+
+Les deux se retrouvent appelés « ETF » dans la conversation courante. Ce n'est pas la même chose du tout, et confondre les deux coûte cher.
 
 ## Comment ça marche
 
-| | ETF Bitcoin au comptant | Token à levier « x3 » |
-|---|---|---|
-| Nature | Fonds régulé, coté en bourse | Jeton émis par une plateforme |
-| Ce qu'il détient | Des bitcoins en garde | Des positions sur dérivés |
-| Où il s'échange | Bourse traditionnelle | Sur la plateforme émettrice |
-| Horizon | Indifférent | Une journée |
-| Superviseur | Régulateur des marchés | La plateforme elle-même |
-| Détention à long terme | Suit le prix | **Perd de la valeur mécaniquement** |
+Un produit à levier vise à multiplier par trois la variation **du jour**. Chaque soir, il réajuste sa position pour repartir sur cette base.
 
-Le point décisif est la dernière ligne, et il est mathématique, pas conjoncturel.
+C'est ce réajustement quotidien qui pose problème. Il n'y a **aucune raison** pour que la multiplication tienne sur plusieurs jours — et en pratique, elle ne tient jamais.
 
-Un produit à levier vise à multiplier par *k* la variation **quotidienne** du sous-jacent. Chaque soir il rééquilibre sa position pour retrouver son levier cible. Cette contrainte de rebalancement fait qu'il n'y a **aucune raison** que le produit multiplie par *k* la variation sur plusieurs jours.
-
-Sur une série de variations, l'écart s'écrit approximativement :
-
-```
-perte ≈ k(k−1)/2 × σ² × nombre de jours
-```
-
-où σ est la volatilité quotidienne. Le terme est toujours négatif dès que *k* > 1, et il croît avec le **carré** de la volatilité. Il ne dépend pas du sens du marché : il fonctionne à la hausse comme à la baisse.
-
-## Le pont CIEL
-
-> [!ciel] Tu connais déjà ça
-> C'est une erreur d'intégration cumulée. Le produit asservit correctement sa **dérivée** — la variation du jour est bien multipliée par trois — mais personne n'asservit la **valeur intégrée**. Chaque rebalancement remet le gain à zéro et repart de la nouvelle base.
+> [!exemple] Deux jours suffisent à comprendre
+> Un actif vaut 100 €. Il perd 10 % le premier jour, puis regagne 10 % le lendemain. Il vaut alors 99 € : presque revenu au point de départ.
 >
-> Résultat : l'écart entre la sortie réelle et la sortie « x3 attendue » ne se corrige jamais, il s'accumule. Exactement comme une dérive d'intégrateur qu'aucune boucle de retour ne rattrape.
+> Un produit « x3 » perd 30 % le premier jour, tombant à 70 €. Il regagne 30 % le lendemain : **91 €**.
+>
+> L'actif a perdu 1 %. Le produit à levier en a perdu 9. Et ça se reproduit à chaque aller-retour.
 
-## Exemple chiffré
+Plus le prix s'agite, plus l'effet est fort. Il ne dépend pas du sens du marché : il fonctionne à la hausse comme à la baisse.
 
-Voici la démonstration sur des données réelles, à partir des 90 dernières bougies quotidiennes de BTC-USDT relevées le 22 août 2026.
+## Un exemple concret
 
-Le sous-jacent, d'abord :
+Voici le calcul refait sur les 90 derniers jours réels du bitcoin, en appliquant chaque jour le triple de la variation quotidienne :
 
-```
-BTC au départ    76 519 USDT
-BTC à l'arrivée  76 956 USDT
-variation          +0,57 % sur 90 jours
-```
+| | Résultat sur 90 jours |
+|---|---|
+| Bitcoin, détenu simplement | **+0,87 %** |
+| Ce qu'un « x3 » devrait faire, intuitivement | +2,60 % |
+| Ce qu'un « x2 » aurait réellement fait | **−2,68 %** |
+| Ce qu'un « x3 » aurait réellement fait | **−10,24 %** |
 
-L'intuition dit qu'un produit x3 aurait fait environ **+1,71 %**. Reconstituons ce qu'il aurait réellement fait, en appliquant chaque jour trois fois la variation quotidienne :
+Le bitcoin a monté. Le produit x3 a perdu 10 %.
 
-| Produit | Résultat sur 90 jours | Écart avec l'attendu |
-|---|---|---|
-| BTC au comptant | +0,57 % | — |
-| « x2 » rebalancé chaque jour | **−3,25 %** | −4,39 points |
-| « x3 » rebalancé chaque jour | **−11,02 %** | −12,74 points |
+Ce n'est pas de la malchance : la période retenue est simplement celle des 90 derniers jours, sans sélection. Ce n'est pas non plus une anomalie de marché — c'est le fonctionnement normal du produit.
 
-Le sous-jacent a monté et le produit à levier a perdu 11 %.
+## Ce qu'il faut savoir
 
-Et la formule tient : la volatilité quotidienne mesurée sur la période est de 2,23 %, ce qui prédit une perte de décroissance de
+> [!piege] « x3 » ne veut dire x3 que sur une seule journée
+> C'est écrit dans la documentation de tous ces produits, et pratiquement jamais lu. Sur n'importe quelle autre durée, le multiplicateur réel n'a pas de valeur fixe.
 
-```
-3 × 2 / 2 × 0,0223² × 89 = 13,3 %
-```
+> [!piege] Le mot « ETF » ne garantit rien par lui-même
+> Il désigne une forme juridique précise. Un jeton qui emprunte le mot sans en avoir le statut n'offre aucune des protections associées.
 
-contre 12,74 points constatés. L'approximation retombe sur l'observation à un demi-point près.
+> [!piege] Même un ETF au comptant ne te donne aucune clé
+> Tu détiens une part de fonds, donc une promesse d'un émetteur qui, lui, détient les bitcoins. Le raisonnement est le même que pour une plateforme : voir [on-chain et off-chain](/okx/on-chain-off-chain).
 
-> [!info] Ce n'est pas de la malchance
-> La période choisie est simplement les 90 derniers jours, sans sélection. Le phénomène ne dépend pas du sens du marché : plus le sous-jacent s'agite, plus le produit fond, quelle que soit sa direction.
-
-## Sur OKX
-
-Vérification faite le 22 août 2026 via l'endpoint public `public/instruments?instType=SPOT` : **aucun instrument au format des tokens à levier** (`BTC3L`, `BTC3S` et équivalents) n'apparaît dans la liste spot, et aucun instrument ne comporte « ETF » dans son identifiant.
-
-Autrement dit, le produit décrit ici n'est pas listé sur la plateforme au moment où j'écris. La page reste parce que le mot circule partout ailleurs et que la confusion, elle, est bien réelle.
-
-> [!verifier] Deux points que je n'ai pas pu vérifier d'ici
-> L'approbation des ETF Bitcoin au comptant aux États-Unis en janvier 2024 est un fait largement documenté, mais `sec.gov` bloque les requêtes automatisées depuis cette machine — je n'ai donc pas pu confirmer l'URL de l'ordre d'approbation. À recouper directement sur sec.gov.
-> De même, l'offre de produits d'OKX évolue : l'absence constatée aujourd'hui ne vaut que pour aujourd'hui.
-
-## Les pièges
-
-> [!piege] « x3 » ne veut dire x3 que sur une journée
-> C'est écrit dans la documentation de tous ces produits, et à peu près jamais lu. Sur toute autre durée, le facteur réel n'a pas de valeur fixe : il dépend du chemin parcouru, pas seulement des points de départ et d'arrivée.
-
-> [!piege] Un ETF au comptant ne te donne aucune clé
-> Tu détiens une part de fonds, donc une créance sur un émetteur qui détient les bitcoins via un dépositaire. C'est le même raisonnement que pour un solde d'exchange : voir [on-chain vs off-chain](/okx/on-chain-off-chain).
-
-> [!piege] Le mot « ETF » ne garantit rien en soi
-> Il décrit une forme juridique, pas une qualité. Un jeton qui emprunte le mot sans en avoir le statut n'offre aucune des protections associées.
+> [!verifier] Ces produits ne sont pas toujours proposés
+> Au moment d'écrire cette page, aucun token à levier n'apparaissait dans la liste publique des produits d'OKX. L'offre change d'une plateforme à l'autre et d'un mois à l'autre.
 
 ## Pour aller plus loin
 
-- [On-chain vs off-chain](/okx/on-chain-off-chain) — ce que tu détiens vraiment dans les deux cas
 - [Le vocabulaire des marchés](/marches/vocabulaire) — les autres mots à décoder
+- [On-chain et off-chain](/okx/on-chain-off-chain) — ce que tu détiens réellement
