@@ -45,44 +45,50 @@ Installe les dernières versions stables et vérifie la doc officielle de chaque
 
 ---
 
-## 3. Contenu (à valider avec Luke au kickoff)
+## 3. Contenu (validé avec Luke au kickoff du 2026-10-07)
 
-Tout le texte vit dans `src/content/` (fichiers TS typés). Aucun texte en dur dans les composants.
+Tout le texte vit dans `src/content/` (fichiers TS typés). Aucun texte en dur dans les composants. Les manques restent des `TODO('[À REMPLIR] …')` dans `src/content/`.
+
+**Direction artistique** : SIGNAL (§4), choisie parmi SIGNAL / OSCILLO / MATIÈRE.
 
 **Identité**
-- Nom affiché : Luke, ou un pseudo **[À VALIDER]**
-- Accroche : élève en Bac Pro CIEL, cybersécurité, réseaux, Linux et électronique **[À VALIDER — propose 3 variantes courtes]**
-- Localisation affichée : France (pas de ville). Âge : optionnel **[À VALIDER]**
-- Photo / avatar : **[À REMPLIR]** (fichier dans `public/`, sinon avatar génératif en shader)
+- Nom affiché : **Skavyoy** (pseudo) ; prénom Luke cité une fois dans « À propos »
+- Accroche : « Élève en Bac Pro CIEL. Cybersécurité, réseaux, Linux et électronique : j'apprends en pratiquant. »
+- Localisation affichée : France (pas de ville). Âge : **pas affiché** (sauf « 17 ans » sur la frise, à la demande de Luke)
+- Avatar : image fournie par Luke → `public/images/avatar.jpg` (illustration de fan, droits non vérifiés : à remplacer si besoin)
+- Statut : « en apprentissage » + **recherche une alternance** (BTS SIO SISR)
 
-**Ce que j'apprends — 4 piliers** (miray en a 3 ; CIEL couvre aussi l'électronique, c'est notre différence)
+**Ce que j'apprends — 4 piliers** : validés tels quels
 1. Cybersécurité & hacking éthique — TryHackMe sous Kali, énumération (nmap, FTP, SMB), vulnérabilités web type IDOR
 2. Réseaux — modèle OSI, LAN, DNS, IPv6
 3. Linux & systèmes — Linux au quotidien (Debian), virtualisation (VirtualBox, Proxmox)
 4. Électronique & signal — analogique vs numérique
 
-**Parcours TryHackMe**
+**Parcours TryHackMe** — Luke a demandé de tout lire sur son profil, mais le pseudo n'a pas été donné et tryhackme.com est bloqué dans l'aperçu
 - Profil : pseudo + URL **[À REMPLIR]**
 - Stats : rooms terminées, badges, classement (top %), rang/titre, date du relevé **[À REMPLIR]**
-- Rooms : nom, catégorie (Réseau / Web / Challenges-CTF / Bases cyber / Linux), difficulté, date, une phrase « ce que j'ai appris » **[À REMPLIR]** — au moins « Anonymous » (nmap, FTP, énumération SMB)
-- Badges : nom + image si dispo **[À REMPLIR]**
+- Rooms : « Anonymous » (Challenges-CTF ; nmap, FTP, énumération SMB) — difficulté et date **[À REMPLIR]** ; autres rooms **[À REMPLIR]**. Les phrases « ce que j'ai appris » sont rédigées par Claude, Luke les reprendra.
+- Badges : **[À REMPLIR]** — visuels holographiques dessinés par nous (pas d'images TryHackMe)
 
-**Lab / Projets — candidats [À VALIDER un par un, Luke retire ce qu'il ne veut pas montrer]**
-- Homelab : mini rack 10" DeskPi RackMate T1, serveur Proxmox, Pi-hole, NAS — en cours, LAN uniquement
-- Dual boot Linux (CachyOS) sur le PC gaming
-- Dashboard perso relié à l'ENT / Pronote (notes, devoirs, fiches de révision)
-- Wiki crypto en français
-- Ce portfolio (Next.js, R3F, GSAP — lien vers le repo)
-- Repos GitHub publics récupérés automatiquement au build (§7)
+**Lab / Projets** (validés)
+- **Homelab MS-01** (projet phare, en préparation, LAN uniquement) : DeskPi RackMate T1 Plus 8U noir ; de haut en bas : routeur GL.iNet Slate AX posé dessus (phase 2), écran tactile 7,84" 2U (phase 2), patch panel 12 ports Cat6 0,5U, switch MokerLink 8 × 2.5G + SFP+ 10G 1U, Minisforum MS-01 i5-12600H 2U (Proxmox, relié en 10G), réserve NAS 1U, cache ventilé 1U (phase 2), cache plein 0,5U (phase 2). Services prévus : Proxmox, AdGuard Home ou Pi-hole, Homepage + Uptime Kuma, Jellyfin, Samba, Immich, bot crypto, dashboard Pronote ; labs à la demande : Kali vs Metasploitable, Active Directory, OPNsense. Source : document « Projet homelab MS-01 » de Luke. Mise en scène : séquence au scroll spectaculaire (rack, vue éclatée, services).
+- **Dashboard Pronote** : privé, en projet, hébergé sur le homelab (une fonctionnalité du lab)
+- **Dual boot Linux (CachyOS)** sur le PC gaming — statut **[À REMPLIR]**
+- **Wiki crypto en français** (cryptomonnaies) — statut et lien **[À REMPLIR]**
+- **Ce portfolio** (Next.js, R3F, GSAP — lien vers le repo)
+- **Repos GitHub publics** récupérés au build (sauf forks, ce portfolio et les repos vides), avec lien vers la démo Pages
+- Pages détail : homelab, dashboard-pronote, portfolio
 - Rien sur les stages / PFMP qui toucherait à des infos internes d'entreprise.
 
-**Frise de parcours** : Bac Pro CIEL (terminale 2026–2027) → suite visée (Licence puis Master) **[À VALIDER, optionnel]**
+**Frise de parcours** : 17 ans — Bac Pro CIEL (terminale 2026–2027, en cours) → BTS SIO option SISR en alternance (visé). On s'arrête là pour l'instant.
 
-**Outils (bandeau défilant)** : Linux (Debian), Kali, nmap, Proxmox, VirtualBox, Git / GitHub, Obsidian, Next.js **[À VALIDER]**
+**Outils (bandeau défilant)** : Linux (Debian), Kali, nmap, Proxmox, VirtualBox, Git / GitHub, Obsidian, Next.js — validés
 
-**Liens** : GitHub, TryHackMe, Discord (handle copiable), LinkedIn, email **[À REMPLIR]** — email jamais en clair dans le HTML (obfusqué, révélé au clic).
+**Liens** : GitHub (github.com/Skavyoy8) ; TryHackMe, Discord (handle copiable), LinkedIn, Instagram, TikTok **[À REMPLIR]** ; email **[À REMPLIR]** — jamais en clair dans le HTML (obfusqué, révélé au clic). Page `/link/` créée pour le lien du profil GitHub.
 
-**CV** : PDF téléchargeable **[optionnel, À REMPLIR]**
+**CV** : PDF **[À REMPLIR]** (Luke le donnera plus tard ; bouton masqué tant que le fichier n'existe pas)
+
+**Déploiement** : push sur `main` autorisé en fin de phase, après vérifications vertes.
 
 ---
 
