@@ -34,7 +34,8 @@ export const about = {
       ['Lab', 'Proxmox · rack 10"'],
       ['Objectif', 'BTS SIO SISR'],
     ],
-    dragHint: 'Attrape le badge',
-    fallbackHint: 'Survole le badge',
+    flip: 'Retourner le badge',
+    hint: 'Survole, clique : il se retourne',
+    strap: 'SKAVYOY · CIEL / FR · ACCÈS LAB · ',
   },
 } as const

@@ -1,4 +1,4 @@
-// Shaders des particules SIGNAL.
+// Shaders des particules du Lab : pistes de circuit → rack 10" (vue éclatée, LED, écran).
 // Bruit simplex 3D : Ashima Arts / Stefan Gustavson (licence MIT).
 
 const noise = /* glsl */ `
@@ -43,7 +43,7 @@ float snoise(vec3 v){
   m = m * m;
   return 42.0 * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
 }
-// Champ de déplacement bon marché : 3 échantillons de bruit décalés (au lieu d'un vrai curl à 6).
+// Champ de déplacement bon marché : 3 échantillons de bruit décalés.
 vec3 drift(vec3 p){
   return vec3(snoise(p), snoise(p + vec3(31.4, 7.1, 3.3)), snoise(p + vec3(5.2, 57.1, 11.7)));
 }
@@ -52,24 +52,18 @@ vec3 drift(vec3 p){
 export const particlesVertex = /* glsl */ `
 uniform float uTime;
 uniform float uProgress;
-uniform float uSquare;
 uniform float uExplode;
 uniform float uFocus;
-uniform float uDim;
-uniform float uPortal;
+uniform float uVisible;
 uniform float uGlitch;
-uniform float uIntro;
 uniform vec3 uPointer;
-uniform vec3 uGround;
 uniform float uPointerStrength;
 uniform float uSize;
 uniform float uPixelRatio;
 uniform float uViewHeight;
 
-attribute vec3 aWave;
-attribute vec3 aCircuit;
+// position = pistes du circuit (état de départ)
 attribute vec3 aRack;
-attribute vec3 aPortal;
 attribute vec4 aRand;
 attribute vec4 aMeta;
 
@@ -84,28 +78,6 @@ const float EXPLODE_GAP = 0.22;
 const float EXPLODE_Z = 0.55;
 const float RACK_SCALE = 0.68;
 
-vec3 corePos() {
-  // Terrain de signal : chaque ligne est une onde, le relief défile vers la caméra.
-  vec3 p = position;
-  float n = snoise(vec3(p.x * 0.2, p.z * 0.28 - uTime * 0.14, uTime * 0.04));
-  float ridge = sin(p.x * 0.85 + p.z * 0.5 + uTime * 0.9) * 0.1;
-  // Le sol remonte avec la distance : l'horizon arrive à mi-écran, les vagues remplissent le fond.
-  float far = (2.6 - p.z) / 12.0;
-  p.y = -2.1 + far * 2.3 + (n * 1.1 + ridge) * mix(0.7, 1.5, far);
-  // Bosse sous le pointeur (intersection du rayon avec le sol).
-  vec2 g = p.xz - uGround.xz;
-  p.y += uPointerStrength * 0.75 * exp(-dot(g, g) * 0.55);
-  return p;
-}
-
-vec3 wavePos() {
-  float phase = aWave.x * 1.15 - uTime * 1.3 + aWave.y * 0.7;
-  float s = sin(phase);
-  float sq = clamp(s * 10.0, -1.0, 1.0);
-  float y = mix(s, sq, uSquare) * (0.95 - aWave.y * 0.25);
-  return vec3(aWave.x, y + (aWave.y - 0.5) * 0.12, aWave.z);
-}
-
 vec3 rackPos() {
   vec3 p = aRack;
   if (aMeta.z >= 0.0) {
@@ -115,47 +87,19 @@ vec3 rackPos() {
   return p * RACK_SCALE;
 }
 
-vec3 portalPos() {
-  float speed = (0.12 + uPortal * 1.4) * (2.3 / max(aPortal.y, 0.35));
-  float a = aPortal.x + uTime * speed;
-  float wobble = sin(aPortal.x * 6.0 + uTime * 1.7) * 0.05 * (1.0 + uPortal);
-  return vec3(cos(a) * (aPortal.y + wobble), sin(a) * (aPortal.y + wobble), aPortal.z);
-}
-
-vec3 shapeAt(int i) {
-  if (i == 0) return corePos();
-  if (i == 1) return wavePos();
-  if (i == 2) return aCircuit;
-  if (i == 3) return rackPos();
-  return portalPos();
-}
-
-float weightOf(int k, int a, float t) {
-  return (k == a ? 1.0 - t : 0.0) + (k == a + 1 ? t : 0.0);
-}
-
 void main() {
-  float p = clamp(uProgress, 0.0, 4.0);
-  float seg = min(floor(p), 3.0);
-  float t = p - seg;
+  // Chaque particule part avec son propre délai : le rack se construit piste par piste.
   float delay = aRand.x * 0.4;
-  float lt = smoothstep(delay, delay + 0.6, t);
-  int ia = int(seg);
-
-  vec3 a = shapeAt(ia);
-  vec3 pos = a;
-  if (lt > 0.0) pos = mix(a, shapeAt(ia + 1), lt);
-
+  float lt = smoothstep(delay, delay + 0.6, uProgress);
+  vec3 pos = mix(position, rackPos(), lt);
   float mid = sin(lt * 3.14159265);
-  if (mid > 0.01) pos += drift(pos * 0.35 + vec3(uTime * 0.05)) * mid * 0.9;
+  if (mid > 0.01) pos += drift(pos * 0.35 + vec3(uTime * 0.05)) * mid * 0.6;
 
-  float wTerrain = weightOf(0, ia, lt);
-  // Le pointeur repousse localement les particules (le terrain, lui, se soulève).
+  // Le pointeur repousse doucement les particules.
   vec2 d = pos.xy - uPointer.xy;
-  float dist = length(d);
-  float push = uPointerStrength * (1.0 - smoothstep(0.0, 1.4, dist)) * (1.0 - wTerrain);
-  pos.xy += normalize(d + 1e-4) * push * 0.5;
-  pos.z += push * 0.4;
+  float push = uPointerStrength * (1.0 - smoothstep(0.0, 1.1, length(d)));
+  pos.xy += normalize(d + 1e-4) * push * 0.35;
+  pos.z += push * 0.25;
 
   // Konami : déchirures horizontales.
   if (uGlitch > 0.001) {
@@ -164,32 +108,24 @@ void main() {
     pos.x += (aRand.z - 0.5) * 1.6 * uGlitch * g;
   }
 
-  float wCircuit = weightOf(2, ia, lt);
-  float wRack = weightOf(3, ia, lt);
-  float wPortal = weightOf(4, ia, lt);
-
-  float bright = 0.0;
   float pulse = 0.0;
-  if (aMeta.x >= 0.0 && wCircuit > 0.0) {
+  if (aMeta.x >= 0.0) {
     float head = fract(uTime * 0.22 + aMeta.x);
-    pulse = smoothstep(0.07, 0.0, abs(head - aMeta.y)) * wCircuit;
+    pulse = smoothstep(0.07, 0.0, abs(head - aMeta.y)) * (1.0 - lt);
   }
-  float led = 0.0;
-  if (aMeta.w > 0.75 && wRack > 0.0) led = step(0.4, fract(uTime * (0.5 + aRand.z * 1.8) + aRand.z * 7.0)) * wRack;
-  float screen = (aMeta.w > 0.25 && aMeta.w < 0.75) ? wRack : 0.0;
+  float led = aMeta.w > 0.75 ? step(0.4, fract(uTime * (0.5 + aRand.z * 1.8) + aRand.z * 7.0)) * lt : 0.0;
+  float screen = (aMeta.w > 0.25 && aMeta.w < 0.75) ? lt : 0.0;
   float focusDim = 1.0;
-  if (aMeta.z >= 0.0 && wRack > 0.0) {
+  if (aMeta.z >= 0.0) {
     bool server = abs(aMeta.z - SERVER_UNIT) < 0.5;
-    focusDim = mix(1.0, server ? 1.6 : 0.3, uFocus * wRack);
+    focusDim = mix(1.0, server ? 1.6 : 0.3, uFocus * lt);
   }
-  bright = pulse * 1.6 + led * 1.8 + screen * 0.5 + wPortal * uPortal * 0.6;
-  // Terrain : les lignes lointaines s'effacent, les crêtes brillent un peu plus.
-  float depthFade = mix(1.0, 0.25 + 0.95 * smoothstep(-9.6, -0.5, a.z), wTerrain);
+  float bright = pulse * 1.6 + led * 1.8 + screen * 0.5;
 
   vec4 mv = modelViewMatrix * vec4(pos, 1.0);
   gl_Position = projectionMatrix * mv;
 
-  float size = uSize * (0.4 + aRand.y * 0.9) * (1.0 + led * 1.6 + pulse * 0.8) * (1.0 + uDim * 1.4);
+  float size = uSize * (0.4 + aRand.y * 0.9) * (1.0 + led * 1.6 + pulse * 0.8);
   gl_PointSize = size * uPixelRatio * (uViewHeight / 900.0) * (7.0 / -mv.z);
 
   vec3 base = mix(vec3(0.93, 0.93, 0.95), vec3(0.42, 0.89, 1.0), aRand.w * 0.55);
@@ -197,7 +133,7 @@ void main() {
   col = mix(col, vec3(0.42, 0.89, 1.0), screen * 0.7);
   col = mix(col, vec3(0.784, 1.0, 0.18), clamp(led, 0.0, 1.0));
   vColor = col;
-  vAlpha = (0.34 + 0.66 * clamp(bright, 0.0, 1.0)) * focusDim * depthFade * mix(1.0, 0.16, uDim) * uIntro;
+  vAlpha = (0.34 + 0.66 * clamp(bright, 0.0, 1.0)) * focusDim * uVisible;
   vRound = clamp(led + pulse, 0.0, 1.0);
 }
 `

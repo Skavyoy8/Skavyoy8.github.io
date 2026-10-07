@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { HeroSignal } from '@/components/ui/HeroSignal'
 import { ParisTime } from '@/components/ui/Live'
 import { Magnetic } from '@/components/ui/Magnetic'
 import { ArrowIcon, buttonGhost, buttonPrimary, StatusDot } from '@/components/ui/Primitives'
@@ -16,7 +17,8 @@ export function Hero() {
 
   return (
     <section id="accueil" aria-labelledby="hero-title" className="relative flex min-h-svh flex-col justify-end pt-28 pb-6">
-      <div className="container-x">
+      <HeroSignal />
+      <div className="container-x relative">
         <p className="label flex items-center gap-3 text-muted" data-hero-fade>
           <StatusDot /> {hero.eyebrow}
         </p>

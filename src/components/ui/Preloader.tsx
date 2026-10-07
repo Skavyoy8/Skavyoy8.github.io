@@ -4,10 +4,10 @@ import { useRef } from 'react'
 import { emit } from '@/lib/events'
 import { gsap, useGSAP } from '@/lib/gsap'
 
-const BOOT = ['init signal…………… ok', 'montage /dev/lab…… ok', 'chargement 3D……… ok', 'session ouverte']
+const BOOT = ['init signal…………… ok', 'montage /dev/lab…… ok', 'calibrage………………… ok', 'session ouverte']
 
 /**
- * Compteur 000 → 100 branché sur le vrai chargement (polices + code de la scène 3D),
+ * Compteur 000 → 100 branché sur le vrai chargement (polices du site),
  * lignes de boot, puis rideau. < 2,5 s, passable, une fois par session.
  */
 export function Preloader() {
@@ -32,17 +32,11 @@ export function Preloader() {
       let shown = 0
       let finished = false
       const start = performance.now()
-      // Progression réelle : polices, puis code de la scène 3D (préchargé, monté après le rideau).
+      // Progression réelle : les polices (la 3D, elle, ne se charge qu'à l'approche du Lab).
       let fontsReady = false
-      let sceneReady = false
       document.fonts?.ready.then(() => {
         fontsReady = true
       })
-      import('@/components/three/Experience')
-        .catch(() => undefined)
-        .finally(() => {
-          sceneReady = true
-        })
 
       const finish = (fast: boolean) => {
         if (finished) return
@@ -61,9 +55,9 @@ export function Preloader() {
 
       const tick = () => {
         const elapsed = performance.now() - start
-        const loaded = (fontsReady ? 50 : 0) + (sceneReady ? 50 : 0)
+        const loaded = fontsReady ? 100 : 0
         target = Math.max(target, Math.min(loaded, 12 + elapsed / 14))
-        if (loaded === 100 || elapsed > 1200) target = 100
+        if ((loaded === 100 && elapsed > 700) || elapsed > 1200) target = 100
         shown += (target - shown) * 0.14
         if (target - shown < 0.6) shown = target
         if (count.current) count.current.textContent = String(Math.floor(shown)).padStart(3, '0')

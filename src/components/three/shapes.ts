@@ -1,8 +1,9 @@
 import { homelab } from '@/content/homelab'
 
 /**
- * Génération procédurale des 5 formes (aucun modèle téléchargé).
- * Déterministe : même graine → mêmes points. Les particules sont mélangées,
+ * Génération procédurale des deux formes du Lab (aucun modèle téléchargé) :
+ * des pistes de circuit (état de départ) qui se replient en rack 10".
+ * Déterministe : même graine → mêmes points. Les particules sont tirées au hasard,
  * donc n'en dessiner qu'un préfixe (drawRange) garde une répartition uniforme.
  */
 
@@ -17,11 +18,8 @@ export const SERVER_UNIT = homelab.units.findIndex((u) => u.id === 'server')
 
 export type ShapeData = {
   count: number
-  core: Float32Array
-  wave: Float32Array
   circuit: Float32Array
   rack: Float32Array
-  portal: Float32Array
   rand: Float32Array
   meta: Float32Array
   /** Ancre (bord droit, centre, face avant) de chaque unité du rack, pour les légendes HTML. */
@@ -44,23 +42,10 @@ export function generateShapes(count: number, seed = 7): ShapeData {
   const rnd = mulberry32(seed)
   const gauss = () => (rnd() + rnd() + rnd() - 1.5) / 1.5
 
-  const core = new Float32Array(count * 3)
-  const wave = new Float32Array(count * 3)
   const circuit = new Float32Array(count * 3)
   const rack = new Float32Array(count * 3)
-  const portal = new Float32Array(count * 3)
   const rand = new Float32Array(count * 4)
   const meta = new Float32Array(count * 4)
-
-  // Permutation : la particule p prend l'échantillon perm[p].
-  const perm = new Uint32Array(count)
-  for (let i = 0; i < count; i++) perm[i] = i
-  for (let i = count - 1; i > 0; i--) {
-    const j = Math.floor(rnd() * (i + 1))
-    const tmp = perm[i] as number
-    perm[i] = perm[j] as number
-    perm[j] = tmp
-  }
 
   for (let p = 0; p < count; p++) {
     rand[p * 4] = rnd()
@@ -71,39 +56,19 @@ export function generateShapes(count: number, seed = 7): ShapeData {
     meta[p * 4 + 2] = -1
   }
 
-  // 1. Terrain de signal : des lignes d'onde empilées en profondeur (la hauteur est calculée dans le shader).
-  const rows = Math.max(16, Math.round(Math.sqrt(count / 16)))
-  const perRow = Math.ceil(count / rows)
-  for (let p = 0; p < count; p++) {
-    const i = perm[p] as number
-    const row = Math.floor(i / perRow)
-    const col = i % perRow
-    core[p * 3] = (col / perRow) * 16 - 8 + (rnd() - 0.5) * (16 / perRow)
-    core[p * 3 + 1] = row / (rows - 1)
-    core[p * 3 + 2] = 2.6 - (row / (rows - 1)) * 12
-  }
-
-  // 2. Onde : 5 brins le long de x ; la hauteur est calculée dans le shader (sinus → carré).
-  for (let p = 0; p < count; p++) {
-    const strand = Math.floor(rnd() * 5)
-    wave[p * 3] = rnd() * 13 - 6.5
-    wave[p * 3 + 1] = strand / 4
-    wave[p * 3 + 2] = (strand - 2) * 0.32 + gauss() * 0.04
-  }
-
-  // 3. Circuit : pistes orthogonales (coudes à 45°), pastilles et puces.
+  // 1. Circuit compact autour du rack : pistes orthogonales (coudes à 45°), pastilles et puces.
   const segs: Seg[] = []
   const pads: [number, number][] = []
-  const W = 5.6
-  const H = 3.1
-  const snap = (v: number) => Math.round(v / 0.25) * 0.25
+  const W = 2.7
+  const H = 1.8
+  const snap = (v: number) => Math.round(v / 0.15) * 0.15
   const dirs = [
     [1, 0],
     [0, 1],
     [-1, 0],
     [0, -1],
   ] as const
-  for (let t = 0; t < 46; t++) {
+  for (let t = 0; t < 40; t++) {
     let x = snap((rnd() * 2 - 1) * W)
     let y = snap((rnd() * 2 - 1) * H)
     let d = Math.floor(rnd() * 4)
@@ -114,7 +79,7 @@ export function generateShapes(count: number, seed = 7): ShapeData {
     for (let k = 0; k < steps; k++) {
       const dir = dirs[d] as readonly [number, number]
       const diag = k > 0 && rnd() < 0.35
-      const len = 0.4 + rnd() * 1.8
+      const len = 0.25 + rnd() * 0.95
       const dx = diag ? (dir[0] + dir[1]) * 0.7071 : dir[0]
       const dy = diag ? (dir[1] - dir[0]) * 0.7071 : dir[1]
       const nx = Math.max(-W, Math.min(W, x + dx * len))
@@ -135,7 +100,7 @@ export function generateShapes(count: number, seed = 7): ShapeData {
     }
     pads.push([x, y])
   }
-  const chips = Array.from({ length: 4 }, () => ({ x: (rnd() * 2 - 1) * (W - 1), y: (rnd() * 2 - 1) * (H - 0.8), w: 0.7 + rnd() * 0.7, h: 0.5 + rnd() * 0.4 }))
+  const chips = Array.from({ length: 3 }, () => ({ x: (rnd() * 2 - 1) * (W - 0.6), y: (rnd() * 2 - 1) * (H - 0.5), w: 0.45 + rnd() * 0.4, h: 0.3 + rnd() * 0.25 }))
   const totalLen = segs.reduce((sum, seg) => sum + seg.len, 0)
   const cumulative = new Float32Array(segs.length)
   let acc = 0
@@ -169,7 +134,7 @@ export function generateShapes(count: number, seed = 7): ShapeData {
     } else if (roll < 0.86) {
       const pad = pads[Math.floor(rnd() * pads.length)] as [number, number]
       const a = rnd() * Math.PI * 2
-      const r = Math.sqrt(rnd()) * 0.075
+      const r = Math.sqrt(rnd()) * 0.055
       x = pad[0] + Math.cos(a) * r
       y = pad[1] + Math.sin(a) * r
     } else {
@@ -184,11 +149,11 @@ export function generateShapes(count: number, seed = 7): ShapeData {
         else [x, y] = [chip.x - chip.w / 2, chip.y + chip.h / 2 - (per - 2 * chip.w - chip.h)]
       } else {
         // broches
-        const pins = Math.max(4, Math.round(chip.w / 0.12))
+        const pins = Math.max(4, Math.round(chip.w / 0.09))
         const k = Math.floor(rnd() * pins)
         const top = rnd() < 0.5 ? 1 : -1
         x = chip.x - chip.w / 2 + ((k + 0.5) / pins) * chip.w
-        y = chip.y + top * (chip.h / 2 + rnd() * 0.14)
+        y = chip.y + top * (chip.h / 2 + rnd() * 0.1)
       }
       z = gauss() * 0.01
     }
@@ -197,7 +162,7 @@ export function generateShapes(count: number, seed = 7): ShapeData {
     circuit[p * 3 + 2] = y * sinT + z * cosT
   }
 
-  // 4. Rack 10" : cadre + unités échantillonnées, LED marquées.
+  // 2. Rack 10" : cadre + unités échantillonnées, LED marquées.
   const { width: RW, depth: RD, u: U } = RACK
   const RH = 8 * U
   const units = homelab.units
@@ -315,19 +280,5 @@ export function generateShapes(count: number, seed = 7): ShapeData {
     rack.set([x, y, z], i)
   }
 
-  // 5. Portail : tore + spirale intérieure (angle, rayon, z) ; la rotation se fait dans le shader.
-  for (let p = 0; p < count; p++) {
-    const i = p * 3
-    if (rnd() < 0.78) {
-      const theta = rnd() * Math.PI * 2
-      const phi = rnd() * Math.PI * 2
-      const tube = 0.32 * Math.sqrt(rnd())
-      portal.set([theta, 2.15 + Math.cos(phi) * tube, Math.sin(phi) * tube * 0.8], i)
-    } else {
-      const r = 0.25 + Math.sqrt(rnd()) * 1.75
-      portal.set([rnd() * Math.PI * 2 + r * 2.2, r, gauss() * 0.06], i)
-    }
-  }
-
-  return { count, core, wave, circuit, rack, portal, rand, meta, anchors }
+  return { count, circuit, rack, rand, meta, anchors }
 }

@@ -18,7 +18,6 @@ export const metadata: Metadata = {
 export default function LinkPage() {
   return (
     <main id="contenu" tabIndex={-1} className="relative z-10 grid min-h-svh place-items-center px-(--gutter) py-28 outline-none">
-      <div className="signal-fallback" aria-hidden="true" />
       <div className="relative w-full max-w-md">
         <div className="flex items-center gap-4">
           <Image src={asset(site.avatar)} alt={`Avatar de ${site.name}`} width={64} height={64} className="size-16 rounded-full border border-line-strong object-cover grayscale" />

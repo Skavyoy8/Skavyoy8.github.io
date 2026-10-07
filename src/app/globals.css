@@ -337,16 +337,113 @@ html.lenis body {
   50% { opacity: 0; }
 }
 
-/* Fond quand la 3D est absente (mode calme ou pas de WebGL) */
-.signal-fallback {
+/* Fond calme : deux halos fixes + une lueur qui suit la souris (rien ne bouge tant qu'on ne bouge pas) */
+.backdrop {
   position: fixed;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
   pointer-events: none;
-  background:
-    radial-gradient(60vmax 45vmax at 78% 18%, rgb(106 228 255 / 0.1), transparent 60%),
-    radial-gradient(50vmax 40vmax at 12% 85%, rgb(200 255 46 / 0.06), transparent 60%),
-    radial-gradient(80vmax 60vmax at 50% 50%, rgb(255 255 255 / 0.025), transparent 70%);
+  background: var(--color-bg);
+}
+.backdrop-glow {
+  position: absolute;
+  width: 80vmax;
+  height: 80vmax;
+  border-radius: 50%;
+}
+.backdrop-glow-a {
+  top: -38vmax;
+  right: -26vmax;
+  background: radial-gradient(closest-side, rgb(106 228 255 / 0.075), transparent);
+}
+.backdrop-glow-b {
+  bottom: -44vmax;
+  left: -30vmax;
+  background: radial-gradient(closest-side, rgb(200 255 46 / 0.045), transparent);
+}
+.backdrop-spot {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-signal);
+  background: radial-gradient(520px circle at var(--spot-x, 50%) var(--spot-y, 30%), rgb(255 255 255 / 0.028), transparent 70%);
+}
+
+/* Ligne de signal du héros */
+.hero-signal-track {
+  animation: signal-scroll 60s linear infinite;
+}
+.hero-signal-fast {
+  animation-duration: 38s;
+}
+@keyframes signal-scroll {
+  to { transform: translateX(-50%); }
+}
+
+/* Badge : cordon fixe, carte recto / verso */
+.badge-strap {
+  width: 26px;
+  height: 64px;
+  overflow: hidden;
+  background: #121216;
+  border-inline: 1px solid var(--color-line);
+}
+.badge-strap span {
+  display: block;
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--color-accent);
+  line-height: 26px;
+  white-space: nowrap;
+}
+.badge-clip {
+  width: 58px;
+  height: 14px;
+  margin-bottom: -4px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #a3a3ab, #5b5b63);
+  position: relative;
+  z-index: 1;
+}
+.badge-flip {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 1s var(--ease-signal);
+  cursor: pointer;
+}
+[data-flipped='true'] .badge-flip {
+  transform: rotateY(180deg);
+}
+.badge-face {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.badge-face-back {
+  transform: rotateY(180deg);
+}
+
+/* Contact : ondes « ping » autour du CTA */
+.ping-ring {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(64vw, 300px);
+  height: min(64vw, 300px);
+  border-radius: 50%;
+  border: 1px solid rgb(200 255 46 / 0.35);
+  pointer-events: none;
+  animation: ping 6s var(--ease-signal) infinite;
+}
+.ping-ring:nth-child(2) { animation-delay: 2s; }
+.ping-ring:nth-child(3) { animation-delay: 4s; }
+.ping:hover .ping-ring { animation-duration: 3s; border-color: rgb(200 255 46 / 0.6); }
+@keyframes ping {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.1); opacity: 0; }
 }
 
 /* Préloader : visible uniquement avec JS, hors mode calme, une fois par session */
@@ -366,8 +463,16 @@ html[data-js='true']:not([data-booted]):not([data-calm='true']) .preloader {
 
 /* ── Mode calme ─────────────────────────────────────────────────────── */
 html[data-calm='true'] .grain,
-html[data-calm='true'] .motion-only {
+html[data-calm='true'] .motion-only,
+html[data-calm='true'] .backdrop-spot,
+html[data-calm='true'] .ping-ring {
   display: none;
+}
+html[data-calm='true'] .hero-signal-track {
+  animation: none;
+}
+html[data-calm='true'] .badge-flip {
+  transition: none;
 }
 html[data-calm='true'] .marquee-track {
   animation: none;
@@ -388,6 +493,8 @@ html[data-calm='true'] .holo {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-signal-track,
+  .ping-ring,
   .grain,
   .marquee-track,
   .scroll-line,

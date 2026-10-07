@@ -1,5 +1,4 @@
 import { Reveals } from '@/components/motion/Reveals'
-import { SceneDirector } from '@/components/motion/SceneDirector'
 import { About } from '@/components/sections/About'
 import { Hero } from '@/components/sections/Hero'
 import { Interests } from '@/components/sections/Interests'
@@ -33,7 +32,6 @@ export default async function Home() {
   return (
     <>
       <SceneLoader />
-      <SceneDirector />
       <Reveals />
       <main id="contenu" tabIndex={-1} className="relative z-10 outline-none">
         <Hero />

@@ -10,15 +10,11 @@ import { EXPLODE_GAP, EXPLODE_Z, generateShapes, RACK_SCALE, RACK_UNITS } from '
 type ParticleUniforms = {
   uTime: THREE.IUniform<number>
   uProgress: THREE.IUniform<number>
-  uSquare: THREE.IUniform<number>
   uExplode: THREE.IUniform<number>
   uFocus: THREE.IUniform<number>
-  uDim: THREE.IUniform<number>
-  uPortal: THREE.IUniform<number>
+  uVisible: THREE.IUniform<number>
   uGlitch: THREE.IUniform<number>
-  uIntro: THREE.IUniform<number>
   uPointer: THREE.IUniform<THREE.Vector3>
-  uGround: THREE.IUniform<THREE.Vector3>
   uPointerStrength: THREE.IUniform<number>
   uSize: THREE.IUniform<number>
   uPixelRatio: THREE.IUniform<number>
@@ -29,9 +25,8 @@ type Scratch = {
   ray: THREE.Vector3
   dir: THREE.Vector3
   hit: THREE.Vector3
-  ground: THREE.Vector3
   label: THREE.Vector3
-  smooth: { progress: number; square: number; explode: number; focus: number; dim: number; portal: number; offsetX: number; strength: number; intro: number; glitch: number }
+  smooth: { progress: number; explode: number; focus: number; visible: number; offsetX: number; strength: number }
   lastPointer: { x: number; y: number }
   labelOpacity: Float32Array
 }
@@ -43,9 +38,8 @@ function createScratch(): Scratch {
     ray: new THREE.Vector3(),
     dir: new THREE.Vector3(),
     hit: new THREE.Vector3(),
-    ground: new THREE.Vector3(),
     label: new THREE.Vector3(),
-    smooth: { progress: 0, square: 0, explode: 0, focus: 0, dim: 0, portal: 0, offsetX: sceneState.offsetX, strength: 0, intro: 0, glitch: 0 },
+    smooth: { progress: 0, explode: 0, focus: 0, visible: 0, offsetX: sceneState.offsetX, strength: 0 },
     lastPointer: { x: 0, y: 0 },
     labelOpacity: new Float32Array(RACK_UNITS).fill(-1),
   }
@@ -56,14 +50,11 @@ export function Particles({ count, fraction }: { count: number; fraction: number
 
   const geometry = useMemo(() => {
     const g = new THREE.BufferGeometry()
-    g.setAttribute('position', new THREE.BufferAttribute(data.core, 3))
-    g.setAttribute('aWave', new THREE.BufferAttribute(data.wave, 3))
-    g.setAttribute('aCircuit', new THREE.BufferAttribute(data.circuit, 3))
+    g.setAttribute('position', new THREE.BufferAttribute(data.circuit, 3))
     g.setAttribute('aRack', new THREE.BufferAttribute(data.rack, 3))
-    g.setAttribute('aPortal', new THREE.BufferAttribute(data.portal, 3))
     g.setAttribute('aRand', new THREE.BufferAttribute(data.rand, 4))
     g.setAttribute('aMeta', new THREE.BufferAttribute(data.meta, 4))
-    g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 12)
+    g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 8)
     return g
   }, [data])
 
@@ -79,15 +70,11 @@ export function Particles({ count, fraction }: { count: number; fraction: number
         uniforms: {
           uTime: { value: 0 },
           uProgress: { value: 0 },
-          uSquare: { value: 0 },
           uExplode: { value: 0 },
           uFocus: { value: 0 },
-          uDim: { value: 0 },
-          uPortal: { value: 0 },
+          uVisible: { value: 0 },
           uGlitch: { value: 0 },
-          uIntro: { value: 0 },
           uPointer: { value: new THREE.Vector3(99, 99, 0) },
-          uGround: { value: new THREE.Vector3(99, -1.55, 99) },
           uPointerStrength: { value: 0 },
           uSize: { value: 3.1 },
           uPixelRatio: { value: 1 },
@@ -119,13 +106,12 @@ export function Particles({ count, fraction }: { count: number; fraction: number
     const s = sceneState
 
     sm.progress = damp(sm.progress, s.progress, 6, delta)
-    sm.square = damp(sm.square, s.square, 6, delta)
     sm.explode = damp(sm.explode, s.explode, 7, delta)
     sm.focus = damp(sm.focus, s.focus, 6, delta)
-    sm.dim = damp(sm.dim, s.dim, 5, delta)
-    sm.portal = damp(sm.portal, s.portalHover, 2.5, delta)
+    sm.visible = damp(sm.visible, s.visible, 5, delta)
+    if (sm.visible < 0.002 && s.visible === 0) sm.visible = 0
     sm.offsetX = damp(sm.offsetX, s.offsetX, 4, delta)
-    sm.intro = damp(sm.intro, 1, 1.6, delta)
+    s.shown = sm.visible
     s.glitch = Math.max(0, s.glitch - delta * 1.2)
 
     // Le pointeur n'agit que s'il bouge (sinon la répulsion retombe).
@@ -137,54 +123,43 @@ export function Particles({ count, fraction }: { count: number; fraction: number
 
     // Parallaxe caméra douce.
     const cam = state.camera
-    cam.position.x = damp(cam.position.x, pointer.x * 0.35, 2.5, delta)
-    cam.position.y = damp(cam.position.y, pointer.y * 0.25, 2.5, delta)
+    cam.position.x = damp(cam.position.x, pointer.x * 0.3, 2.5, delta)
+    cam.position.y = damp(cam.position.y, pointer.y * 0.2, 2.5, delta)
     cam.lookAt(0, 0, 0)
 
-    const rackWeight = Math.max(0, 1 - Math.abs(sm.progress - 3))
     const width = state.size.width
-    const scale = width < 640 ? 0.6 : width < 1024 ? 0.78 : 1
+    const scale = width < 640 ? 0.75 : width < 1024 ? 0.85 : 1
     g.scale.setScalar(scale)
     g.position.x = sm.offsetX
-    g.rotation.y = pointer.x * 0.1 - 0.5 * sm.explode * rackWeight
-    g.rotation.x = -pointer.y * 0.06 + 0.12 * sm.explode * rackWeight
+    g.rotation.y = pointer.x * 0.1 - 0.5 * sm.explode
+    g.rotation.x = -pointer.y * 0.06 + 0.12 * sm.explode
     g.updateMatrixWorld()
 
     // Rayon souris → plan z = 0 → espace local du groupe.
     sc.ray.set(pointer.x, pointer.y, 0.5).unproject(cam)
     sc.dir.copy(sc.ray).sub(cam.position).normalize()
-    const dist = -cam.position.z / sc.dir.z
-    sc.hit.copy(cam.position).addScaledVector(sc.dir, dist)
-    // Même rayon → sol du terrain (y = -1,55 en local), pour la bosse sous le pointeur.
-    const toGround = sc.dir.y < -0.02 ? (-1.2 * g.scale.y - cam.position.y) / sc.dir.y : 60
-    sc.ground.copy(cam.position).addScaledVector(sc.dir, Math.min(toGround, 60))
-    g.worldToLocal(sc.ground)
+    sc.hit.copy(cam.position).addScaledVector(sc.dir, -cam.position.z / sc.dir.z)
     g.worldToLocal(sc.hit)
 
     u.uTime.value = state.clock.elapsedTime
     u.uProgress.value = sm.progress
-    u.uSquare.value = sm.square
     u.uExplode.value = sm.explode
     u.uFocus.value = sm.focus
-    u.uDim.value = sm.dim
-    u.uPortal.value = sm.portal
+    u.uVisible.value = sm.visible
     u.uGlitch.value = s.glitch
-    u.uIntro.value = sm.intro
     u.uPointer.value.copy(sc.hit)
-    u.uGround.value.copy(sc.ground)
-    u.uPointerStrength.value = sm.strength * (1 - sm.dim)
+    u.uPointerStrength.value = sm.strength
     u.uPixelRatio.value = state.gl.getPixelRatio()
     u.uViewHeight.value = state.size.height
 
     // Légendes HTML du rack, projetées depuis la 3D (même formule que le shader).
     const labels = s.rackLabels
-    const visible = sm.explode * rackWeight
+    const visible = sm.explode * sm.progress * sm.visible
     for (let i = 0; i < RACK_UNITS; i++) {
       const el = labels[i]
       if (!el) continue
       // Les légendes s'effacent quand le panneau des services prend le relais.
-      const focus = 1 - sm.focus
-      const opacity = visible > 0.02 ? Math.min(1, visible * 1.4) * focus : 0
+      const opacity = visible > 0.02 ? Math.min(1, visible * 1.4) * (1 - sm.focus) : 0
       if (Math.abs(opacity - (sc.labelOpacity[i] ?? -1)) > 0.005) {
         el.style.opacity = opacity.toFixed(3)
         sc.labelOpacity[i] = opacity
@@ -200,8 +175,6 @@ export function Particles({ count, fraction }: { count: number; fraction: number
       const y = (-sc.label.y * 0.5 + 0.5) * state.size.height
       el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`
     }
-
-    if (!s.ready) s.ready = true
   })
 
   return (

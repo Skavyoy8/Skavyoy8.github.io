@@ -34,8 +34,7 @@ export default async function LabPage({ params }: { params: Promise<{ slug: stri
   const { default: Content } = await import(`@/content/lab/${slug}.mdx`)
 
   return (
-    <main id="contenu" tabIndex={-1} className="relative z-10 min-h-svh bg-bg pt-32 pb-[18vh] outline-none">
-      <div className="signal-fallback" aria-hidden="true" />
+    <main id="contenu" tabIndex={-1} className="relative z-10 min-h-svh pt-32 pb-[18vh] outline-none">
       <PageEnter />
       <article className="container-x relative">
         <Link href="/#lab" className="group label inline-flex items-center gap-2 text-muted hover:text-fg">

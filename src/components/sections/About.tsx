@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import QRCode from 'qrcode'
-import { BadgeStage } from '@/components/three/BadgeStage'
+import { BadgeFlip } from '@/components/ui/BadgeFlip'
 import { SectionHeader, Viewfinder } from '@/components/ui/Primitives'
 import { about } from '@/content/about'
 import { site } from '@/content/site'
@@ -74,6 +74,29 @@ function BadgeCard() {
   )
 }
 
+/** Verso du badge : infos rapides. */
+function BadgeBack() {
+  const b = about.badge
+  return (
+    <div className="relative flex aspect-[1.6/2.25] w-[min(100%,330px)] flex-col overflow-hidden rounded-[18px] border border-line-strong bg-surface p-5 text-left">
+      <p className="label text-muted">{b.backTitle}</p>
+      <dl className="mt-4 divide-y divide-line">
+        {b.backLines.map(([label, value]) => (
+          <div key={label} className="py-2.5">
+            <dt className="label text-[0.625rem] text-muted">{label}</dt>
+            <dd className="mt-1 text-lg font-medium tracking-tight">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      <div className="mt-auto flex items-end justify-between">
+        <span className="h-8 w-28 bg-[repeating-linear-gradient(90deg,#ededef_0_2px,transparent_2px_4px,#ededef_4px_5px,transparent_5px_8px)] opacity-70" aria-hidden="true" />
+        <span className="label text-[0.625rem] text-muted">{site.url.replace('https://', '')}</span>
+      </div>
+      <span className="absolute inset-x-0 bottom-0 h-1.5 bg-accent" aria-hidden="true" />
+    </div>
+  )
+}
+
 export function About() {
   return (
     <section id="a-propos" aria-labelledby="about-title" className="relative py-[16vh]">
@@ -98,10 +121,8 @@ export function About() {
             <Viewfinder />
           </dl>
         </div>
-        <div className="col-span-4 lg:sticky lg:top-8 lg:col-span-5 lg:self-start">
-          <BadgeStage>
-            <BadgeCard />
-          </BadgeStage>
+        <div className="col-span-4 lg:sticky lg:top-24 lg:col-span-5 lg:self-start" data-reveal="fade">
+          <BadgeFlip front={<BadgeCard />} back={<BadgeBack />} />
         </div>
       </div>
     </section>

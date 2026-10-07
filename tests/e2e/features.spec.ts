@@ -104,69 +104,33 @@ test.describe('mode calme et 3D', () => {
     if (testInfo.project.name === 'reduced-motion') {
       await expect(page.locator('html')).toHaveAttribute('data-calm', 'true')
     } else {
-      await expect(page.locator('canvas')).toHaveCount(1, { timeout: 15000 })
+      // La 3D ne se charge qu'à l'approche du Lab.
+      await expect(page.locator('canvas')).toHaveCount(0)
+      await page.locator('#lab').scrollIntoViewIfNeeded()
+      await expect(page.locator('canvas')).toHaveCount(1, { timeout: 20000 })
       await page.getByRole('button', { name: /Mode calme|Calme/ }).first().click()
       await expect(page.locator('html')).toHaveAttribute('data-calm', 'true')
     }
     await expect(page.locator('canvas')).toHaveCount(0)
-    await expect(page.locator('.signal-fallback').first()).toBeAttached()
+    await expect(page.locator('.backdrop')).toBeAttached()
     await page.locator('#lab').scrollIntoViewIfNeeded()
     await expect(page.getByRole('img', { name: /Plan du rack/ })).toBeVisible()
-    await expect(page.locator('[data-badge-stage="static"]')).toBeAttached()
+    await expect(page.locator('[data-badge]')).toBeAttached()
   })
 
-  test('badge lanyard : drag souris ou tactile', async ({ page }, testInfo) => {
-    test.skip(testInfo.project.name === 'reduced-motion', 'fallback statique en mode calme')
+  test('badge : se retourne au clic et au clavier', async ({ page }) => {
     const errors = watchErrors(page)
     await skipPreloader(page)
     await gotoHome(page)
-    await expect(page.locator('canvas')).toHaveCount(1, { timeout: 15000 })
-    const stage = page.locator('[data-badge-stage]')
-    await stage.scrollIntoViewIfNeeded()
-    await expect(stage).toHaveAttribute('data-badge-stage', '3d', { timeout: 20000 })
-    await page.waitForTimeout(2500)
-    const view = page.locator('[data-badge-3d]')
-    const box = await view.boundingBox()
-    if (!box) throw new Error('vue du badge introuvable')
-    // Vrais événements : souris en desktop, doigt (CDP) sur mobile.
-    const touch = testInfo.project.name === 'mobile'
-    const cdp = touch ? await page.context().newCDPSession(page) : null
-    const down = async (px: number, py: number) => {
-      if (cdp) await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: px, y: py }] })
-      else {
-        await page.mouse.move(px, py)
-        await page.mouse.down()
-      }
-    }
-    const move = async (px: number, py: number) => {
-      if (cdp) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: px, y: py }] })
-      else await page.mouse.move(px, py, { steps: 2 })
-    }
-    const up = async () => {
-      if (cdp) await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
-      else await page.mouse.up()
-    }
-    // La carte se balance : on cherche un point où elle se trouve, comme le ferait un doigt.
-    let x = 0
-    let y = 0
-    let grabbed = false
-    for (const fy of [0.5, 0.42, 0.58, 0.35, 0.65, 0.28, 0.72]) {
-      for (const fx of [0.5, 0.4, 0.6]) {
-        x = box.x + box.width * fx
-        y = box.y + box.height * fy
-        await down(x, y)
-        if ((await view.getAttribute('data-dragging')) === 'true') {
-          grabbed = true
-          break
-        }
-        await up()
-      }
-      if (grabbed) break
-    }
-    expect(grabbed).toBe(true)
-    for (let i = 1; i <= 6; i++) await move(x - i * 25, y + i * 10)
-    await up()
-    await expect(view).toHaveAttribute('data-dragging', 'false')
+    const badge = page.locator('[data-badge]')
+    await badge.scrollIntoViewIfNeeded()
+    const flip = page.getByRole('button', { name: /Retourner le badge/ })
+    await expect(badge).toHaveAttribute('data-flipped', 'false')
+    await flip.click()
+    await expect(badge).toHaveAttribute('data-flipped', 'true')
+    await expect(flip).toHaveAttribute('aria-pressed', 'true')
+    await flip.press('Enter')
+    await expect(badge).toHaveAttribute('data-flipped', 'false')
     expect(errors).toEqual([])
   })
 

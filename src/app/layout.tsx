@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
 import Script from 'next/script'
 import type { ReactNode } from 'react'
+import { Backdrop } from '@/components/layout/Backdrop'
 import { Footer } from '@/components/layout/Footer'
 import { Nav } from '@/components/layout/Nav'
 import { Overlays } from '@/components/layout/Overlays'
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           {navCopy.skip}
         </a>
+        <Backdrop />
         <Providers>
           <Preloader />
           <Nav />

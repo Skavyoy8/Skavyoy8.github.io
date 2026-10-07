@@ -118,28 +118,47 @@ function LabPinned() {
       const stageEls = gsap.utils.toArray<HTMLElement>('[data-stage]')
       gsap.set(stageEls.slice(1), { autoAlpha: 0, y: 32 })
       gsap.set('[data-services], [data-network]', { autoAlpha: 0 })
+      const mm = gsap.matchMedia()
+      mm.add('(min-width: 1024px)', () => {
+        s.offsetX = 0.75
+        return () => {
+          s.offsetX = 0
+        }
+      })
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
-        scrollTrigger: { trigger: root.current, start: 'top top', end: '+=380%', pin: true, scrub: 0.8, anticipatePin: 1, refreshPriority: 5 },
+        scrollTrigger: { trigger: root.current, start: 'top top', end: '+=420%', pin: true, scrub: 0.8, anticipatePin: 1 },
       })
       const swap = (from: number, to: number, at: number) => {
         tl.to(stageEls[from] ?? {}, { autoAlpha: 0, y: -32, duration: 0.3, ease: 'power2.in' }, at)
         tl.to(stageEls[to] ?? {}, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power2.out' }, at + 0.25)
       }
-      tl.to(s, { explode: 1, duration: 1.2 }, 0.5)
-      swap(0, 1, 0.6)
-      tl.to(s, { focus: 1, duration: 0.6 }, 2.1)
-      swap(1, 2, 2.1)
-      tl.to('[data-services]', { autoAlpha: 1, x: 0, duration: 0.35 }, 2.2)
-      tl.from('[data-services] [data-service]', { autoAlpha: 0, x: 24, stagger: 0.06, duration: 0.3 }, 2.3)
-      tl.from('[data-services] [data-ram-bar]', { scaleX: 0, stagger: 0.2, duration: 0.6 }, 2.6)
-      tl.to('[data-services]', { autoAlpha: 0, duration: 0.3 }, 3.7)
-      swap(2, 3, 3.7)
-      tl.to(s, { explode: 0.25, focus: 0, duration: 0.8 }, 3.7)
-      tl.to('[data-network]', { autoAlpha: 1, duration: 0.3 }, 3.9)
-      tl.from('[data-network] [data-net-line]', { scaleX: 0, stagger: 0.12, duration: 0.4 }, 4.0)
-      tl.fromTo('[data-rail]', { scaleY: 0 }, { scaleY: 1, duration: tl.duration() }, 0)
-      tl.to({}, { duration: 0.5 })
+      // 1. Les pistes du circuit apparaissent et se replient en rack.
+      tl.fromTo(s, { visible: 0 }, { visible: 1, duration: 0.35 }, 0)
+      tl.fromTo(s, { progress: 0 }, { progress: 1, duration: 0.9 }, 0.05)
+      // 2. Vue éclatée légendée.
+      tl.fromTo(s, { explode: 0 }, { explode: 1, duration: 1.2 }, 1.1)
+      swap(0, 1, 1.2)
+      // 3. Proxmox démarre : le MS-01 ressort, les services s'affichent.
+      tl.fromTo(s, { focus: 0 }, { focus: 1, duration: 0.6 }, 2.7)
+      swap(1, 2, 2.7)
+      tl.to('[data-services]', { autoAlpha: 1, x: 0, duration: 0.35 }, 2.8)
+      tl.from('[data-services] [data-service]', { autoAlpha: 0, x: 24, stagger: 0.06, duration: 0.3 }, 2.9)
+      tl.from('[data-services] [data-ram-bar]', { scaleX: 0, stagger: 0.2, duration: 0.6 }, 3.2)
+      tl.to('[data-services]', { autoAlpha: 0, duration: 0.3 }, 4.3)
+      // 4. Câblage 10G.
+      swap(2, 3, 4.3)
+      tl.to(s, { explode: 0.25, focus: 0, duration: 0.8 }, 4.3)
+      tl.to('[data-network]', { autoAlpha: 1, duration: 0.3 }, 4.5)
+      tl.from('[data-network] [data-net-line]', { scaleX: 0, stagger: 0.12, duration: 0.4 }, 4.6)
+      // 5. Le rack se dissipe : la suite de la page reste parfaitement lisible.
+      tl.to(s, { visible: 0, duration: 0.5 }, 5.6)
+      tl.to('[data-network]', { autoAlpha: 0, duration: 0.4 }, 5.7)
+      tl.fromTo('[data-rail]', { scaleY: 0 }, { scaleY: 1, duration: 6.1 }, 0)
+      return () => {
+        mm.revert()
+        s.visible = 0
+      }
     },
     { scope: root },
   )
