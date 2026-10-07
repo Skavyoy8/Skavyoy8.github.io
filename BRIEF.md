@@ -94,7 +94,7 @@ Tout le texte vit dans `src/content/` (fichiers TS typés). Aucun texte en dur d
 
 ## 4. Direction artistique
 
-**Concept : « SIGNAL ».** CIEL, c'est le signal sous toutes ses formes : électrique, réseau, données. Fil rouge visuel : **un nuage de particules unique qui se transforme au fil du scroll** — noyau, onde, circuit, rack, portail. Si Luke préfère une autre direction au kickoff, propose 2 alternatives aussi fortes.
+**Concept : « SIGNAL ».** CIEL, c'est le signal sous toutes ses formes : électrique, réseau, données. Fil rouge visuel : **un nuage de particules unique qui se transforme au fil du scroll** — terrain de signal, onde, circuit, rack, portail. *(2026-10-07 : Luke n'aimait pas la sphère « noyau » ; remplacée par un terrain de lignes d'onde en perspective, particules en « pixels » carrés.)* Si Luke préfère une autre direction au kickoff, propose 2 alternatives aussi fortes.
 
 **Ambiance** : sombre, éditoriale, précise. Plus « labo de nuit » que « hacker Matrix ».
 
@@ -129,7 +129,7 @@ Compteur `000 → 100` branché sur le vrai chargement (polices + `useProgress` 
 ### 5.1 Héros `#accueil`
 miray : nom, tagline, 2 CTA, chips (âge + pays + handle), carte avatar « CYBER / FR01 », 2 stats.
 → Nous :
-- « Luke. » en très grand, révélation lettre par lettre ; la scène 3D « noyau » derrière et à travers le texte (sphère de particules bruitée qui respire et se déforme sous le pointeur)
+- « Skavyoy. » en très grand, révélation lettre par lettre ; la scène 3D derrière et à travers le texte : un **terrain de signal** (lignes d'onde empilées en perspective, qui défilent et se soulèvent sous le pointeur)
 - tagline + 2 CTA magnétiques (« Mon parcours » / « On se parle ? »)
 - barre de méta en mono : statut (« en apprentissage ● »), France, heure locale en direct, handle
 - mini-stats TryHackMe en compteurs, cliquables vers leurs sections
@@ -222,7 +222,7 @@ Bonus si tout le reste est fini : version anglaise (`/en`), sons d'UI discrets (
 
 - **Un seul `<Canvas>`** fixe en arrière-plan, monté une fois, importé en `dynamic(..., { ssr: false })` **après** le premier rendu du texte : le LCP doit être du texte, pas la 3D. Le badge lanyard et les micro-scènes passent par `<View>` de drei (un seul contexte WebGL) — sinon, justifie dans `PLAN.md`.
 - **Particules** : `THREE.Points` + `ShaderMaterial` custom. Desktop ~60–80k particules, mobile ~15–20k, ajusté en direct par `PerformanceMonitor`. Chaque forme cible est un nuage de N points **généré procéduralement** (aucun modèle 3D téléchargé), stocké en attribut ou en DataTexture :
-  1. **noyau** — sphère de Fibonacci + bruit
+  1. **terrain de signal** — lignes d'onde empilées en profondeur + bruit (remplace la sphère « noyau » à la demande de Luke)
   2. **onde** — sinus → carré (uniform de transition)
   3. **circuit** — pistes orthogonales sur un plan + pads
   4. **rack 10"** — boîtes échantillonnées (cadre + unités), avec des points « LED » marqués
