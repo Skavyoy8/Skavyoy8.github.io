@@ -1,4 +1,4 @@
-# PLAN — Portfolio 3D « FIBRE » de Skavyoy
+# PLAN — Portfolio « SIMPLE » de Skavyoy
 
 > Suivi d'exécution du `BRIEF.md`. Une case n'est cochée qu'avec la preuve sous les yeux (sortie de commande ou capture).
 > Direction au kickoff (2026-10-07) : SIGNAL (particules). **Le même jour, Luke a changé de direction** sur la vidéo « Relay » : « je veux un site comme la vidéo ». Direction **FIBRE** : ruban de fibres 3D accroché à la page, bloom, verre dépoli, rack homelab en 3D, rien qui suive la souris. Les cases SIGNAL devenues sans objet sont marquées *remplacé* ; le travail FIBRE est suivi en P7.
@@ -131,12 +131,25 @@ tests/e2e/                       Playwright : desktop 1440×900, mobile 390×844
 - [ ] P7.8 Plus aucun effet lié à la souris (ruban, curseur, magnétisme, tilt)
 - [ ] P7.9 Fallbacks : mode calme, téléphone et sans WebGL → ruban SVG + rack SVG, site complet
 
+### P8 — Direction SIMPLE (miray-28.github.io, 2026-10-08)
+- [x] P8.1 Retrait de Three.js / R3F / postprocessing, GSAP, Lenis, Motion, préloader, Konami, badge, manifeste — `npm ls --depth=0`
+- [x] P8.2 Fond `Ambient` en canvas 2D (étoiles + 2 rubans de fils), animé au premier geste, figé en mode calme — capture 1440 px + test e2e `data-state`
+- [x] P8.3 Héros façon miray (pseudo métal, carte inclinée, puces), sections numérotées, cartes sombres — captures 1440 / 390 / reduced-motion
+- [x] P8.4 Homelab : rack 8U en CSS à l'échelle (écran btop, switch et LED, MS-01) + services, RAM, câblage — capture
+- [x] P8.5 Apparitions en CSS + un seul `IntersectionObserver` ; menu, terminal, toasts en CSS
+- [x] P8.6 e2e 24 / 24 (desktop, mobile, reduced-motion), 0 erreur console, 0 violation axe serious/critical — `npm run test:e2e`
+- [ ] P8.7 Lighthouse — desktop 94 / 100 / 100 / 100 ✔ ; mobile 54 en simulation locale ✘ (le contenu s'affiche à 0,7 s mesuré avec le CPU ralenti 4×, mais Lighthouse compte le JS de base de React / Next comme dépendance du LCP)
+- [x] P8.8 Image OG régénérée dans le nouveau style — `npm run assets:og`
+
 ## Journal
 
 - 2026-10-07, session 1 : direction SIGNAL, particules, lanyard, 22 tests e2e sur 33 verts.
 - 2026-10-07, session 2 : fond calme, badge recto / verso, puis changement de direction vers FIBRE sur la vidéo de Luke.
+- 2026-10-08, session 3 : FIBRE jugé lourd par l'entourage de Luke → direction SIMPLE d'après miray-28.github.io ; 3D et libs d'animation retirées.
 
 Corrigé en route (à retenir) :
+- un texte en `background-clip: text` (couleur transparente) n'est pas compté par Chrome comme contenu visible (LCP) → dégradé métal fait avec un `mask-image`.
+- un test qui fait défiler la page plus vite que le navigateur ne la dessine rate des apparitions → attendre deux `requestAnimationFrame` à chaque pas.
 - les fibres extrudées à l'écran ont un sens de rotation variable → `DoubleSide`, sinon three les masque.
 - Lightning CSS (Tailwind 4) fusionne `backdrop-filter` et `-webkit-backdrop-filter` en ne gardant que le dernier → n'écrire que la propriété standard.
 - `frameloop="never"` : R3F prend le temps passé à `advance()` tel quel → lui donner des secondes.

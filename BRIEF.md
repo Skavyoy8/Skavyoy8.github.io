@@ -24,7 +24,8 @@ Mais le contenu reste lisible et rapide : un recruteur doit comprendre en 10 sec
 
 Si tu peux ouvrir ces sites dans un navigateur (aperçu intégré), regarde-les vraiment : le texte seul ne suffit pas pour calibrer le niveau visuel.
 
-- **Vidéo « Relay » envoyée par Luke (2026-10-07)** → la *direction retenue* (§4) : landing SaaS générée par Opus 5.5, ruban de fibres lumineuses en 3D qui serpente sur toute la page, panneaux en verre, accent citron, mini-interfaces vivantes. On reprend l'esprit et les techniques (Three.js, bloom, caméra liée au scroll, verre dépoli) ; aucun texte, logo ni asset n'est copié.
+- **miray-28.github.io (2026-10-08)** → la *direction actuelle* (§4) : un site simple et fluide, fond noir avec étoiles et fils fins qui ondulent, grand pseudo en dégradé métal, cartes sombres, sections numérotées « 01 / À PROPOS ». Luke : « fais un site quasi comme lui, juste à notre manière ». On reprend la mise en page et l'esprit, avec le contenu, l'accent citron et le homelab de Luke ; aucun texte, code ni asset n'est copié.
+- **Vidéo « Relay » envoyée par Luke (2026-10-07)** *(direction abandonnée le 2026-10-08 : jugée lourde et peu optimisée)* → la *direction retenue* (§4) : landing SaaS générée par Opus 5.5, ruban de fibres lumineuses en 3D qui serpente sur toute la page, panneaux en verre, accent citron, mini-interfaces vivantes. On reprend l'esprit et les techniques (Three.js, bloom, caméra liée au scroll, verre dépoli) ; aucun texte, logo ni asset n'est copié.
 
 ---
 
@@ -32,18 +33,14 @@ Si tu peux ouvrir ces sites dans un navigateur (aperçu intégré), regarde-les 
 
 - **Next.js** (App Router, TypeScript strict) en export statique (`output: 'export'`)
 - **Tailwind CSS v4** (config CSS-first via `@theme`) + CSS custom pour les effets
-- **React Three Fiber** + **@react-three/postprocessing** (bloom) ; shaders GLSL maison. *(2026-10-07 : drei et rapier retirés, le badge physique ayant été abandonné à la demande de Luke.)*
-- **GSAP** + **ScrollTrigger** + **SplitText** + **@gsap/react** (`useGSAP`) — GSAP et tous ses plugins sont gratuits
-- **Lenis** pour le smooth scroll, synchronisé avec ScrollTrigger
-- **Motion** (ex-Framer Motion, import depuis `motion/react`) pour l'UI
+- **Fond animé en canvas 2D** maison (`Ambient`), sans librairie
+- **Animations en CSS** (keyframes, transitions) + un seul `IntersectionObserver` pour les apparitions au scroll ; défilement natif (`scroll-behavior: smooth`)
+- *(2026-10-08 : Three.js / R3F / postprocessing, GSAP, Lenis et Motion retirés pour alléger le site.)*
 - **Playwright** + **@axe-core/playwright** pour les tests e2e ; **Lighthouse CI** pour l'audit
 
-Installe les dernières versions stables et vérifie la doc officielle de chaque lib avant d'utiliser son API (R3F doit matcher la version de React, Tailwind v4 n'a plus de `tailwind.config.js` par défaut, etc.). Note les versions exactes dans `PLAN.md`.
+Installe les dernières versions stables et vérifie la doc officielle de chaque lib avant d'utiliser son API (Tailwind v4 n'a plus de `tailwind.config.js` par défaut, etc.). Note les versions exactes dans `PLAN.md`.
 
-**Répartition des rôles — jamais deux moteurs sur le même élément :**
-- GSAP / ScrollTrigger → tout ce qui est piloté par le scroll : pins, scrub, chorégraphie de la scène 3D, reveals de texte
-- Motion → états et micro-interactions d'UI : menu, filtres, terminal, toasts, curseur, layout animations
-- R3F `useFrame` → animation continue de la 3D ; lit des valeurs (refs) que GSAP met à jour. Jamais de `setState` dans `useFrame`.
+**Animations — règle simple :** uniquement `transform` et `opacity` (et des dégradés), coupées en mode calme. Rien ne suit la souris.
 
 ---
 
@@ -51,7 +48,7 @@ Installe les dernières versions stables et vérifie la doc officielle de chaque
 
 Tout le texte vit dans `src/content/` (fichiers TS typés). Aucun texte en dur dans les composants. Les manques restent des `TODO('[À REMPLIR] …')` dans `src/content/`.
 
-**Direction artistique** : SIGNAL au kickoff, puis **FIBRE** (§4) le 2026-10-07, sur la vidéo « Relay » envoyée par Luke : « je veux un site comme la vidéo ».
+**Direction artistique** : SIGNAL au kickoff, puis FIBRE le 2026-10-07 (vidéo « Relay »), puis **SIMPLE** (§4) le 2026-10-08, d'après miray-28.github.io : « beaucoup plus simple et fluide ».
 
 **Identité**
 - Nom affiché : **Skavyoy** (pseudo) ; prénom Luke cité une fois dans « À propos »
@@ -95,6 +92,8 @@ Tout le texte vit dans `src/content/` (fichiers TS typés). Aucun texte en dur d
 ---
 
 ## 4. Direction artistique
+
+**Concept : « SIMPLE ».** *(Décidé avec Luke le 2026-10-08 : plusieurs personnes ont trouvé FIBRE lourd et pas optimisé. Remplace FIBRE, dont la suite de cette section garde la trace.)* Fond noir avec des étoiles qui scintillent et deux rubans de fils fins (argent → citron) qui ondulent lentement, dessinés en canvas 2D. Héros : pastille de domaines, pseudo `skavyoy` géant en dégradé métal avec un point citron lumineux, deux lignes de présentation, deux boutons, carte de profil inclinée avec deux puces flottantes. Puis des sections numérotées (« 02 / COMPÉTENCES ») au grand titre ponctué d'un point : À propos, Compétences (4 cartes avec mini-illustrations CSS), Homelab (rack 8U dessiné en CSS + services), Projets, Parcours, TryHackMe, Contact. Cartes sombres presque opaques, aucun flou sauf la barre de navigation.
 
 **Concept : « FIBRE ».** *(Décidé avec Luke le 2026-10-07, d'après la vidéo « Relay » : remplace SIGNAL.)* Un faisceau de fibres optiques lumineuses, en vraie 3D, serpente du haut en bas de la page : épingle incandescente dans le héros, puis il passe derrière chaque section. Net là où il y a de la place, flouté en aurore derrière les sections denses (verre dépoli). C'est le signal qui transporte tout ce que Luke apprend : réseau, systèmes, sécurité.
 
@@ -196,7 +195,15 @@ Ligne d'état (recherche une alternance · terminale · heure de Paris en direct
 
 ---
 
-## 8. Scène 3D — spécification *(refaite le 2026-10-07, direction FIBRE)*
+## 8. Fond animé — spécification *(2026-10-08, direction SIMPLE)*
+
+- **Un `<canvas>` 2D** fixe derrière la page (`Ambient`), contexte opaque, `dpr` ≤ 1,5 (≤ 1,25 sur téléphone).
+- **Contenu** : ~90 étoiles qui scintillent (40 sur téléphone) et deux rubans de 34 fils (18 sur téléphone) : chaque fil suit `base(u) + écart(u) · cos(θ + torsion(u, t))`, plus une petite ondulation propre à chaque fil. Le scroll fait doucement glisser les rubans et les étoiles (parallaxe).
+- **Perf** : la première image est dessinée au premier temps libre ; l'animation ne démarre qu'au premier geste du visiteur (scroll, souris, toucher, clavier), s'arrête quand l'onglet est caché, et ne dessine qu'une image sur deux sur téléphone ou machine lente.
+- **Mode calme / mouvement réduit** : une image figée.
+- Halos, voile et grain : calques CSS statiques au-dessus du canvas.
+
+### Ancienne scène 3D *(direction FIBRE, retirée le 2026-10-08)*
 
 - **Un seul `<Canvas>`** R3F fixe derrière la page, importé en `dynamic(..., { ssr: false })` quand le navigateur est libre, après le premier rendu du texte. Rendu piloté par `gsap.ticker` juste après Lenis (`frameloop="never"` + `advance`) : la 3D ne décroche jamais du texte.
 - **Caméra liée au scroll** : 10 unités monde = la hauteur de l'écran ; la caméra suit `scrollY` au pixel près, donc le ruban est « imprimé » sur la page.
@@ -210,8 +217,8 @@ Ligne d'état (recherche une alternance · terminale · heure de Paris en direct
 ## 9. Qualité, perf, accessibilité, SEO
 
 - **Lighthouse** (build de prod) : Performance ≥ 80 mobile / ≥ 90 desktop, Accessibilité ≥ 95, Best Practices ≥ 95, SEO ≥ 95. CLS < 0,05.
-- JS initial minimal : three / R3F / postprocessing dans un chunk chargé après l'affichage, et seulement sur ordinateur.
-- 60 fps visés au scroll sur desktop ; aucun à-coup pendant le chargement de la 3D.
+- JS initial minimal : React + Next.js seulement, aucune lib d'animation.
+- 60 fps visés au scroll ; aucun à-coup au chargement.
 - Responsive impeccable de 360 px à 2560 px ; tactile pensé (rien qui n'existe qu'au survol).
 - **Accessibilité** : HTML sémantique, `lang="fr"`, un seul `h1`, focus visible stylé, tout utilisable au clavier (menu, terminal, filtres), contrastes AA, canvas `aria-hidden` avec le contenu équivalent en HTML, `prefers-reduced-motion` respecté partout.
 - **SEO / partage** : metadata Next complète, image Open Graph 1200×630, `sitemap.xml` et `robots.txt` statiques, JSON-LD `Person`, favicon + icônes, `theme-color`.

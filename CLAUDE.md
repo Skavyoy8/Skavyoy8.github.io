@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Portfolio 3D de Luke (élève en Bac Pro CIEL) — Next.js en export statique, déployé sur GitHub Pages.
+Portfolio de Luke (élève en Bac Pro CIEL) — Next.js en export statique, déployé sur GitHub Pages.
 
 - Spécification complète : `BRIEF.md` (source de vérité). Suivi : `PLAN.md`, à cocher au fur et à mesure.
 - Luke apprend Git et le dev web : dans tes récaps (en français), explique en une phrase chaque choix non évident.
@@ -18,9 +18,9 @@ Portfolio 3D de Luke (élève en Bac Pro CIEL) — Next.js en export statique, d
 - Export statique : pas de route handlers dynamiques, middleware, ISR, Server Actions, `cookies()` / `headers()`, ni optimisation d'image Next.
 - Tout fichier de `public/` chargé hors `next/link` / `next/image` passe par `asset()` (`src/lib/asset.ts`) à cause du basePath.
 - Tout le texte du site vit dans `src/content/` (typé). N'invente jamais de stats, rooms, badges ou projets : laisse `[À REMPLIR]`.
-- 3D : un seul `<Canvas>` (ruban et rack dans la même scène), import dynamique `ssr: false`, aucun `setState` ni allocation dans `useFrame`, valeurs de scroll transmises par refs (`ribbonState`, `rackState`).
-- GSAP via `useGSAP` avec `scope` (nettoyage auto). Lenis synchronisé avec ScrollTrigger (`lenis.on('scroll', ScrollTrigger.update)`, Lenis piloté par `gsap.ticker`, `gsap.ticker.lagSmoothing(0)`).
-- GSAP = scroll et chorégraphie ; Motion (`motion/react`) = UI et micro-interactions. Jamais les deux sur le même élément.
+- Le site doit rester **simple et fluide** (direction SIMPLE, d'après miray-28.github.io) : pas de 3D, pas de lib d'animation. N'en ajoute pas sans l'accord de Luke.
+- Fond : un seul canvas 2D (`Ambient`), aucune allocation dans la boucle d'animation, animé seulement après le premier geste, figé en mode calme.
+- Animations en CSS (`transform` / `opacity`), apparitions via `data-reveal` (un seul `IntersectionObserver`). Rien ne suit la souris.
 - `prefers-reduced-motion` et le mode calme donnent toujours un site complet et beau.
 - Ne désactive jamais une règle lint / TS / a11y et ne baisse jamais un seuil pour faire passer un test : corrige la cause.
 

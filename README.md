@@ -1,15 +1,14 @@
 # Skavyoy — portfolio
 
 Le portfolio de Luke (Skavyoy), élève en Bac Pro CIEL : cybersécurité, réseaux, Linux et électronique.
-Un site d'une page en export statique, avec un ruban de fibres lumineuses en 3D qui serpente derrière toute la page et un rack homelab en 3D.
+Un site d'une page en export statique, simple et fluide : un fond étoilé où ondulent des fils fins, des cartes sombres et le rack du homelab dessiné en CSS.
 
 En ligne : <https://skavyoy8.github.io>
 
 ## Stack
 
 - **Next.js 16** (App Router) en export statique, **TypeScript**, **Tailwind CSS 4**
-- **Three.js** via **React Three Fiber**, bloom avec **@react-three/postprocessing**, shaders GLSL maison
-- **GSAP** (ScrollTrigger, SplitText) pour le scroll, **Lenis** pour le défilement fluide, **Motion** pour l'interface
+- Fond animé en **canvas 2D** fait maison, animations en **CSS**, aucune librairie d'animation
 - **Playwright** + **axe** pour les tests, **Lighthouse CI** pour la performance
 
 La spécification complète est dans [BRIEF.md](BRIEF.md), le suivi dans [PLAN.md](PLAN.md).
@@ -44,12 +43,12 @@ Tout le texte du site est dans `src/content/`, un fichier par section :
 
 | Fichier | Contenu |
 | --- | --- |
-| `site.ts` | nom, accroche, héros, panneau réseau, pied de page |
-| `about.ts` | « À propos » et badge d'accès |
-| `pillars.ts` | les 4 piliers et leurs mini-interfaces, les outils |
+| `site.ts` | nom, héros, pied de page |
+| `about.ts` | « À propos » et la fiche de profil |
+| `pillars.ts` | les 4 compétences, les outils |
 | `homelab.ts` | le rack (unités), les services, le câblage |
 | `lab.ts` | les projets |
-| `timeline.ts` | le parcours scolaire et le curseur « glisse dans le temps » |
+| `timeline.ts` | le parcours scolaire |
 | `tryhackme.ts` | profil, stats, rooms et badges TryHackMe |
 | `links.ts` | réseaux sociaux, email, CV, contact |
 
@@ -84,6 +83,6 @@ Le suivi du déploiement se trouve dans l'onglet **Actions** du dépôt sur GitH
 
 ## Bon à savoir
 
-- **Mode calme** : le bouton en forme d'onde, dans la barre du haut, coupe la 3D et les animations lourdes. Il s'active tout seul si l'appareil demande moins d'animations.
-- **Téléphone** : pour l'instant, la 3D est réservée aux ordinateurs. Sur téléphone, le ruban est une image statique et le rack un dessin.
+- **Mode calme** : le bouton en forme d'onde, dans la barre du haut, fige le fond et coupe les animations. Il s'active tout seul si l'appareil demande moins d'animations.
+- **Fond animé** : il est dessiné tout de suite, mais ne bouge qu'au premier geste (scroll, souris, toucher) : la page se charge plus vite.
 - **Terminal caché** : `Ctrl + K` (ou `⌘K`), puis tape `help`.
