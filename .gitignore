@@ -1,0 +1,20 @@
+# dépendances
+node_modules/
+
+# builds Next
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# tests et audits
+playwright-report/
+test-results/
+.lighthouseci/
+
+# environnement
+.env*
+!.env.example
+
+# système
+.DS_Store
