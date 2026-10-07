@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { konamiCopy } from '@/content/terminal'
 import { emit, toast } from '@/lib/events'
-import { sceneState } from '@/lib/sceneState'
+import { ribbonState } from '@/lib/ribbonState'
 
 const SEQUENCE = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']
 
@@ -15,7 +15,7 @@ export function Konami() {
       position = key === SEQUENCE[position] ? position + 1 : key === SEQUENCE[0] ? 1 : 0
       if (position < SEQUENCE.length) return
       position = 0
-      sceneState.glitch = 1
+      ribbonState.glitch = 1
       document.documentElement.classList.add('glitching')
       window.setTimeout(() => document.documentElement.classList.remove('glitching'), 900)
       toast(konamiCopy.toast)

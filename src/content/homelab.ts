@@ -13,6 +13,20 @@ export type RackUnit = {
 
 export const homelab = {
   name: 'Homelab MS-01',
+  section: {
+    pill: 'homelab',
+    title: { before: 'Le homelab,', accent: 'unité par unité', after: '.' },
+    intro: 'Un rack 10 pouces de 8U, posé sur un bureau. Défile : chaque unité s’allume et dit à quoi elle sert.',
+    rackLabel: 'Plan du rack 8U du homelab, de haut en bas',
+    scrollHint: 'défile : le rack s’ouvre',
+    step: 'unité',
+    servicesTitle: 'services en continu',
+    ramTitle: 'mémoire prévue',
+    ramOf: (used: string, total: number) => `${used} Go sur ${total} Go, en continu`,
+    onDemandTitle: 'labs à la demande',
+    linksTitle: 'câblage prévu',
+    lanNote: 'aucun port ouvert : le lab reste en LAN',
+  },
   status: 'En préparation · LAN uniquement',
   rack: 'DeskPi RackMate T1 Plus · 8U · noir',
   sequence: {

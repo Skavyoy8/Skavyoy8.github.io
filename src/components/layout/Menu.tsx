@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { type KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { navCopy, sections } from '@/content/nav'
 import { site } from '@/content/site'
+import { LogoMark } from '@/components/ui/Primitives'
 import { getLenis } from '@/lib/scroll'
 
 const EASE = [0.16, 1, 0.3, 1] as const
@@ -58,18 +59,18 @@ export function Menu({ open, onClose, current }: { open: boolean; onClose: () =>
           aria-modal="true"
           aria-label="Menu"
           onKeyDown={onKeyDown}
-          className="fixed inset-0 z-[70] flex flex-col bg-surface"
+          className="dots fixed inset-0 z-[70] flex flex-col bg-[#070806]"
           initial={{ clipPath: 'inset(0 0 100% 0)' }}
           animate={{ clipPath: 'inset(0 0 0% 0)' }}
           exit={{ clipPath: 'inset(100% 0 0% 0)' }}
           transition={{ duration: 0.8, ease: EASE }}
         >
           <div className="container-x flex h-(--header-h) shrink-0 items-center justify-between">
-            <span className="text-lg font-semibold tracking-tight">
+            <span className="flex items-center gap-2.5 text-[15px] font-medium tracking-tight">
+              <LogoMark />
               {site.name}
-              <span className="text-accent">.</span>
             </span>
-            <button type="button" onClick={onClose} className="label rounded-full border border-line-strong px-4 py-1.5 hover:border-fg">
+            <button type="button" onClick={onClose} className="mono rounded-full border border-line-strong px-4 py-1.5 hover:bg-white/5">
               {navCopy.close}
             </button>
           </div>
@@ -108,13 +109,13 @@ export function Menu({ open, onClose, current }: { open: boolean; onClose: () =>
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.5, ease: EASE }}
                 >
-                  <p className="text-[9rem] leading-none font-semibold tracking-[-0.06em] text-accent">{preview.index}</p>
+                  <p className="accent-serif text-[9rem] leading-none text-accent">{preview.index}</p>
                   <p className="mt-4 max-w-xs text-lg text-muted">{preview.preview}</p>
                 </m.div>
               </AnimatePresence>
             </aside>
           </div>
-          <p className="container-x label pb-6 text-muted">Échap pour fermer · ⌘K pour le terminal</p>
+          <p className="container-x mono pb-6 text-muted">échap pour fermer · ⌘K pour le terminal</p>
         </m.div>
       ) : null}
     </AnimatePresence>

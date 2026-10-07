@@ -1,58 +1,49 @@
-import { Motif } from '@/components/ui/Motif'
-import { SectionHeader, Viewfinder } from '@/components/ui/Primitives'
-import { interests, pillars, tools } from '@/content/pillars'
+import type { ReactNode } from 'react'
+import { Chip, SectionHead } from '@/components/ui/Primitives'
+import { interests, type PillarDemo, pillars } from '@/content/pillars'
+import { EnumDemo, OsiDemo } from './demos/StaticDemos'
+import { SignalDemo } from './demos/SignalDemo'
+import { VirtDemo } from './demos/VirtDemo'
 import { PillarLink } from './PillarLink'
+
+const demo: Record<PillarDemo, ReactNode> = {
+  enum: <EnumDemo />,
+  osi: <OsiDemo />,
+  virt: <VirtDemo />,
+  signal: <SignalDemo />,
+}
 
 export function Interests() {
   return (
-    <section id="interets" aria-labelledby="interests-title" className="relative">
-      <div className="hscroll-frame py-[14vh] lg:flex lg:h-svh lg:flex-col lg:justify-center lg:py-0" data-hscroll>
-        <SectionHeader id="interests-title" index={interests.index} title={interests.title} intro={interests.intro} className="pb-10 lg:pb-12" />
-        <div className="container-x" data-hscroll-viewport>
-          <ol className="flex flex-col gap-4 lg:w-max lg:flex-row lg:gap-(--gutter)" data-hscroll-track>
-            {pillars.map((pillar) => (
-              <li key={pillar.index} className="lg:w-[min(34vw,540px)] lg:shrink-0">
-                <article className="relative flex h-full flex-col gap-5 border border-line bg-surface/70 p-6 backdrop-blur-sm lg:p-7">
-                  <Viewfinder />
-                  <div className="label flex items-center justify-between text-muted">
-                    <span className="text-accent">{pillar.index}</span>
-                    <span>{pillar.category}</span>
-                  </div>
-                  <Motif motif={pillar.motif} />
-                  <h3 className="text-title text-balance">{pillar.title}</h3>
-                  <p className="text-pretty text-muted">{pillar.text}</p>
-                  <ul className="flex flex-wrap gap-2" aria-label="Notions">
-                    {pillar.tags.map((tag) => (
-                      <li key={tag} className="rounded-full border border-line px-2.5 py-1 font-mono text-[11px] text-muted">
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-auto border-t border-line pt-4">
-                    <PillarLink link={pillar.link} />
-                  </div>
-                </article>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
-      <div className="marquee overflow-hidden border-y border-line py-5" aria-label="Outils que j’utilise">
-        <ul className="marquee-track flex w-max gap-12 pr-12 text-[clamp(1.5rem,3vw,2.6rem)] font-medium tracking-tight text-fg/80">
-          {tools.map((tool) => (
-            <li key={tool} className="flex items-center gap-12 whitespace-nowrap">
-              {tool}
-              <span className="size-2 rounded-full bg-accent" aria-hidden="true" />
-            </li>
-          ))}
-          {tools.map((tool) => (
-            <li key={`dup-${tool}`} className="marquee-dup flex items-center gap-12 whitespace-nowrap" aria-hidden="true">
-              {tool}
-              <span className="size-2 rounded-full bg-accent" />
-            </li>
-          ))}
-        </ul>
-      </div>
+    <section id="interets" aria-labelledby="interests-title" className="frost relative py-[16vh]">
+      <SectionHead id="interests-title" pill={interests.pill} title={interests.title} intro={interests.intro} />
+
+      <ol className="container-x mt-16 space-y-24 lg:mt-24 lg:space-y-36">
+        {pillars.map((pillar, i) => (
+          <li key={pillar.index} className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
+            <div className={`lg:col-span-5 ${i % 2 ? 'lg:order-2 lg:col-start-8' : ''}`} data-reveal="fade">
+              <p className="mono text-muted">
+                {pillar.index} · {pillar.category.toLowerCase()}
+              </p>
+              <h3 className="text-h3 mt-4 text-balance">{pillar.title}</h3>
+              <p className="mt-4 max-w-md text-pretty text-muted">{pillar.text}</p>
+              <ul className="mt-6 flex flex-wrap gap-2" aria-label="Notions">
+                {pillar.tags.map((tag) => (
+                  <li key={tag}>
+                    <Chip>{tag}</Chip>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-7">
+                <PillarLink link={pillar.link} />
+              </div>
+            </div>
+            <div className={`lg:col-span-7 ${i % 2 ? 'lg:order-1 lg:col-start-1' : ''}`} data-reveal="fade">
+              {demo[pillar.demo]}
+            </div>
+          </li>
+        ))}
+      </ol>
     </section>
   )
 }

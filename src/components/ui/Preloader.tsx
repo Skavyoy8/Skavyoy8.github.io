@@ -1,10 +1,12 @@
 'use client'
 
 import { useRef } from 'react'
+import { LogoMark } from '@/components/ui/Primitives'
+import { preloader } from '@/content/site'
 import { emit } from '@/lib/events'
 import { gsap, useGSAP } from '@/lib/gsap'
 
-const BOOT = ['init signal…………… ok', 'montage /dev/lab…… ok', 'calibrage………………… ok', 'session ouverte']
+const BOOT = preloader.boot
 
 /**
  * Compteur 000 → 100 branché sur le vrai chargement (polices du site),
@@ -32,7 +34,7 @@ export function Preloader() {
       let shown = 0
       let finished = false
       const start = performance.now()
-      // Progression réelle : les polices (la 3D, elle, ne se charge qu'à l'approche du Lab).
+      // Progression réelle : les polices (la 3D arrive après, en fondu, quand la page est affichée).
       let fontsReady = false
       document.fonts?.ready.then(() => {
         fontsReady = true
@@ -82,21 +84,23 @@ export function Preloader() {
       className="preloader fixed inset-0 z-[100] flex-col justify-between bg-bg p-(--gutter) text-fg"
       style={{ clipPath: 'inset(0 0 0% 0)' }}
       aria-hidden="true"
-      data-cursor="link"
+     
     >
-      <div className="label flex justify-between pt-3 text-muted">
-        <span>Skavyoy · Signal</span>
-        <span>Clic ou touche pour passer</span>
+      <div className="mono flex items-center justify-between pt-3 text-muted">
+        <span className="flex items-center gap-2.5 text-fg">
+          <LogoMark /> {preloader.brand}
+        </span>
+        <span>{preloader.skip}</span>
       </div>
       <div className="flex items-end justify-between gap-6">
-        <ul className="label space-y-1 text-muted">
+        <ul className="mono space-y-1 text-muted">
           {BOOT.map((line) => (
             <li key={line} data-boot-line style={{ opacity: 0, visibility: 'hidden' }}>
               {line}
             </li>
           ))}
         </ul>
-        <span ref={count} className="font-mono text-[clamp(5rem,18vw,15rem)] leading-none tracking-tighter tabular-nums">
+        <span ref={count} className="font-mono text-[clamp(5rem,18vw,15rem)] leading-none tracking-tighter text-accent tabular-nums">
           000
         </span>
       </div>

@@ -3,9 +3,9 @@ import { About } from '@/components/sections/About'
 import { Hero } from '@/components/sections/Hero'
 import { Interests } from '@/components/sections/Interests'
 import { Lab } from '@/components/sections/Lab'
+import { Manifesto } from '@/components/sections/Manifesto'
 import { Parcours } from '@/components/sections/Parcours'
 import { Badges, Contact, Rooms } from '@/components/sections/Showcase'
-import { SceneLoader } from '@/components/three/SceneLoader'
 import { socials } from '@/content/links'
 import { pillars } from '@/content/pillars'
 import { site } from '@/content/site'
@@ -31,13 +31,13 @@ export default async function Home() {
 
   return (
     <>
-      <SceneLoader />
       <Reveals />
       <main id="contenu" tabIndex={-1} className="relative z-10 outline-none">
         <Hero />
         <About />
-        <Interests />
+        <Manifesto />
         <Lab repos={repos} />
+        <Interests />
         <Parcours />
         <Rooms />
         <Badges />

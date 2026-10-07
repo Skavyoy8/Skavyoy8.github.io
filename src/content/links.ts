@@ -6,6 +6,8 @@ export type SocialId = 'github' | 'tryhackme' | 'discord' | 'linkedin' | 'instag
 export type SocialLink = {
   id: SocialId
   label: string
+  /** Deux ou trois lettres pour les petites tuiles. */
+  short: string
   handle: Fillable<string>
   href: Fillable<string>
   /** Le handle se copie au clic (Discord). */
@@ -13,16 +15,18 @@ export type SocialLink = {
 }
 
 export const socials: readonly SocialLink[] = [
-  { id: 'github', label: 'GitHub', handle: site.github.user, href: site.github.url },
+  { id: 'github', label: 'GitHub', short: 'gh', handle: site.github.user, href: site.github.url },
   {
     id: 'tryhackme',
     label: 'TryHackMe',
+    short: 'thm',
     handle: TODO('[À REMPLIR] pseudo TryHackMe'),
     href: TODO('[À REMPLIR] URL du profil TryHackMe'),
   },
   {
     id: 'discord',
     label: 'Discord',
+    short: 'dc',
     handle: TODO('[À REMPLIR] pseudo Discord'),
     href: TODO('[À REMPLIR] lien https://discord.com/users/<ID numérique>'),
     copy: true,
@@ -30,18 +34,21 @@ export const socials: readonly SocialLink[] = [
   {
     id: 'linkedin',
     label: 'LinkedIn',
+    short: 'in',
     handle: TODO('[À REMPLIR] nom LinkedIn'),
     href: TODO('[À REMPLIR] URL LinkedIn'),
   },
   {
     id: 'instagram',
     label: 'Instagram',
+    short: 'ig',
     handle: TODO('[À REMPLIR] pseudo Instagram'),
     href: TODO('[À REMPLIR] URL Instagram'),
   },
   {
     id: 'tiktok',
     label: 'TikTok',
+    short: 'tt',
     handle: TODO('[À REMPLIR] pseudo TikTok'),
     href: TODO('[À REMPLIR] URL TikTok'),
   },
@@ -59,6 +66,18 @@ export const cv: Fillable<string> = TODO('[À REMPLIR] CV en PDF (public/cv.pdf)
 
 export const contactCopy = {
   index: '07 / ME RETROUVER',
+  pill: 'contact',
+  card: {
+    kicker: 'et maintenant ?',
+    title: { before: 'Une', accent: 'alternance', after: ' à proposer ?' },
+    text: 'Je cherche une entreprise pour mon BTS SIO SISR, dès 2027. Alternance, projet, question sur le lab : écris-moi, je réponds.',
+    field: 'mon adresse email',
+    reveal: 'Afficher',
+  },
+  identity: 'Portfolio de Luke, alias Skavyoy.',
+  follow: 'me suivre',
+  socialsTitle: 'Tous mes réseaux',
+  status: ['recherche une alternance', 'terminale Bac Pro CIEL', 'France · heure de Paris'],
   title: { before: 'On se', accent: 'parle', after: ' ?' },
   intro: 'Alternance, projet, question sur le lab : écris-moi, je réponds.',
   cta: 'On se parle ?',

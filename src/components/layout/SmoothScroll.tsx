@@ -18,6 +18,8 @@ export function SmoothScroll() {
     }
     const lenis = new Lenis({ autoRaf: false, lerp: 0.1, smoothWheel: true })
     setLenis(lenis)
+    // En développement seulement : pratique pour piloter le scroll depuis la console.
+    if (process.env.NODE_ENV === 'development') Object.assign(window, { __lenis: lenis })
     lenis.on('scroll', ScrollTrigger.update)
     const tick = (time: number) => lenis.raf(time * 1000)
     gsap.ticker.add(tick)

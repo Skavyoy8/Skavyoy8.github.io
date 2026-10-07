@@ -1,5 +1,6 @@
 export const about = {
   index: '01 / À PROPOS',
+  pill: 'à propos',
   title: { before: 'Un peu', accent: 'sur moi', after: '.' },
   // Les mots entre [crochets] passent en accent.
   statement:
@@ -35,7 +36,19 @@ export const about = {
       ['Objectif', 'BTS SIO SISR'],
     ],
     flip: 'Retourner le badge',
-    hint: 'Survole, clique : il se retourne',
+    hint: 'Clique : il se retourne',
     strap: 'SKAVYOY · CIEL / FR · ACCÈS LAB · ',
   },
+  who: {
+    title: 'Le signal sous tout le reste',
+    caption: 'électronique / réseaux / systèmes / sécurité',
+    hub: [
+      { abbr: 'CI', label: 'ciel' },
+      { abbr: 'TH', label: 'tryhackme' },
+      { abbr: 'LX', label: 'linux' },
+      { abbr: 'LB', label: 'homelab' },
+    ],
+  },
+  badgeCard: { title: 'Badge d’accès', text: 'Recto : l’identité. Verso : les infos rapides.' },
+  next: { label: 'prochaine étape', cta: 'Me proposer une alternance' },
 } as const

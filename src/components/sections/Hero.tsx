@@ -1,101 +1,67 @@
-import Image from 'next/image'
-import { HeroSignal } from '@/components/ui/HeroSignal'
-import { ParisTime } from '@/components/ui/Live'
-import { Magnetic } from '@/components/ui/Magnetic'
-import { ArrowIcon, buttonGhost, buttonPrimary, StatusDot } from '@/components/ui/Primitives'
-import { Fill } from '@/components/ui/Todo'
-import { hero, site } from '@/content/site'
-import { parcoursCopy, tryhackme } from '@/content/tryhackme'
-import { asset } from '@/lib/asset'
+import type { CSSProperties } from 'react'
+import { ArrowIcon, buttonGhost, buttonPrimary, Pill } from '@/components/ui/Primitives'
+import { tools } from '@/content/pillars'
+import { hero, toolsStrip } from '@/content/site'
+import { ProfileCard } from './ProfileCard'
 
 export function Hero() {
-  const stats = [
-    { label: parcoursCopy.labels.rooms, value: tryhackme.stats.rooms, href: '#rooms', suffix: '' },
-    { label: parcoursCopy.labels.badges, value: tryhackme.stats.badges, href: '#badges', suffix: '' },
-    { label: parcoursCopy.labels.top, value: tryhackme.stats.topPercent, href: '#parcours', suffix: ' %' },
-  ]
-
   return (
-    <section id="accueil" aria-labelledby="hero-title" className="relative flex min-h-svh flex-col justify-end pt-28 pb-6">
-      <HeroSignal />
-      <div className="container-x relative">
-        <p className="label flex items-center gap-3 text-muted" data-hero-fade>
-          <StatusDot /> {hero.eyebrow}
-        </p>
-        <h1 id="hero-title" className="text-mega mt-5 -ml-[0.05em] mix-blend-difference">
-          <span className="sr-only">{site.name}.</span>
-          <span aria-hidden="true">
-            <span data-reveal="hero">{site.name}</span>
-            <span className="text-accent">.</span>
-          </span>
-        </h1>
+    <section id="accueil" aria-labelledby="hero-title" className="relative overflow-x-clip pt-[calc(var(--header-h)+9vh)] pb-24 lg:min-h-svh lg:pt-[calc(var(--header-h)+15vh)]">
+      <div className="dots pointer-events-none absolute inset-0 [mask-image:radial-gradient(70%_60%_at_25%_35%,#000,transparent)]" aria-hidden="true" />
 
-        <div className="mt-8 grid grid-cols-4 gap-x-(--gutter) gap-y-8 lg:mt-10 lg:grid-cols-12 lg:items-end">
-          <p className="col-span-4 max-w-xl text-lg text-pretty text-fg/90 lg:col-span-5 lg:text-xl" data-hero-fade>
-            {site.tagline}
+      <div className="container-x relative grid gap-14 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <p data-hero-fade>
+            <Pill className="rounded-md">{hero.pill}</Pill>
           </p>
-          <div className="col-span-4 flex flex-wrap gap-3 lg:col-span-5 lg:col-start-8 lg:justify-end" data-hero-fade>
-            <Magnetic>
-              <a href={hero.ctaPrimary.href} className={buttonPrimary} data-cursor="link">
-                {hero.ctaPrimary.label}
-                <ArrowIcon direction="down" className="size-4 transition-transform duration-500 group-hover:translate-y-0.5" />
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a href={hero.ctaSecondary.href} className={buttonGhost} data-cursor="link">
-                {hero.ctaSecondary.label}
-                <ArrowIcon className="size-4 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </a>
-            </Magnetic>
+          <h1 id="hero-title" className="mt-7 text-[clamp(2.6rem,4.7vw,4.4rem)] leading-[1.02] font-semibold tracking-[-0.045em]" data-reveal="hero">
+            <span className="block">{hero.title.line}</span>
+            <span className="accent-serif block text-fg/90">{hero.title.accent}</span>
+          </h1>
+          <p className="mt-7 max-w-lg text-[1.05rem] leading-relaxed text-pretty text-muted" data-hero-fade>
+            {hero.intro}
+          </p>
+          <div className="mt-9 flex flex-wrap items-center gap-3" data-hero-fade>
+            <a href={hero.ctaPrimary.href} className={buttonPrimary}>
+              {hero.ctaPrimary.label}
+              <ArrowIcon direction="down" className="size-3.5" />
+            </a>
+            <a href={hero.ctaSecondary.href} className={buttonGhost}>
+              {hero.ctaSecondary.label}
+              <ArrowIcon className="size-3.5" />
+            </a>
           </div>
+          <p className="mono mt-6 text-muted/80" data-hero-fade>
+            {hero.meta}
+          </p>
         </div>
 
-        <div className="mt-12 flex flex-col gap-6 border-t border-line pt-5 lg:flex-row lg:items-end lg:justify-between" data-hero-fade>
-          <ul className="label flex flex-wrap items-center gap-x-6 gap-y-3 text-muted" aria-label="Infos">
-            <li className="flex items-center gap-2 text-fg">
-              <StatusDot /> {site.status}
-            </li>
-            <li className="text-fg">{site.seeking}</li>
-            <li>{site.location}</li>
-            <li>
-              <ParisTime /> · Paris
-            </li>
-            <li className="flex items-center gap-2">
-              <Image src={asset(site.avatar)} alt="" width={20} height={20} className="size-5 rounded-full object-cover grayscale" />@{site.github.user}
-            </li>
-          </ul>
-          <ul className="grid grid-cols-3 gap-px overflow-hidden rounded-md border border-line bg-line" aria-label="Statistiques TryHackMe">
-            {stats.map((stat) => (
-              <li key={stat.label} className="bg-bg/80 backdrop-blur-sm transition-colors hover:bg-surface">
-                <a href={stat.href} className="block h-full px-4 py-3">
-                <span className="label block text-[0.625rem] text-muted">{stat.label}</span>
-                <span className="mt-1.5 block font-mono text-xl tabular-nums">
-                  <Fill value={stat.value}>
-                    {(value) => (
-                      <>
-                        <span data-count={value}>{value}</span>
-                        {stat.suffix}
-                      </>
-                    )}
-                  </Fill>
-                </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+        <div className="lg:col-span-5 lg:col-start-8 lg:-mt-6" data-hero-panel>
+          <div className="hero-panel">
+            <ProfileCard />
+          </div>
         </div>
       </div>
 
-      <a
-        href="#a-propos"
-        className="label absolute top-[22vh] right-(--gutter) hidden flex-col items-center gap-3 text-muted [writing-mode:vertical-rl] lg:flex"
-        aria-label="Défiler vers À propos"
-      >
-        {hero.scrollHint}
-        <span className="relative block h-16 w-px overflow-hidden bg-line">
-          <span className="scroll-line absolute inset-0 bg-fg" />
-        </span>
-      </a>
+      <div className="container-x relative mt-24 lg:mt-[22vh]">
+        <p className="mono text-muted" data-scramble>
+          {toolsStrip.intro}
+        </p>
+        <ul className="mt-7 grid grid-cols-4 gap-x-4 gap-y-7 sm:grid-cols-8" aria-label="Outils">
+          {tools.map((tool, i) => (
+            <li key={tool} className="relative flex flex-col items-start gap-3" style={{ '--i': i } as CSSProperties}>
+              <span className="tool-tile tile size-14 rounded-2xl text-[13px]" aria-hidden="true">
+                {toolsStrip.abbr[i]}
+              </span>
+              <span className="mono text-[11.5px] text-muted">{tool}</span>
+              {i < tools.length - 1 ? <span className="tool-link absolute top-[26px] left-[68px] hidden h-[3px] w-[calc(100%-60px)] sm:block" aria-hidden="true" /> : null}
+            </li>
+          ))}
+        </ul>
+        <a href="#a-propos" className="mono mt-16 inline-flex items-center gap-2 text-muted transition-colors hover:text-fg" aria-label={hero.scrollLabel}>
+          <ArrowIcon direction="down" className="size-3.5" /> {hero.scrollHint}
+        </a>
+      </div>
     </section>
   )
 }

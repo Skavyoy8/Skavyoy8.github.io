@@ -22,10 +22,12 @@ export type Project = {
 }
 
 export const labCopy = {
-  index: '03 / LE LAB',
-  title: { before: 'Le', accent: 'lab', after: '.' },
-  intro: 'Ce que je construis pour apprendre en vrai. Le projet phare : un homelab dans un rack 10 pouces, qui sort du papier en ce moment.',
+  index: '02 / PROJETS',
+  pill: 'projets',
+  title: { before: 'Ce que je', accent: 'construis', after: '.' },
+  intro: 'Des projets pour apprendre en vrai. Le projet phare : un homelab dans un rack 10 pouces, qui sort du papier en ce moment. Défile, il s’ouvre unité par unité.',
   projectsTitle: 'Projets',
+  projectsCount: (n: number) => `${n} projets, du rack au code`,
   reposTitle: 'Sur GitHub',
   reposIntro: 'Mes repos publics, récupérés automatiquement à chaque build.',
   open: 'Ouvrir',

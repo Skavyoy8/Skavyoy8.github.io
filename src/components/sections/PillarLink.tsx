@@ -5,7 +5,7 @@ import type { Pillar } from '@/content/pillars'
 import { emit } from '@/lib/events'
 import { scrollToTarget } from '@/lib/scroll'
 
-const linkClass = 'group label inline-flex items-center gap-2 text-fg transition-colors hover:text-accent'
+const linkClass = 'group mono inline-flex items-center gap-2 text-fg/85 transition-colors hover:text-accent'
 
 export function PillarLink({ link }: { link: Pillar['link'] }) {
   const { filter } = link

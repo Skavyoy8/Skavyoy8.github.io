@@ -2,18 +2,6 @@ import type { ReactNode } from 'react'
 
 type Title = { readonly before: string; readonly accent: string; readonly after: string }
 
-/** Coins de cadre « viseur » : à placer dans un parent en position relative. */
-export function Viewfinder() {
-  return (
-    <span className="viewfinder pointer-events-none absolute inset-0" aria-hidden="true">
-      <i />
-      <i />
-      <i />
-      <i />
-    </span>
-  )
-}
-
 export function AccentTitle({ title }: { title: Title }) {
   return (
     <>
@@ -23,22 +11,44 @@ export function AccentTitle({ title }: { title: Title }) {
   )
 }
 
-export const buttonPrimary =
-  'group inline-flex items-center gap-3 rounded-full bg-fg px-6 py-3.5 text-sm font-medium text-bg transition-colors duration-500 hover:bg-accent'
-export const buttonGhost =
-  'group inline-flex items-center gap-3 rounded-full border border-line-strong px-6 py-3.5 text-sm font-medium text-fg transition-colors duration-500 hover:border-fg'
-
-export function SectionHeader({ id, index, title, intro, className = 'pb-12 lg:pb-20' }: { id: string; index: string; title: Title; intro?: string; className?: string }) {
+/** Le logo : une tuile citron avec un créneau de signal numérique. */
+export function LogoMark({ className = 'size-7' }: { className?: string }) {
   return (
-    <header className={`container-x grid grid-cols-4 gap-x-(--gutter) gap-y-6 lg:grid-cols-12 ${className}`}>
-      <p className="label col-span-4 text-muted lg:col-span-12" data-scramble>
-        {index}
-      </p>
-      <h2 id={id} className="text-display col-span-4 text-balance lg:col-span-8" data-reveal="title">
-        <AccentTitle title={title} />
-      </h2>
+    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
+      <rect width="32" height="32" rx="8" fill="#c8ff2e" />
+      <path d="M6 20h5v-8h5v8h5v-8h5" fill="none" stroke="#0b0d05" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export const buttonPrimary =
+  'btn-lime group inline-flex items-center gap-2.5 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-ink transition-[background-color,box-shadow] duration-500 hover:bg-[#d8ff6a]'
+export const buttonGhost =
+  'group inline-flex items-center gap-2.5 rounded-full border border-line-strong bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-fg transition-colors duration-500 hover:bg-white/[0.09]'
+
+export function Pill({ children, tone = 'accent', className = '' }: { children: ReactNode; tone?: 'accent' | 'muted'; className?: string }) {
+  return (
+    <span className={`pill ${className}`}>
+      <span className={`size-1.5 rounded-full ${tone === 'accent' ? 'bg-accent shadow-[0_0_8px_#c8ff2e]' : 'bg-muted'}`} aria-hidden="true" />
+      {children}
+    </span>
+  )
+}
+
+/** En-tête de section : pastille, grand titre à gauche, intro à droite. */
+export function SectionHead({ id, pill, title, intro, className = '' }: { id: string; pill: string; title: Title; intro?: ReactNode; className?: string }) {
+  return (
+    <header className={`container-x grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end ${className}`}>
+      <div className="lg:col-span-7">
+        <p data-reveal="fade">
+          <Pill>{pill}</Pill>
+        </p>
+        <h2 id={id} className="text-h2 mt-6 text-balance" data-reveal="title">
+          <AccentTitle title={title} />
+        </h2>
+      </div>
       {intro ? (
-        <p className="col-span-4 self-end text-pretty text-muted lg:col-span-4 lg:col-start-9" data-reveal="fade">
+        <p className="max-w-md text-pretty text-[0.95rem] leading-relaxed text-muted lg:col-span-4 lg:col-start-9 lg:pb-2" data-reveal="fade">
           {intro}
         </p>
       ) : null}
@@ -46,11 +56,21 @@ export function SectionHeader({ id, index, title, intro, className = 'pb-12 lg:p
   )
 }
 
+/** Barre de titre d'une carte : légende mono à gauche, méta à droite. */
+export function CardBar({ title, meta, className = '' }: { title: ReactNode; meta?: ReactNode; className?: string }) {
+  return (
+    <div className={`mono flex items-center justify-between gap-4 text-muted ${className}`}>
+      <span className="text-fg/85">{title}</span>
+      {meta ? <span>{meta}</span> : null}
+    </div>
+  )
+}
+
 export function Chip({ children, active = false }: { children: ReactNode; active?: boolean }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[0.6875rem] tracking-wide ${
-        active ? 'border-accent/50 text-accent' : 'border-line text-muted'
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[0.6875rem] ${
+        active ? 'border-accent/50 bg-accent/10 text-accent' : 'border-line text-muted'
       }`}
     >
       {children}
@@ -59,7 +79,7 @@ export function Chip({ children, active = false }: { children: ReactNode; active
 }
 
 export function StatusDot({ tone = 'accent' }: { tone?: 'accent' | 'cold' | 'muted' }) {
-  const color = tone === 'accent' ? 'bg-accent' : tone === 'cold' ? 'bg-cold' : 'bg-muted'
+  const color = tone === 'accent' ? 'bg-accent shadow-[0_0_8px_#c8ff2e]' : tone === 'cold' ? 'bg-cold' : 'bg-muted'
   return <span className={`pulse-dot inline-block size-1.5 rounded-full ${color}`} aria-hidden="true" />
 }
 

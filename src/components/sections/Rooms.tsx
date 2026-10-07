@@ -60,7 +60,7 @@ export function RoomsExplorer() {
 
   return (
     <div className="container-x">
-      <div className="flex flex-col gap-5 border-y border-line py-5 lg:flex-row lg:items-center lg:justify-between">
+      <div className="glass flex flex-col gap-5 p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
         <div role="group" aria-label="Filtrer par catégorie" className="flex flex-wrap gap-2">
           {chips.map((chip) => {
             const active = category === chip.id
@@ -70,13 +70,13 @@ export function RoomsExplorer() {
                 type="button"
                 aria-pressed={active}
                 onClick={() => setCategory(chip.id)}
-                className={`relative inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm transition-colors duration-300 ${
-                  active ? 'border-fg text-bg' : 'border-line-strong text-fg hover:border-fg'
+                className={`relative isolate inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm transition-colors duration-300 ${
+                  active ? 'border-accent text-ink' : 'border-white/10 text-fg hover:border-white/30'
                 }`}
               >
-                {active ? <m.span layoutId="room-chip" className="absolute inset-0 -z-10 rounded-full bg-fg" transition={{ duration: 0.5, ease: EASE }} /> : null}
+                {active ? <m.span layoutId="room-chip" className="absolute inset-0 -z-10 rounded-full bg-accent" transition={{ duration: 0.5, ease: EASE }} /> : null}
                 {chip.label}
-                <span className={`font-mono text-[11px] ${active ? 'text-bg/70' : 'text-muted'}`}>{counts.get(chip.id) ?? 0}</span>
+                <span className={`font-mono text-[11px] ${active ? 'text-ink/70' : 'text-muted'}`}>{counts.get(chip.id) ?? 0}</span>
               </button>
             )
           })}
@@ -91,16 +91,16 @@ export function RoomsExplorer() {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder={roomsCopy.searchPlaceholder}
-            className="w-56 rounded-full border border-line-strong bg-transparent px-4 py-1.5 text-sm placeholder:text-muted/70 focus:border-fg focus:outline-none focus-visible:outline-2 focus-visible:outline-accent"
+            className="w-56 rounded-full border border-white/10 bg-black/30 px-4 py-1.5 text-sm placeholder:text-muted/70 focus:border-accent/60 focus:outline-none focus-visible:outline-2 focus-visible:outline-accent"
           />
-          <div role="group" aria-label={roomsCopy.sortLabel} className="flex rounded-full border border-line-strong p-0.5">
+          <div role="group" aria-label={roomsCopy.sortLabel} className="flex rounded-full border border-white/10 p-0.5">
             {(['date', 'difficulty'] as const).map((key) => (
               <button
                 key={key}
                 type="button"
                 aria-pressed={sort === key}
                 onClick={() => setSort(key)}
-                className={`rounded-full px-3 py-1 text-xs transition-colors ${sort === key ? 'bg-surface-2 text-fg' : 'text-muted hover:text-fg'}`}
+                className={`rounded-full px-3 py-1 text-xs transition-colors ${sort === key ? 'bg-white/10 text-fg' : 'text-muted hover:text-fg'}`}
               >
                 {key === 'date' ? roomsCopy.sortDate : roomsCopy.sortDifficulty}
               </button>
@@ -109,7 +109,7 @@ export function RoomsExplorer() {
         </div>
       </div>
 
-      <p className="label mt-6 flex items-center gap-2 text-muted" aria-live="polite" data-rooms-count>
+      <p className="mono mt-6 flex items-center gap-2 text-muted" aria-live="polite" data-rooms-count>
         <span className="text-fg">
           <Rolling value={visible.length} />
         </span>
@@ -126,10 +126,10 @@ export function RoomsExplorer() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.6, ease: EASE }}
-              className="flex flex-col gap-4 rounded-lg border border-line bg-surface/80 p-6 backdrop-blur-sm"
+              className="glass flex flex-col gap-4 p-6 sm:p-7"
               data-room
             >
-              <div className="label flex flex-wrap items-center justify-between gap-2 text-muted">
+              <div className="mono flex flex-wrap items-center justify-between gap-2 text-muted">
                 <span className="text-accent">{categoryLabel(room.category)}</span>
                 <span className="flex items-center gap-3">
                   <Fill value={room.difficulty}>{(d) => labelOf(d)}</Fill>
@@ -139,10 +139,10 @@ export function RoomsExplorer() {
               </div>
               <h3 className="text-2xl font-semibold tracking-tight">{room.name}</h3>
               <div>
-                <p className="label text-muted">{roomsCopy.learnedLabel}</p>
+                <p className="mono text-muted">{roomsCopy.learnedLabel.toLowerCase()}</p>
                 <p className="mt-1.5 text-pretty text-fg/85">{room.learned}</p>
               </div>
-              <a href={room.url} target="_blank" rel="noopener noreferrer" className="label mt-auto inline-flex items-center gap-2 hover:text-accent">
+              <a href={room.url} target="_blank" rel="noopener noreferrer" className="mono mt-auto inline-flex items-center gap-2 text-fg/85 hover:text-accent">
                 {roomsCopy.open}
                 <ArrowIcon className="size-3.5" />
                 <span className="sr-only">{room.name}</span>
@@ -159,7 +159,7 @@ export function RoomsExplorer() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: EASE }}
-            className="mt-2 flex flex-col items-start gap-4 rounded-lg border border-dashed border-line-strong p-10"
+            className="glass mt-2 flex flex-col items-start gap-4 border-dashed p-10"
             data-rooms-empty
           >
             <p className="font-mono text-sm text-accent">0x00 · rien à afficher</p>
@@ -171,7 +171,7 @@ export function RoomsExplorer() {
                 setCategory('all')
                 setQuery('')
               }}
-              className="label rounded-full border border-line-strong px-4 py-2 hover:border-fg"
+              className="mono rounded-full border border-white/10 px-4 py-2 hover:bg-white/5"
             >
               {roomsCopy.emptyReset}
             </button>

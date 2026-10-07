@@ -5,8 +5,8 @@ import { about } from '@/content/about'
 import { HoloCard } from './HoloCard'
 
 /**
- * Badge d'accès : carte holographique accrochée à un cordon fixe.
- * Elle s'incline sous la souris et se retourne d'un clic (recto identité, verso infos rapides).
+ * Badge d'accès : carte holographique qui s'incline sous la souris
+ * et se retourne d'un clic (recto identité, verso infos rapides).
  */
 export function BadgeFlip({ front, back }: { front: ReactNode; back: ReactNode }) {
   const [flipped, setFlipped] = useState(false)
@@ -14,12 +14,8 @@ export function BadgeFlip({ front, back }: { front: ReactNode; back: ReactNode }
 
   return (
     <div className="flex flex-col items-center" data-badge data-flipped={flipped ? 'true' : 'false'}>
-      <div className="badge-strap" aria-hidden="true">
-        <span>{about.badge.strap.repeat(4)}</span>
-      </div>
-      <div className="badge-clip" aria-hidden="true" />
       <HoloCard className="rounded-[18px]">
-        <div className="badge-flip" onClick={toggle} data-cursor="view">
+        <div className="badge-flip" onClick={toggle}>
           <div className="badge-face" aria-hidden={flipped ? true : undefined}>
             {front}
           </div>
@@ -32,11 +28,11 @@ export function BadgeFlip({ front, back }: { front: ReactNode; back: ReactNode }
         type="button"
         onClick={toggle}
         aria-pressed={flipped}
-        className="label mt-6 inline-flex items-center gap-2 rounded-full border border-line-strong px-4 py-2 transition-colors hover:border-fg"
+        className="mono mt-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 transition-colors hover:bg-white/[0.09]"
       >
         <span aria-hidden="true">↻</span> {about.badge.flip}
       </button>
-      <p className="label mt-3 text-muted">{about.badge.hint}</p>
+      <p className="mono mt-3 text-muted">{about.badge.hint}</p>
     </div>
   )
 }

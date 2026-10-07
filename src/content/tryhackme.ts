@@ -62,6 +62,7 @@ export const tryhackme = {
 
 export const parcoursCopy = {
   index: '04 / MON PARCOURS',
+  pill: 'parcours',
   title: { before: 'Mon', accent: 'parcours', after: '.' },
   consoleTitle: 'tryhackme --profil',
   intro: 'Des rooms pour apprendre, des challenges pour pratiquer. Le relevé est daté : il vieillit honnêtement.',
@@ -75,10 +76,25 @@ export const parcoursCopy = {
     username: 'Utilisateur',
   },
   timelineTitle: 'La suite',
+  dashboard: {
+    year: 'l’année de terminale, semaine par semaine',
+    week: (n: number, total: number) => `semaine ${n} sur ${total}`,
+    soon: 'avant la rentrée',
+    gauge: 'de la terminale déjà passée',
+    profile: 'tryhackme --profil',
+    lastRoom: 'dernière room',
+    roomsLink: 'Toutes les rooms',
+    status: 'statut',
+    statusValue: 'recherche une alternance',
+    statusDetail: 'BTS SIO SISR · dès 2027',
+    statusCta: 'On se parle ?',
+  },
+  months: ['sept', 'oct', 'nov', 'déc', 'janv', 'févr', 'mars', 'avr', 'mai', 'juin'],
 }
 
 export const roomsCopy = {
   index: '05 / LA PRATIQUE',
+  pill: 'la pratique',
   title: { before: 'Mes', accent: 'rooms', after: '.' },
   intro: 'Les rooms terminées sur TryHackMe, avec ce que chacune m’a appris.',
   all: 'Tout',
@@ -98,6 +114,7 @@ export const roomsCopy = {
 
 export const badgesCopy = {
   index: '06 / LES BADGES',
+  pill: 'les badges',
   title: { before: 'Petites', accent: 'étapes', after: '.' },
   intro: 'Chaque badge TryHackMe marque une étape franchie.',
   slot: 'Emplacement libre',
