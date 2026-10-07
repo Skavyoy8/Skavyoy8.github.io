@@ -22,21 +22,16 @@ export type Project = {
 }
 
 export const labCopy = {
-  index: '02 / PROJETS',
-  pill: 'projets',
-  title: { before: 'Ce que je', accent: 'construis', after: '.' },
-  intro: 'Des projets pour apprendre en vrai. Le projet phare : un homelab dans un rack 10 pouces, qui sort du papier en ce moment. Défile, il s’ouvre unité par unité.',
-  projectsTitle: 'Projets',
-  projectsCount: (n: number) => `${n} projets, du rack au code`,
+  index: '04 / PROJETS',
+  title: 'Ce que je construis.',
+  intro: 'Des projets pour apprendre en vrai, du rack au code.',
   reposTitle: 'Sur GitHub',
   reposIntro: 'Mes repos publics, récupérés automatiquement à chaque build.',
-  open: 'Ouvrir',
   details: 'Lire le détail',
   source: 'Code',
   demo: 'Démo',
   privateLabel: 'Privé',
-  back: 'Retour au lab',
-  updated: 'Mis à jour le',
+  back: 'Retour aux projets',
 }
 
 export const projects: readonly Project[] = [
@@ -78,9 +73,9 @@ export const projects: readonly Project[] = [
     slug: 'portfolio',
     title: 'Ce portfolio',
     summary:
-      'Next.js en export statique, scène WebGL temps réel en React Three Fiber, chorégraphie au scroll avec GSAP. Déployé sur GitHub Pages à chaque push.',
+      'Next.js en export statique, un fond animé en canvas 2D et des animations en CSS. Léger, rapide, déployé sur GitHub Pages à chaque push.',
     status: 'en-cours',
-    stack: ['Next.js', 'React Three Fiber', 'GSAP', 'Tailwind CSS'],
+    stack: ['Next.js', 'TypeScript', 'Canvas 2D', 'Tailwind CSS'],
     href: site.repoUrl,
     detail: true,
   },

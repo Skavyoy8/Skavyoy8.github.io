@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatePresence, m } from 'motion/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { about } from '@/content/about'
@@ -8,18 +7,17 @@ import { projects, statusLabel } from '@/content/lab'
 import { socials } from '@/content/links'
 import { sections } from '@/content/nav'
 import { terminalCopy } from '@/content/terminal'
-import { type RoomCategory, roomCategories } from '@/content/tryhackme'
+import { tryhackme } from '@/content/tryhackme'
 import { isTodo } from '@/content/types'
 import { calmStore } from '@/lib/calm'
-import { emit, on } from '@/lib/events'
-import { getLenis, scrollToTarget } from '@/lib/scroll'
+import { on } from '@/lib/events'
+import { scrollToTarget } from '@/lib/scroll'
 
 type Line = { id: number; kind: 'in' | 'out' | 'err' | 'ok'; text: string }
 
 const COMMANDS = ['help', 'whoami', 'ls', 'cd', 'cat', 'projects', 'rooms', 'open', 'calm', 'clear', 'exit', 'sudo'] as const
-const ALIASES: Record<string, string> = { contact: 'reseaux', about: 'a-propos', apropos: 'a-propos', home: 'accueil', interets: 'interets', apprends: 'interets' }
+const ALIASES: Record<string, string> = { contact: 'reseaux', about: 'a-propos', apropos: 'a-propos', home: 'accueil', competences: 'interets', apprends: 'interets', projets: 'lab', projects: 'lab', tryhackme: 'pratique', thm: 'pratique', rooms: 'pratique' }
 const OPENABLE: Record<string, string> = { github: 'github', gh: 'github', thm: 'tryhackme', tryhackme: 'tryhackme', discord: 'discord', linkedin: 'linkedin', instagram: 'instagram', tiktok: 'tiktok' }
-const FILTERS = [...roomCategories.map((c) => c.id), 'tout'] as const
 
 let lineId = 0
 const make = (kind: Line['kind'], text: string): Line => ({ id: ++lineId, kind, text })
@@ -40,21 +38,11 @@ function complete(value: string): string {
   const [cmd, ...rest] = parts
   const arg = rest.join(' ')
   let pool: readonly string[] = []
-  let prefix = `${cmd} `
+  const prefix = `${cmd} `
   if (cmd === 'cd') pool = sections.map((s) => s.id)
   else if (cmd === 'open') pool = ['github', 'thm', 'discord', 'linkedin', 'instagram', 'tiktok']
   else if (cmd === 'cat') pool = ['about']
   else if (cmd === 'sudo') pool = ['hire-luke']
-  else if (cmd === 'rooms') {
-    if (!arg.startsWith('--filter')) pool = ['--filter ']
-    else {
-      prefix = 'rooms --filter '
-      pool = FILTERS
-      const sub = arg.replace('--filter', '').trim()
-      const match = pool.filter((p) => p.startsWith(sub))
-      return match.length === 1 ? `${prefix}${match[0]}` : value
-    }
-  }
   const match = pool.filter((p) => p.startsWith(arg))
   return match.length === 1 ? `${prefix}${match[0]}` : value
 }
@@ -92,11 +80,9 @@ export function Terminal() {
   useEffect(() => {
     if (!open) return
     returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    getLenis()?.stop()
     const id = requestAnimationFrame(() => input.current?.focus())
     return () => {
       cancelAnimationFrame(id)
-      getLenis()?.start()
       returnFocus.current?.focus()
     }
   }, [open])
@@ -138,16 +124,8 @@ export function Terminal() {
         return about.paragraphs.map((t) => make('out', t))
       case 'projects':
         return projects.map((p) => make('out', `${p.title.padEnd(26, ' ')}${isTodo(p.status) ? '[À REMPLIR]' : statusLabel[p.status]}`))
-      case 'rooms': {
-        const match = arg.match(/^(?:--filter|-f)\s+(\S+)/)
-        if (!match?.[1]) return [make('err', terminalCopy.roomsUsage)]
-        const wanted = match[1].toLowerCase()
-        const category = wanted === 'tout' || wanted === 'all' ? 'all' : roomCategories.find((c) => c.id === wanted)?.id
-        if (!category) return [make('err', terminalCopy.roomsUsage)]
-        emit('rooms:filter', { category: category as RoomCategory | 'all' })
-        goTo('rooms')
-        return [make('ok', terminalCopy.roomsOk(category))]
-      }
+      case 'rooms':
+        return tryhackme.rooms.map((r) => make('out', `${r.name.padEnd(26, ' ')}${r.learned}`))
       case 'open': {
         const id = OPENABLE[arg.toLowerCase()]
         const link = socials.find((s) => s.id === id)
@@ -209,74 +187,62 @@ export function Terminal() {
     }
   }
 
+  if (!open) return null
   return (
-    <AnimatePresence>
-      {open ? (
-        <m.div
-          className="fixed inset-0 z-[85] flex items-start justify-center bg-bg/70 px-3 pt-[12vh] backdrop-blur-sm sm:px-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setOpen(false)
-          }}
-        >
-          <m.div
-            role="dialog"
-            aria-modal="true"
-            aria-label={terminalCopy.label}
-            className="w-full max-w-3xl overflow-hidden rounded-lg border border-line-strong bg-surface font-mono text-[13px] shadow-[0_40px_120px_-20px_rgb(0_0_0/0.8)]"
-            initial={{ y: 24, scale: 0.98, filter: 'blur(8px)' }}
-            animate={{ y: 0, scale: 1, filter: 'blur(0px)' }}
-            exit={{ y: 12, scale: 0.98, filter: 'blur(8px)' }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            data-lenis-prevent
-          >
-            <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
-              <div className="flex items-center gap-2" aria-hidden="true">
-                <span className="size-2.5 rounded-full bg-white/15" />
-                <span className="size-2.5 rounded-full bg-white/15" />
-                <span className="size-2.5 rounded-full bg-accent" />
-              </div>
-              <p className="text-muted">{terminalCopy.title}</p>
-              <button type="button" onClick={() => setOpen(false)} className="label text-muted hover:text-fg">
-                Échap
-              </button>
-            </div>
-            <div ref={output} role="log" aria-live="polite" aria-label="Sortie du terminal" className="h-[min(52vh,420px)] space-y-1 overflow-y-auto px-4 py-3" data-terminal-output>
-              {lines.map((line) => (
-                <p
-                  key={line.id}
-                  className={`break-words whitespace-pre-wrap ${line.kind === 'in' ? 'text-fg' : line.kind === 'err' ? 'text-[#ff8a7a]' : line.kind === 'ok' ? 'text-accent' : 'text-muted'}`}
-                >
-                  {line.kind === 'in' ? <span className="text-accent">❯ </span> : null}
-                  {line.text}
-                </p>
-              ))}
-            </div>
-            <form onSubmit={submit} className="flex items-center gap-2 border-t border-line px-4 py-3">
-              <label htmlFor="terminal-input" className="text-accent">
-                <span aria-hidden="true">❯</span>
-                <span className="sr-only">Commande</span>
-              </label>
-              <input
-                id="terminal-input"
-                ref={input}
-                value={value}
-                onChange={(event) => setValue(event.target.value)}
-                onKeyDown={onKeyDown}
-                autoComplete="off"
-                autoCapitalize="off"
-                spellCheck={false}
-                placeholder={terminalCopy.placeholder}
-                className="min-w-0 flex-1 bg-transparent text-fg caret-accent outline-none placeholder:text-muted/60"
-              />
-            </form>
-            <p className="border-t border-line px-4 py-2 text-[11px] text-muted">{terminalCopy.hint}</p>
-          </m.div>
-        </m.div>
-      ) : null}
-    </AnimatePresence>
+    <div
+      className="overlay-in fixed inset-0 z-[85] flex items-start justify-center bg-bg/75 px-3 pt-[12vh] sm:px-6"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) setOpen(false)
+      }}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={terminalCopy.label}
+        className="dialog-in w-full max-w-3xl overflow-hidden rounded-2xl border border-line-strong bg-surface font-mono text-[13px] shadow-[0_40px_120px_-20px_rgb(0_0_0/0.8)]"
+      >
+        <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
+          <div className="flex items-center gap-2" aria-hidden="true">
+            <span className="size-2.5 rounded-full bg-white/15" />
+            <span className="size-2.5 rounded-full bg-white/15" />
+            <span className="size-2.5 rounded-full bg-accent" />
+          </div>
+          <p className="text-muted">{terminalCopy.title}</p>
+          <button type="button" onClick={() => setOpen(false)} className="label text-muted hover:text-fg">
+            Échap
+          </button>
+        </div>
+        <div ref={output} role="log" aria-live="polite" aria-label="Sortie du terminal" className="h-[min(52vh,420px)] space-y-1 overflow-y-auto px-4 py-3" data-terminal-output>
+          {lines.map((line) => (
+            <p
+              key={line.id}
+              className={`break-words whitespace-pre-wrap ${line.kind === 'in' ? 'text-fg' : line.kind === 'err' ? 'text-[#ff8a7a]' : line.kind === 'ok' ? 'text-accent' : 'text-muted'}`}
+            >
+              {line.kind === 'in' ? <span className="text-accent">❯ </span> : null}
+              {line.text}
+            </p>
+          ))}
+        </div>
+        <form onSubmit={submit} className="flex items-center gap-2 border-t border-line px-4 py-3">
+          <label htmlFor="terminal-input" className="text-accent">
+            <span aria-hidden="true">❯</span>
+            <span className="sr-only">Commande</span>
+          </label>
+          <input
+            id="terminal-input"
+            ref={input}
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+            onKeyDown={onKeyDown}
+            autoComplete="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            placeholder={terminalCopy.placeholder}
+            className="min-w-0 flex-1 bg-transparent text-fg caret-accent outline-none placeholder:text-muted/60"
+          />
+        </form>
+        <p className="border-t border-line px-4 py-2 text-[11px] text-muted">{terminalCopy.hint}</p>
+      </div>
+    </div>
   )
 }

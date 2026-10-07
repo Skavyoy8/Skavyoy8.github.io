@@ -1,19 +1,20 @@
-## Le concept : SIGNAL
+## Le concept : simple et fluide
 
-Le CIEL, c'est le signal sous toutes ses formes : électrique, réseau, données. Le fil rouge du site est donc **un seul nuage de particules** qui change de forme au fil du scroll : un noyau, une onde qui passe de l'analogique au numérique, un circuit imprimé, mon rack 10 pouces, puis un portail.
+Une première version misait sur une scène 3D lourde. Les retours ont été clairs : trop chargé, pas assez rapide. Cette version fait l'inverse : un fond noir où ondulent des fils fins, de grandes typographies, des cartes sombres, et le contenu qui passe avant tout.
 
 ## La technique
 
 - **Next.js** en export statique, déployé sur **GitHub Pages** par une action à chaque push ;
-- **React Three Fiber** : un seul canvas WebGL, des particules animées par un shader maison, le badge physique avec **rapier** ;
-- **GSAP + ScrollTrigger** pour tout ce qui suit le scroll, **Lenis** pour le défilement doux, **Motion** pour l'interface ;
+- un **fond animé en canvas 2D** écrit à la main : des étoiles et deux rubans de fils, quelques milliers de points par image, sans aucune librairie ;
+- des **animations en CSS** (uniquement `transform` et `opacity`) et un seul `IntersectionObserver` pour les apparitions au scroll ;
+- le **rack du homelab dessiné en CSS**, chaque unité à sa vraie hauteur ;
 - **Tailwind CSS v4** pour le design system.
 
 ## Les règles que je me suis fixées
 
-- le texte s'affiche avant la 3D, qui se charge ensuite ;
-- un **mode calme** (et le réglage « réduire les animations » du système) coupe la 3D et les animations lourdes, sans rien retirer du contenu ;
-- tout se fait au clavier : menu, filtres et un **terminal** caché (essaie `Ctrl + K`) ;
+- le texte s'affiche tout de suite ; le fond ne s'anime qu'au premier geste du visiteur ;
+- un **mode calme** (et le réglage « réduire les animations » du système) fige le fond et coupe les animations, sans rien retirer du contenu ;
+- tout se fait au clavier : menu et un **terminal** caché (essaie `Ctrl + K`) ;
 - aucun tracker, aucun cookie.
 
 Le code est public sur [GitHub](https://github.com/Skavyoy8/Skavyoy8.github.io).

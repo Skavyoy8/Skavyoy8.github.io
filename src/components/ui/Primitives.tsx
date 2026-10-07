@@ -1,17 +1,12 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 
-type Title = { readonly before: string; readonly accent: string; readonly after: string }
+/** Décalage d'une apparition ou d'une animation CSS (variable --d). */
+export const delay = (seconds: number) => ({ '--d': `${seconds}s` }) as CSSProperties
 
-export function AccentTitle({ title }: { title: Title }) {
-  return (
-    <>
-      {title.before} <span className="accent-serif">{title.accent}</span>
-      {title.after}
-    </>
-  )
-}
+/** Variables CSS en style inline (--i, --h…). */
+export const vars = (values: Record<`--${string}`, string | number>) => values as CSSProperties
 
-/** Le logo : une tuile citron avec un créneau de signal numérique. */
+/** Le logo : une tuile citron avec un créneau de signal numérique (aussi l'icône du site). */
 export function LogoMark({ className = 'size-7' }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
@@ -21,73 +16,51 @@ export function LogoMark({ className = 'size-7' }: { className?: string }) {
   )
 }
 
-export const buttonPrimary =
-  'btn-lime group inline-flex items-center gap-2.5 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-ink transition-[background-color,box-shadow] duration-500 hover:bg-[#d8ff6a]'
-export const buttonGhost =
-  'group inline-flex items-center gap-2.5 rounded-full border border-line-strong bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-fg transition-colors duration-500 hover:bg-white/[0.09]'
-
-export function Pill({ children, tone = 'accent', className = '' }: { children: ReactNode; tone?: 'accent' | 'muted'; className?: string }) {
+/** Le pseudo en texte, avec son point citron. */
+export function Wordmark({ className = '' }: { className?: string }) {
   return (
-    <span className={`pill ${className}`}>
-      <span className={`size-1.5 rounded-full ${tone === 'accent' ? 'bg-accent shadow-[0_0_8px_#c8ff2e]' : 'bg-muted'}`} aria-hidden="true" />
-      {children}
+    <span className={`text-[1.35rem] font-semibold tracking-[-0.04em] ${className}`}>
+      skavyoy<span className="text-accent">.</span>
     </span>
   )
 }
 
-/** En-tête de section : pastille, grand titre à gauche, intro à droite. */
-export function SectionHead({ id, pill, title, intro, className = '' }: { id: string; pill: string; title: Title; intro?: ReactNode; className?: string }) {
+export const buttonPrimary =
+  'group inline-flex items-center gap-3 rounded-xl bg-gradient-to-b from-white to-[#d6d6dc] px-6 py-3.5 text-[0.9rem] font-medium text-ink shadow-[0_10px_40px_-12px_rgb(255_255_255/0.35)] transition-[transform,box-shadow] duration-500 hover:-translate-y-0.5 hover:shadow-[0_16px_50px_-14px_rgb(255_255_255/0.5)]'
+export const buttonGhost =
+  'group inline-flex items-center gap-3 rounded-xl border border-line-strong bg-white/[0.02] px-6 py-3.5 text-[0.9rem] font-medium text-fg transition-colors duration-500 hover:border-white/25 hover:bg-white/[0.05]'
+
+/** En-tête de section : « 01 / À PROPOS », puis le grand titre, l'intro à droite. */
+export function SectionHead({ id, index, title, intro, children }: { id: string; index: string; title: string; intro?: ReactNode; children?: ReactNode }) {
   return (
-    <header className={`container-x grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end ${className}`}>
-      <div className="lg:col-span-7">
-        <p data-reveal="fade">
-          <Pill>{pill}</Pill>
+    <header className="grid gap-x-10 gap-y-5 lg:grid-cols-12 lg:items-end">
+      <div className="lg:col-span-7" data-reveal>
+        <p className="label text-muted">
+          <span className="text-accent">{index.split(' / ')[0]}</span> / {index.split(' / ')[1]}
         </p>
-        <h2 id={id} className="text-h2 mt-6 text-balance" data-reveal="title">
-          <AccentTitle title={title} />
+        <h2 id={id} className="text-h2 mt-5 text-balance">
+          {title}
         </h2>
       </div>
-      {intro ? (
-        <p className="max-w-md text-pretty text-[0.95rem] leading-relaxed text-muted lg:col-span-4 lg:col-start-9 lg:pb-2" data-reveal="fade">
-          {intro}
-        </p>
+      {intro || children ? (
+        <div className="max-w-md text-pretty text-muted lg:col-span-4 lg:col-start-9 lg:pb-2" data-reveal style={delay(0.1)}>
+          {intro ? <p>{intro}</p> : null}
+          {children}
+        </div>
       ) : null}
     </header>
   )
 }
 
-/** Barre de titre d'une carte : légende mono à gauche, méta à droite. */
-export function CardBar({ title, meta, className = '' }: { title: ReactNode; meta?: ReactNode; className?: string }) {
-  return (
-    <div className={`mono flex items-center justify-between gap-4 text-muted ${className}`}>
-      <span className="text-fg/85">{title}</span>
-      {meta ? <span>{meta}</span> : null}
-    </div>
-  )
-}
-
 export function Chip({ children, active = false }: { children: ReactNode; active?: boolean }) {
-  return (
-    <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[0.6875rem] ${
-        active ? 'border-accent/50 bg-accent/10 text-accent' : 'border-line text-muted'
-      }`}
-    >
-      {children}
-    </span>
-  )
-}
-
-export function StatusDot({ tone = 'accent' }: { tone?: 'accent' | 'cold' | 'muted' }) {
-  const color = tone === 'accent' ? 'bg-accent shadow-[0_0_8px_#c8ff2e]' : tone === 'cold' ? 'bg-cold' : 'bg-muted'
-  return <span className={`pulse-dot inline-block size-1.5 rounded-full ${color}`} aria-hidden="true" />
+  return <span className={`tag ${active ? 'border-accent/40 text-accent' : ''}`}>{children}</span>
 }
 
 export function ArrowIcon({ direction = 'up-right', className = 'size-4' }: { direction?: 'up-right' | 'down' | 'right' | 'up'; className?: string }) {
   const rotate = { 'up-right': 0, right: 45, down: 135, up: -45 }[direction]
   return (
     <svg viewBox="0 0 16 16" className={className} style={{ transform: `rotate(${rotate}deg)` }} aria-hidden="true" fill="none">
-      <path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="square" />
+      <path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

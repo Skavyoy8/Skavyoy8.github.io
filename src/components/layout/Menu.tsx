@@ -1,29 +1,19 @@
 'use client'
 
-import { AnimatePresence, m } from 'motion/react'
 import Link from 'next/link'
-import { type KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { type KeyboardEvent, useEffect, useRef } from 'react'
+import { delay, Wordmark } from '@/components/ui/Primitives'
 import { navCopy, sections } from '@/content/nav'
-import { site } from '@/content/site'
-import { LogoMark } from '@/components/ui/Primitives'
-import { getLenis } from '@/lib/scroll'
 
-const EASE = [0.16, 1, 0.3, 1] as const
-
+/** Menu plein écran (téléphone et tablette) : la liste des sections. */
 export function Menu({ open, onClose, current }: { open: boolean; onClose: () => void; current: string }) {
   const panel = useRef<HTMLDivElement>(null)
-  const [hovered, setHovered] = useState<string | null>(null)
-  const preview = sections.find((s) => s.id === (hovered ?? current)) ?? sections[0]
 
   useEffect(() => {
     if (!open) return
-    const lenis = getLenis()
-    lenis?.stop()
     document.body.style.overflow = 'hidden'
-    const first = panel.current?.querySelector<HTMLElement>('a, button')
-    first?.focus()
+    panel.current?.querySelector<HTMLElement>('a, button')?.focus()
     return () => {
-      lenis?.start()
       document.body.style.overflow = ''
     }
   }, [open])
@@ -49,75 +39,40 @@ export function Menu({ open, onClose, current }: { open: boolean; onClose: () =>
     }
   }
 
+  if (!open) return null
   return (
-    <AnimatePresence>
-      {open ? (
-        <m.div
-          ref={panel}
-          id="menu-principal"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menu"
-          onKeyDown={onKeyDown}
-          className="dots fixed inset-0 z-[70] flex flex-col bg-[#070806]"
-          initial={{ clipPath: 'inset(0 0 100% 0)' }}
-          animate={{ clipPath: 'inset(0 0 0% 0)' }}
-          exit={{ clipPath: 'inset(100% 0 0% 0)' }}
-          transition={{ duration: 0.8, ease: EASE }}
-        >
-          <div className="container-x flex h-(--header-h) shrink-0 items-center justify-between">
-            <span className="flex items-center gap-2.5 text-[15px] font-medium tracking-tight">
-              <LogoMark />
-              {site.name}
-            </span>
-            <button type="button" onClick={onClose} className="mono rounded-full border border-line-strong px-4 py-1.5 hover:bg-white/5">
-              {navCopy.close}
-            </button>
-          </div>
-          <div className="container-x grid min-h-0 flex-1 grid-cols-4 gap-x-(--gutter) lg:grid-cols-12">
-            <nav aria-label="Sections" className="col-span-4 flex flex-col justify-center overflow-y-auto py-6 lg:col-span-8" data-lenis-prevent>
-              <ul>
-                {sections.map((section, i) => (
-                  <li key={section.id} className="overflow-hidden">
-                    <m.div
-                      initial={{ y: '110%' }}
-                      animate={{ y: '0%' }}
-                      transition={{ duration: 0.9, ease: EASE, delay: 0.15 + i * 0.05 }}
-                    >
-                      <Link
-                        href={`/#${section.id}`}
-                        onClick={onClose}
-                        onMouseEnter={() => setHovered(section.id)}
-                        onFocus={() => setHovered(section.id)}
-                        aria-current={current === section.id ? 'location' : undefined}
-                        className="group flex items-baseline gap-4 py-0.5 text-[clamp(2.25rem,6.2vw,5.5rem)] leading-[0.95] font-semibold tracking-[-0.05em] text-fg/40 transition-colors duration-500 hover:text-fg focus-visible:text-fg aria-[current=location]:text-fg"
-                      >
-                        <span className="label w-8 shrink-0 text-muted">{section.index}</span>
-                        <span className="transition-transform duration-500 ease-signal group-hover:translate-x-3">{section.label}</span>
-                      </Link>
-                    </m.div>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <aside className="relative col-span-4 hidden flex-col justify-end pb-12 lg:flex" aria-hidden="true">
-              <AnimatePresence mode="wait">
-                <m.div
-                  key={preview.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.5, ease: EASE }}
-                >
-                  <p className="accent-serif text-[9rem] leading-none text-accent">{preview.index}</p>
-                  <p className="mt-4 max-w-xs text-lg text-muted">{preview.preview}</p>
-                </m.div>
-              </AnimatePresence>
-            </aside>
-          </div>
-          <p className="container-x mono pb-6 text-muted">échap pour fermer · ⌘K pour le terminal</p>
-        </m.div>
-      ) : null}
-    </AnimatePresence>
+    <div
+      ref={panel}
+      id="menu-principal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu"
+      onKeyDown={onKeyDown}
+      className="overlay-in fixed inset-0 z-[70] flex flex-col bg-bg/[0.97]"
+    >
+      <div className="container-x flex h-[5.5rem] shrink-0 items-center justify-between pt-3">
+        <Wordmark className="pl-5" />
+        <button type="button" onClick={onClose} className="mono mr-3 rounded-xl border border-line-strong px-4 py-2 hover:bg-white/5">
+          {navCopy.close}
+        </button>
+      </div>
+      <nav aria-label="Sections" className="container-x flex flex-1 flex-col justify-center overflow-y-auto py-8">
+        <ul>
+          {sections.map((section, i) => (
+            <li key={section.id} className="fade-up" style={delay(0.05 + i * 0.04)}>
+              <Link
+                href={`/#${section.id}`}
+                onClick={onClose}
+                aria-current={current === section.id ? 'location' : undefined}
+                className="flex items-baseline gap-4 py-1 text-[clamp(2rem,8vw,3.5rem)] leading-[1.1] font-medium tracking-[-0.05em] text-fg/45 transition-colors hover:text-fg focus-visible:text-fg aria-[current=location]:text-fg"
+              >
+                <span className="mono w-7 shrink-0 text-accent/80">{section.index}</span>
+                {section.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
   )
 }

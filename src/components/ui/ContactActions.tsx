@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { contactCopy, email } from '@/content/links'
 import { isTodo } from '@/content/types'
 import { decodeEmail } from '@/lib/email'
@@ -60,4 +60,14 @@ export function useEmailAction() {
     toast(address)
     window.location.href = `mailto:${address}`
   }
+}
+
+/** Le grand bouton du contact : ouvre le client mail (ou prévient que l'adresse arrive bientôt). */
+export function EmailCta({ className = '', children }: { className?: string; children: ReactNode }) {
+  const onClick = useEmailAction()
+  return (
+    <button type="button" onClick={onClick} className={className}>
+      {children}
+    </button>
+  )
 }

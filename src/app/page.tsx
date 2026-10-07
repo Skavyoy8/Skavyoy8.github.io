@@ -1,11 +1,11 @@
-import { Reveals } from '@/components/motion/Reveals'
 import { About } from '@/components/sections/About'
+import { Contact } from '@/components/sections/Contact'
 import { Hero } from '@/components/sections/Hero'
-import { Interests } from '@/components/sections/Interests'
-import { Lab } from '@/components/sections/Lab'
-import { Manifesto } from '@/components/sections/Manifesto'
-import { Parcours } from '@/components/sections/Parcours'
-import { Badges, Contact, Rooms } from '@/components/sections/Showcase'
+import { Homelab } from '@/components/sections/Homelab'
+import { Journey } from '@/components/sections/Journey'
+import { Practice } from '@/components/sections/Practice'
+import { Projects } from '@/components/sections/Projects'
+import { Skills } from '@/components/sections/Skills'
 import { socials } from '@/content/links'
 import { pillars } from '@/content/pillars'
 import { site } from '@/content/site'
@@ -31,16 +31,14 @@ export default async function Home() {
 
   return (
     <>
-      <Reveals />
       <main id="contenu" tabIndex={-1} className="relative z-10 outline-none">
         <Hero />
         <About />
-        <Manifesto />
-        <Lab repos={repos} />
-        <Interests />
-        <Parcours />
-        <Rooms />
-        <Badges />
+        <Skills />
+        <Homelab />
+        <Projects repos={repos} />
+        <Journey />
+        <Practice />
         <Contact />
       </main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, '\\u003c') }} />

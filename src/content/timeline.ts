@@ -7,9 +7,6 @@ export type TimelineStep = {
   points: readonly string[]
 }
 
-/** Calendrier scolaire officiel 2026-2027 : rentrée des élèves, début des vacances d'été. */
-export const schoolYear = { start: '2026-09-01', end: '2027-07-03' } as const
-
 export const timeline: readonly TimelineStep[] = [
   {
     when: '2026 – 2027',
@@ -28,17 +25,10 @@ export const timeline: readonly TimelineStep[] = [
   },
 ]
 
-/** Curseur « glisse dans le temps » : une position par année scolaire. */
-export const timelineSlider = {
-  kicker: 'glisse dans le temps',
-  question: 'Où j’en serai ?',
-  label: 'Année scolaire',
-  current: 'cette année',
-  stops: [
-    { year: '2026–27', step: 0, note: 'terminale' },
-    { year: '2027–28', step: 1, note: '1re année, en alternance' },
-    { year: '2028–29', step: 1, note: '2e année, en alternance' },
-  ],
+export const timelineCopy = {
+  index: '05 / PARCOURS',
+  title: 'Mon parcours.',
+  intro: 'Le bac cette année, puis un BTS en alternance.',
+  states: { 'en cours': 'En cours', visé: 'Je cherche une entreprise' },
   cta: 'Me proposer une alternance',
-  badges: { 'en cours': 'en cours', visé: 'je cherche une entreprise' },
 } as const
