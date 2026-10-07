@@ -16,4 +16,5 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default createMDX({})(nextConfig)
+// remark-gfm : tableaux Markdown dans les pages du lab (nom en texte, comme l'exige Turbopack).
+export default createMDX({ options: { remarkPlugins: ['remark-gfm'] } })(nextConfig)

@@ -1,15 +1,12 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import Script from 'next/script'
 import type { ReactNode } from 'react'
+import { Ambient } from '@/components/layout/Ambient'
 import { Footer } from '@/components/layout/Footer'
 import { Nav } from '@/components/layout/Nav'
 import { Providers } from '@/components/layout/Providers'
-import { SmoothScroll } from '@/components/layout/SmoothScroll'
-import { RibbonLoader } from '@/components/ribbon/RibbonLoader'
-import { RibbonPoster } from '@/components/ribbon/RibbonPoster'
-import { Konami } from '@/components/ui/Konami'
-import { Preloader } from '@/components/ui/Preloader'
+import { RevealObserver } from '@/components/layout/RevealObserver'
 import { Terminal } from '@/components/ui/Terminal'
 import { Toaster } from '@/components/ui/Toaster'
 import { navCopy } from '@/content/nav'
@@ -20,7 +17,6 @@ import './globals.css'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist', display: 'swap' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono', display: 'swap' })
-const instrument = Instrument_Serif({ subsets: ['latin'], weight: '400', style: 'italic', variable: '--font-instrument', display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${site.url}${basePath}/`),
@@ -53,7 +49,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={`${geist.variable} ${geistMono.variable} ${instrument.variable}`} suppressHydrationWarning>
+    <html lang="fr" className={`${geist.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body>
         <Script id="boot" strategy="beforeInteractive">
           {bootScript}
@@ -61,21 +57,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <a
           href="#contenu"
           data-native
-          className="label fixed top-3 left-3 z-[110] -translate-y-24 rounded-md bg-accent px-4 py-3 text-bg focus:translate-y-0"
+          className="label fixed top-3 left-3 z-[110] -translate-y-24 rounded-md bg-accent px-4 py-3 text-ink focus:translate-y-0"
         >
           {navCopy.skip}
         </a>
-        <RibbonPoster />
+        <Ambient />
+        <div className="progress" aria-hidden="true" />
         <Providers>
-          <RibbonLoader />
-          <Preloader />
           <Nav />
           {children}
           <Footer />
           <Terminal />
           <Toaster />
-          <Konami />
-          <SmoothScroll />
+          <RevealObserver />
         </Providers>
       </body>
     </html>

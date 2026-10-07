@@ -72,4 +72,4 @@ export function useCalm(): boolean {
 }
 
 /** Script inline exécuté avant le rendu : évite tout flash d'animation en mode calme. */
-export const bootScript = `(function(){try{var d=document.documentElement;var v=localStorage.getItem('${KEY}');var c=v==='1'||(v!=='0'&&matchMedia('${QUERY}').matches);d.dataset.calm=c?'true':'false';if(sessionStorage.getItem('skavyoy:booted'))d.dataset.booted='true';d.dataset.js='true'}catch(e){}})();`
+export const bootScript = `(function(){try{var d=document.documentElement;var v=localStorage.getItem('${KEY}');var c=v==='1'||(v!=='0'&&matchMedia('${QUERY}').matches);d.dataset.calm=c?'true':'false';d.dataset.js='true'}catch(e){}})();`
