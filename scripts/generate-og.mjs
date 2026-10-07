@@ -7,25 +7,34 @@ const fonts =
 
 const og = `<!doctype html><html><head><link rel="stylesheet" href="${fonts}"><style>
 *{margin:0;box-sizing:border-box}body{width:1200px;height:630px;background:#050506;color:#ededef;font-family:Geist,sans-serif;overflow:hidden;position:relative}
-.grid{position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:100px 100%}
-.glow{position:absolute;right:-120px;top:-160px;width:760px;height:760px;border-radius:50%;background:radial-gradient(circle,rgba(106,228,255,.22),transparent 62%)}
-canvas{position:absolute;right:40px;top:40px}
-.label{font-family:'Geist Mono',monospace;font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:#8b8b94}
-h1{position:absolute;left:72px;bottom:150px;font-size:190px;line-height:.8;letter-spacing:-.07em;font-weight:600}
-h1 span{color:#c8ff2e}.top{position:absolute;left:72px;top:64px;display:flex;gap:14px;align-items:center}
-.dot{width:10px;height:10px;border-radius:50%;background:#c8ff2e}
-.tag{position:absolute;left:76px;bottom:72px;font-size:32px;letter-spacing:-.02em}.tag em{font-family:'Instrument Serif',serif;color:#c8ff2e}
-</style></head><body><div class="grid"></div><div class="glow"></div><canvas id="c" width="560" height="560"></canvas>
-<div class="top"><span class="dot"></span><span class="label">Portfolio · CIEL / FR</span></div>
-<h1>Skavyoy<span>.</span></h1><p class="tag">Cybersécurité, réseaux, Linux et <em>électronique</em>.</p>
+canvas{position:absolute;inset:0}
+.dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.3px);background-size:24px 24px;-webkit-mask-image:radial-gradient(60% 70% at 20% 40%,#000,transparent)}
+.brand{position:absolute;left:72px;top:60px;display:flex;gap:14px;align-items:center;font-size:30px;font-weight:500;letter-spacing:-.02em}
+.pill{position:absolute;left:72px;top:190px;font-family:'Geist Mono',monospace;font-size:20px;color:rgba(237,237,239,.8);border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:8px;padding:8px 16px;display:flex;gap:12px;align-items:center}
+.pill i{width:9px;height:9px;border-radius:50%;background:#c8ff2e;box-shadow:0 0 10px #c8ff2e}
+h1{position:absolute;left:72px;top:262px;font-size:92px;line-height:1.02;letter-spacing:-.045em;font-weight:600}
+h1 em{display:block;font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.02em;color:rgba(237,237,239,.9)}
+</style></head><body><canvas id="c" width="1200" height="630"></canvas><div class="dots"></div>
+<div class="brand"><svg viewBox="0 0 32 32" width="44" height="44"><rect width="32" height="32" rx="8" fill="#c8ff2e"/><path d="M6 20h5v-8h5v8h5v-8h5" fill="none" stroke="#0b0d05" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Skavyoy</div>
+<p class="pill"><i></i>Bac Pro CIEL · recherche une alternance</p>
+<h1>Comprendre le signal,<em>puis le protéger.</em></h1>
 <script>
-const c=document.getElementById('c').getContext('2d');let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;
-for(let row=0;row<34;row++){const z=row/33,y0=470-row*11,amp=10+z*26;c.beginPath();for(let x=0;x<=560;x+=4){const n=Math.sin(x*.02+row*.5)*amp*.6+Math.sin(x*.047-row*.3)*amp*.4;const y=y0-n;x?c.lineTo(x,y):c.moveTo(x,y)}
-c.strokeStyle=row%7===3?'rgba(200,255,46,.55)':'rgba(106,228,255,'+(.12+.5*(1-z))+')';c.lineWidth=1.2;c.stroke()}
+// Le ruban de fibres du héros, dessiné en 2D : une épingle lumineuse et un éventail vers la droite.
+const c=document.getElementById('c').getContext('2d');let s=11;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+const P=[[1300,-120],[1010,120],[800,330],[700,470],[820,600],[1000,760]];
+const cr=(a,b,d,e,u)=>{const u2=u*u,u3=u2*u;return 0.5*(2*b+(-a+d)*u+(2*a-5*b+4*d-e)*u2+(-a+3*b-3*d+e)*u3)};
+const at=(t)=>{const x=t*5,i=Math.min(Math.floor(x),4),u=x-i,g=(k)=>P[Math.max(0,Math.min(5,k))];const a=g(i-1),b=g(i),d=g(i+1),e=g(i+2);return[cr(a[0],b[0],d[0],e[0],u),cr(a[1],b[1],d[1],e[1],u)]};
+c.globalCompositeOperation='lighter';
+const halo=c.createRadialGradient(700,470,0,700,470,260);halo.addColorStop(0,'rgba(220,255,140,.35)');halo.addColorStop(1,'rgba(200,255,46,0)');c.fillStyle=halo;c.fillRect(0,0,1200,630);
+for(let k=0;k<170;k++){const w=r()*2-1,pick=r(),wob=r()*6.28;const col=pick<.2?'106,190,255':pick<.5?'110,190,40':'200,255,46';
+const near=10,start=360,end=170;c.beginPath();for(let i=0;i<=120;i++){const t=i/120;const [x,y]=at(t),[x2,y2]=at(Math.min(t+.004,1));const tx=x2-x,ty=y2-y,l=Math.hypot(tx,ty)||1;
+const d=Math.abs(t-.6)/(t<.6?.6:.4),sm=Math.min(d,1);const spr=near+((t<.6?start:end)-near)*sm*sm*(3-2*sm);const off=(w+Math.sin(t*9+wob)*.08)*spr;
+const px=x-ty/l*off,py=y+tx/l*off;i?c.lineTo(px,py):c.moveTo(px,py)}
+const a=.12+.5*Math.pow(r(),2.2);c.strokeStyle='rgba('+col+','+a+')';c.lineWidth=1.1;c.shadowColor='rgba('+col+',.8)';c.shadowBlur=8;c.stroke()}
 </script></body></html>`
 
 const icon = `<!doctype html><html><head><style>*{margin:0}body{width:180px;height:180px;background:#050506;display:grid;place-items:center}</style></head><body>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="180" height="180"><path d="M41 21.5c-1.7-3-5-4.6-9.2-4.6-5.6 0-9.4 2.9-9.4 7.2 0 9.6 19.4 5.4 19.4 15.1 0 4.6-4.1 7.9-10 7.9-4.7 0-8.5-2-10.3-5.4" fill="none" stroke="#ededef" stroke-width="5.2" stroke-linecap="round"/><circle cx="49" cy="46" r="4" fill="#c8ff2e"/></svg></body></html>`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="180" height="180"><rect width="32" height="32" rx="8" fill="#c8ff2e"/><path d="M6 20h5v-8h5v8h5v-8h5" fill="none" stroke="#0b0d05" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></body></html>`
 
 const browser = await chromium.launch()
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } })

@@ -2,10 +2,26 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3010"
+      ],
+      "port": 3010
+    },
+    {
       "name": "out",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["scripts/serve-out.mjs"],
-      "env": { "PORT": "4310" },
+      "runtimeArgs": [
+        "scripts/serve-out.mjs"
+      ],
+      "env": {
+        "PORT": "4310"
+      },
       "port": 4310
     }
   ]
