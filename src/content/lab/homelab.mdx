@@ -1,0 +1,55 @@
+import { RackDiagram } from '@/components/ui/RackDiagram'
+
+## Le projet
+
+Un vrai lab à la maison pour pratiquer ce que j'apprends : virtualisation, réseau, services auto-hébergés et labs de cybersécurité. Le projet est **en préparation** : la configuration est choisie, les pièces sont listées, l'assemblage arrive.
+
+Config retenue : un **Minisforum MS-01** (i5-12600H) dans un **DeskPi RackMate T1 Plus** noir de 8U, avec un switch **MokerLink 2.5G** relié en **10G**.
+
+<RackDiagram className="my-10 w-full max-w-2xl" />
+
+## Pourquoi le MS-01
+
+- son iGPU Intel gère le transcodage vidéo (Jellyfin, Immich) avec Quick Sync ;
+- ses quatre ports réseau sont tous Intel : 2 × SFP+ 10G et 2 × 2.5G ;
+- trois emplacements NVMe : le système d'abord, un futur NAS ensuite ;
+- 25 à 35 W au repos.
+
+## Le plan du rack
+
+| Unité | Rôle | Phase |
+| --- | --- | --- |
+| Routeur GL.iNet Slate AX (posé dessus) | Isolera le lab du réseau de la maison | 2 |
+| Écran tactile 7,84" · 2U | Console Proxmox et btop | 2 |
+| Patch panel 12 ports Cat6 · 0,5U | Tous les câbles passent derrière | 1 |
+| Switch MokerLink · 1U | 8 × 2.5G + SFP+ 10G, VLAN | 1 |
+| Minisforum MS-01 · 2U | L'hôte Proxmox, relié en 10G | 1 |
+| Réserve · 1U | Place pour un futur NAS | 1 |
+| Cache ventilé · 1U | Les blocs d'alimentation derrière | 2 |
+| Cache plein · 0,5U | Ferme le rack | 2 |
+
+## Ce qui tournera dessus
+
+Avec 32 Go de RAM, tout tient en même temps : environ 12 Go pour les services allumés en permanence, et 15 Go pour les labs lancés à la demande.
+
+- **Proxmox** : l'hôte qui fait tourner tout le reste ;
+- **AdGuard Home ou Pi-hole** : bloque les pubs pour toute la maison ;
+- **Homepage + Uptime Kuma** : page d'accueil des services, alerte si l'un tombe ;
+- **Jellyfin** et **Immich** : vidéos et photos perso, hébergées à la maison ;
+- **Samba** : un mini NAS pour partager des dossiers ;
+- **Bot crypto** : il tourne 24 h/24 sans laisser le PC allumé ;
+- **Dashboard Pronote** : hébergé sur le lab plutôt que sur mon PC ;
+- à la demande : **Kali face à Metasploitable** sur un réseau isolé, un **lab Active Directory** et **OPNsense** pour les VLAN.
+
+## Le câblage
+
+Le MS-01 rejoint le switch en 10G par un câble DAC SFP+, le switch rejoint la box par un seul câble. Chaque câble passe derrière le patch panel, puis un cordon de 25 cm le relie au switch en façade. Tant qu'aucun port n'est ouvert sur la box, le lab reste **accessible uniquement en LAN**.
+
+## Les étapes
+
+1. Monter le rack et l'étagère du switch.
+2. Installer la RAM et le SSD dans le MS-01, mettre le BIOS à jour, activer VT-x et VT-d.
+3. Installer Proxmox depuis une clé USB, avec une IP fixe.
+4. Câbler selon le plan, puis basculer le pont réseau de Proxmox sur le port SFP+ 10G.
+5. Créer les premiers conteneurs (AdGuard Home, Homepage, Uptime Kuma) et une sauvegarde chaque nuit.
+6. Phase 2 : l'écran, le routeur GL.iNet, les caches et l'éclairage.

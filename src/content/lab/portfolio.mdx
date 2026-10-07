@@ -1,0 +1,19 @@
+## Le concept : SIGNAL
+
+Le CIEL, c'est le signal sous toutes ses formes : électrique, réseau, données. Le fil rouge du site est donc **un seul nuage de particules** qui change de forme au fil du scroll : un noyau, une onde qui passe de l'analogique au numérique, un circuit imprimé, mon rack 10 pouces, puis un portail.
+
+## La technique
+
+- **Next.js** en export statique, déployé sur **GitHub Pages** par une action à chaque push ;
+- **React Three Fiber** : un seul canvas WebGL, des particules animées par un shader maison, le badge physique avec **rapier** ;
+- **GSAP + ScrollTrigger** pour tout ce qui suit le scroll, **Lenis** pour le défilement doux, **Motion** pour l'interface ;
+- **Tailwind CSS v4** pour le design system.
+
+## Les règles que je me suis fixées
+
+- le texte s'affiche avant la 3D, qui se charge ensuite ;
+- un **mode calme** (et le réglage « réduire les animations » du système) coupe la 3D et les animations lourdes, sans rien retirer du contenu ;
+- tout se fait au clavier : menu, filtres et un **terminal** caché (essaie `Ctrl + K`) ;
+- aucun tracker, aucun cookie.
+
+Le code est public sur [GitHub](https://github.com/Skavyoy8/Skavyoy8.github.io).

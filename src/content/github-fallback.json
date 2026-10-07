@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Skavyoy8.github.io",
+    "description": null,
+    "html_url": "https://github.com/Skavyoy8/Skavyoy8.github.io",
+    "homepage": null,
+    "language": "JavaScript",
+    "pushed_at": "2026-10-07T12:55:46Z",
+    "stargazers_count": 0,
+    "fork": false,
+    "has_pages": true,
+    "size": 0
+  },
+  {
+    "name": "sciences-piles-accus",
+    "description": "Fiche de révision et QCM sur l'oxydoréduction, les piles et les accumulateurs (terminale bac pro)",
+    "html_url": "https://github.com/Skavyoy8/sciences-piles-accus",
+    "homepage": null,
+    "language": "HTML",
+    "pushed_at": "2026-09-24T18:58:57Z",
+    "stargazers_count": 0,
+    "fork": false,
+    "has_pages": true,
+    "size": 75
+  },
+  {
+    "name": "maths-feuille-ds",
+    "description": "Révision du DS : exponentielle de base q et logarithme décimal (Terminale bac pro)",
+    "html_url": "https://github.com/Skavyoy8/maths-feuille-ds",
+    "homepage": null,
+    "language": "HTML",
+    "pushed_at": "2026-09-21T16:36:25Z",
+    "stargazers_count": 0,
+    "fork": false,
+    "has_pages": true,
+    "size": 13
+  },
+  {
+    "name": "maths-log-base-q",
+    "description": "Entraînement : logarithme décimal et logarithme de base q (maths bac pro / BTS CIEL)",
+    "html_url": "https://github.com/Skavyoy8/maths-log-base-q",
+    "homepage": null,
+    "language": "HTML",
+    "pushed_at": "2026-09-21T12:45:13Z",
+    "stargazers_count": 0,
+    "fork": false,
+    "has_pages": true,
+    "size": 16
+  },
+  {
+    "name": "interview-lab",
+    "description": "Entraînement à l'oral d'entretien d'embauche en anglais — reconnaissance vocale, examen blanc chronométré, fiches",
+    "html_url": "https://github.com/Skavyoy8/interview-lab",
+    "homepage": null,
+    "language": "HTML",
+    "pushed_at": "2026-09-18T13:34:31Z",
+    "stargazers_count": 0,
+    "fork": false,
+    "has_pages": true,
+    "size": 20
+  },
+  {
+    "name": "skavyoy-cyber",
+    "description": null,
+    "html_url": "https://github.com/Skavyoy8/skavyoy-cyber",
+    "homepage": null,
+    "language": null,
+    "pushed_at": "2026-05-27T20:48:30Z",
+    "stargazers_count": 0,
+    "fork": false,
+    "has_pages": false,
+    "size": 3
+  }
+]
