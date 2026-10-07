@@ -2,13 +2,12 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
 import Script from 'next/script'
 import type { ReactNode } from 'react'
-import { Backdrop } from '@/components/layout/Backdrop'
 import { Footer } from '@/components/layout/Footer'
 import { Nav } from '@/components/layout/Nav'
-import { Overlays } from '@/components/layout/Overlays'
 import { Providers } from '@/components/layout/Providers'
 import { SmoothScroll } from '@/components/layout/SmoothScroll'
-import { Cursor } from '@/components/ui/Cursor'
+import { RibbonLoader } from '@/components/ribbon/RibbonLoader'
+import { RibbonPoster } from '@/components/ribbon/RibbonPoster'
 import { Konami } from '@/components/ui/Konami'
 import { Preloader } from '@/components/ui/Preloader'
 import { Terminal } from '@/components/ui/Terminal'
@@ -66,19 +65,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           {navCopy.skip}
         </a>
-        <Backdrop />
+        <RibbonPoster />
         <Providers>
+          <RibbonLoader />
           <Preloader />
           <Nav />
           {children}
           <Footer />
           <Terminal />
           <Toaster />
-          <Cursor />
           <Konami />
           <SmoothScroll />
         </Providers>
-        <Overlays />
       </body>
     </html>
   )
