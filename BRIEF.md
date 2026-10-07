@@ -24,13 +24,15 @@ Mais le contenu reste lisible et rapide : un recruteur doit comprendre en 10 sec
 
 Si tu peux ouvrir ces sites dans un navigateur (aperçu intégré), regarde-les vraiment : le texte seul ne suffit pas pour calibrer le niveau visuel.
 
+- **Vidéo « Relay » envoyée par Luke (2026-10-07)** → la *direction retenue* (§4) : landing SaaS générée par Opus 5.5, ruban de fibres lumineuses en 3D qui serpente sur toute la page, panneaux en verre, accent citron, mini-interfaces vivantes. On reprend l'esprit et les techniques (Three.js, bloom, caméra liée au scroll, verre dépoli) ; aucun texte, logo ni asset n'est copié.
+
 ---
 
 ## 2. Stack (imposée)
 
 - **Next.js** (App Router, TypeScript strict) en export statique (`output: 'export'`)
 - **Tailwind CSS v4** (config CSS-first via `@theme`) + CSS custom pour les effets
-- **React Three Fiber** + **@react-three/drei** + **@react-three/postprocessing** ; **@react-three/rapier** pour le badge physique (§5.2)
+- **React Three Fiber** + **@react-three/postprocessing** (bloom) ; shaders GLSL maison. *(2026-10-07 : drei et rapier retirés, le badge physique ayant été abandonné à la demande de Luke.)*
 - **GSAP** + **ScrollTrigger** + **SplitText** + **@gsap/react** (`useGSAP`) — GSAP et tous ses plugins sont gratuits
 - **Lenis** pour le smooth scroll, synchronisé avec ScrollTrigger
 - **Motion** (ex-Framer Motion, import depuis `motion/react`) pour l'UI
@@ -49,7 +51,7 @@ Installe les dernières versions stables et vérifie la doc officielle de chaque
 
 Tout le texte vit dans `src/content/` (fichiers TS typés). Aucun texte en dur dans les composants. Les manques restent des `TODO('[À REMPLIR] …')` dans `src/content/`.
 
-**Direction artistique** : SIGNAL (§4), choisie parmi SIGNAL / OSCILLO / MATIÈRE.
+**Direction artistique** : SIGNAL au kickoff, puis **FIBRE** (§4) le 2026-10-07, sur la vidéo « Relay » envoyée par Luke : « je veux un site comme la vidéo ».
 
 **Identité**
 - Nom affiché : **Skavyoy** (pseudo) ; prénom Luke cité une fois dans « À propos »
@@ -94,69 +96,59 @@ Tout le texte vit dans `src/content/` (fichiers TS typés). Aucun texte en dur d
 
 ## 4. Direction artistique
 
-**Concept : « SIGNAL ».** CIEL, c'est le signal sous toutes ses formes : électrique, réseau, données. Fil rouge visuel : **un nuage de particules unique qui se transforme au fil du scroll** — terrain de signal, onde, circuit, rack, portail. *(2026-10-07 : Luke n'aimait pas la sphère « noyau » ; remplacée par un terrain de lignes d'onde en perspective, particules en « pixels » carrés.)* Si Luke préfère une autre direction au kickoff, propose 2 alternatives aussi fortes.
+**Concept : « FIBRE ».** *(Décidé avec Luke le 2026-10-07, d'après la vidéo « Relay » : remplace SIGNAL.)* Un faisceau de fibres optiques lumineuses, en vraie 3D, serpente du haut en bas de la page : épingle incandescente dans le héros, puis il passe derrière chaque section. Net là où il y a de la place, flouté en aurore derrière les sections denses (verre dépoli). C'est le signal qui transporte tout ce que Luke apprend : réseau, systèmes, sécurité.
 
-**Ambiance** : sombre, éditoriale, précise. Plus « labo de nuit » que « hacker Matrix ».
+**Ambiance** : sombre, précise, lumineuse. Panneaux en verre, mini-interfaces qui vivent (graphe réseau, couches OSI, signal échantillonné, rack), une seule couleur d'accent.
 
 **Palette** (tokens `@theme`, modifiables en un endroit)
-- fond `#050506`, surface `#0B0B0E`, lignes `rgb(255 255 255 / 0.08)`
-- texte `#EDEDEF`, texte secondaire `#8B8B94`
-- accent « phosphore » `#C8FF2E` — un seul accent, utilisé avec parcimonie : états actifs, données, lueurs
-- froid secondaire `#6AE4FF` — réservé à la 3D (lueurs, impulsions)
+- fond `#050506`, surface `#0C0D0B`, lignes `rgb(255 255 255 / 0.07)`
+- texte `#EDEDEF`, texte secondaire `#8D8F88`
+- accent citron `#C8FF2E` (boutons, données, lueurs) ; encre sur citron `#0B0D05`
+- froid secondaire `#6AE4FF` — quelques fibres et reflets
 
 **Typo** (via `next/font/google`, auto-hébergée au build)
-- **Geist** — titres et texte ; titres énormes (jusqu'à ~14vw via `clamp`), interlettrage serré
-- **Instrument Serif italique** — mots d'accent dans les titres (« Ce que *j'apprends*. »)
-- **Geist Mono** — labels, index de section (`01 / À PROPOS`), données, terminal
+- **Geist** — titres et texte ; titres serrés (≈ 5 vw au héros, ≈ 3,5 vw en section)
+- **Instrument Serif italique** — mots d'accent (« puis le *protéger*. », « Le *lab*. »)
+- **Geist Mono** — légendes en minuscules façon console, pastilles, données, terminal
 
-**Texture & grille** : grain SVG animé très léger en overlay ; grille 12 colonnes visible en filigrane (lignes 1 px à ~4 % d'opacité) qui structure toute la page ; index de section en mono ; coins de cadre type « viseur » sur les éléments clés.
+**Surfaces** : cartes en verre (`glass`), verre qui floute vraiment le fond (`glass-blur` : héros, nav, colonnes du lab), sections denses posées sur du verre dépoli (`frost`). Grille de points en filigrane. Plus de grain ni de grille 12 colonnes.
 
 **Principes de motion**
-- easing principal `cubic-bezier(0.16, 1, 0.3, 1)`, durées 0,6–1,2 s, stagger 0,03–0,08 s
-- rien ne rebondit, rien ne bouge sans raison : le scroll raconte, la souris répond
-- titres : révélation par lignes masquées (SplitText) ; labels mono : effet « décryptage » (scramble) ; chiffres : compteurs
-- la 3D se met en retrait (opacité, flou, échelle) quand une section dense en texte occupe l'écran
-
----
+- easing principal `cubic-bezier(0.16, 1, 0.3, 1)`, durées 0,6–1,2 s
+- rien ne suit la souris *(demande de Luke, 2026-10-07)* : pas de curseur custom, pas d'effet magnétique, pas de tilt ; le scroll raconte, les survols restent sobres
+- titres : révélation par mots / lignes masqués (SplitText) ; légendes : décryptage (scramble) ; chiffres : compteurs ; barres et jauges qui se remplissent
 
 ## 5. Sections — reprise de miray, en mieux
 
-Ordre de la page. Pour chaque section : ce que fait miray → ce qu'on fait.
+Ordre de la page *(2026-10-07, ordre d'un portfolio)* : héros, à propos, manifeste, projets (`#lab`), compétences (`#interets`), parcours, rooms, badges, contact. Les ancres ne changent pas. Pour chaque section : ce que fait miray → ce qu'on fait.
 
 ### 5.0 Préloader
-Compteur `000 → 100` branché sur le vrai chargement (polices + `useProgress` de drei), puis 3–4 lignes de « boot » en mono, puis un rideau qui s'ouvre sur le héros. Moins de 2,5 s, passable (clic / touche), une seule fois par session (`sessionStorage`).
+Compteur `000 → 100` branché sur le vrai chargement des polices (la 3D arrive après, en fondu), puis 3–4 lignes de « boot » en mono, puis un rideau qui s'ouvre sur le héros. Moins de 2,5 s, passable (clic / touche), une seule fois par session (`sessionStorage`).
 
-### 5.1 Héros `#accueil`
-miray : nom, tagline, 2 CTA, chips (âge + pays + handle), carte avatar « CYBER / FR01 », 2 stats.
-→ Nous :
-- « Skavyoy. » en très grand, révélation lettre par lettre ; la scène 3D derrière et à travers le texte : un **terrain de signal** (lignes d'onde empilées en perspective, qui défilent et se soulèvent sous le pointeur)
-- tagline + 2 CTA magnétiques (« Mon parcours » / « On se parle ? »)
-- barre de méta en mono : statut (« en apprentissage ● »), France, heure locale en direct, handle
-- mini-stats TryHackMe en compteurs, cliquables vers leurs sections
-- indicateur de scroll animé
+### 5.1 Héros `#accueil` *(2026-10-07 : Luke veut « une vraie présentation » plutôt qu'un slogan)*
+- pastille « Disponible pour une alternance · BTS SIO SISR · rentrée 2027 », titre « Luke, alias Skavyoy. *Cyber, réseaux & Linux.* », présentation (terminale CIEL, TryHackMe, homelab Proxmox, recherche d'alternance), 2 CTA (« Voir mes projets » citron / « Me contacter »), ligne mono de méta
+- à droite, **carte-profil en verre** légèrement inclinée : photo, nom, domaines, puis une session de terminal qui s'écrit ligne à ligne (`whoami`, objectif, projets, dernière room), liens GitHub / projets / contact
+- le ruban 3D derrière : épingle incandescente sous les boutons, éventail vers la droite, flouté à travers la carte
+- bandeau d'outils (Linux, Kali, nmap, Proxmox…) : tuiles reliées en pointillés, l'outil actif passe de l'une à l'autre
 
 ### 5.2 À propos `#a-propos`
-miray : texte + carte profil (âge, pays, intérêts, plateforme, Discord).
-→ Nous :
-- texte court en grand, mots-clés en accent
-- **badge d'accès 3D sur lanyard physique** (rapier) : la carte pend depuis le haut, se balance, se drag à la souris et au doigt. Recto = carte d'identité « CIEL / FR » (nom, handle, filière, statut, QR vers GitHub) ; verso = infos rapides. Texture générée en canvas, aucune image externe. Fallback statique (carte en tilt CSS) en mode calme ou machine faible.
-- les particules s'aplatissent en **onde sinusoïdale qui devient carrée** pendant le scroll : analogique → numérique, clin d'œil CIEL
+- en-tête (pastille, titre, phrase-clé), carte « Le signal sous tout le reste » : textes + hub (avatar au centre relié à CIEL, TryHackMe, Linux, homelab)
+- **badge d'accès recto / verso** en carte holographique : se retourne au clic et au clavier (recto identité + QR GitHub, verso infos rapides). *(Le badge physique sur lanyard a été retiré à la demande de Luke.)*
+- bande « prochaine étape » + faits (pays, filière, plateforme, objectif)
 
 ### 5.3 Ce que j'apprends `#interets`
-miray : 3 cartes.
-→ Nous : 4 piliers en **scroll horizontal pinné** (desktop) / cartes empilées (mobile). Chaque carte : index, catégorie, titre, texte, lien vers les rooms filtrées, et sa propre micro-animation (onde, graphe réseau, prompt shell, piste de circuit). Les particules forment un **circuit imprimé** parcouru d'impulsions lumineuses.
+4 piliers en lignes alternées, chacun avec sa **mini-interface vivante** : méthode de la room Anonymous (barres en cascade), les 7 couches OSI parcourues par un paquet, virtualisation « aujourd'hui / demain » (VirtualBox → Proxmox, bascule animée), signal échantillonné (curseur : analogique → numérique). Lien vers les rooms filtrées.
 
-### 5.4 Lab `#lab` (nouveau, absent chez miray)
-- section pinnée : les particules s'assemblent en **mini rack 10"** (cadre, unités 1U, LED qui clignotent) ; au scroll, le rack passe en **vue éclatée** et chaque unité (switch, patch panel, nœud Proxmox, Pi-hole, NAS) reçoit une ligne de légende
-- puis grille de projets : cartes avec projecteur qui suit le curseur (bordure lumineuse), statut (en cours / terminé), stack, lien
-- pages détail `/lab/[slug]` générées statiquement (contenu MDX), transition de page soignée
+**Manifeste** (entre les piliers et le lab) : une carte citron s'ouvre au scroll, les mots s'allument un à un, puis elle se referme autour du logo.
+
+### 5.4 Lab `#lab`
+- **rack 10" en 3D**, dans la même scène que le ruban : cadre DeskPi 8U, unités à l'échelle (écran Proxmox lumineux, patch panel et cordons, switch et ses LED, MS-01 sur sa tablette, réserve NAS en pointillés, caches), câble DAC 10G lumineux. Au scroll : vue éclatée, puis chaque étape de la colonne de droite fait sortir son unité comme un tiroir. Le ruban passe derrière le rack. Secours : dessin isométrique SVG (mode calme, téléphone, sans WebGL), et équivalent texte accessible.
+- cartes : services en continu (RAM par service), mémoire prévue (11,5 Go sur 32), labs à la demande, **plan réseau** en éditeur de flux (switch → lab cyber / services maison → Proxmox, paquets lumineux, journal du câblage prévu)
+- grille de projets (statut, stack, liens), repos GitHub du build, pages détail `/lab/[slug]` (MDX)
 
 ### 5.5 Parcours `#parcours`
-miray : carte profil TryHackMe, 3 stats, date du relevé, lien profil.
-→ Nous :
-- tableau de bord type « console » : stats en compteurs, rang, jauge du classement, date du relevé, lien profil
-- frise du parcours qui se dessine au scroll (tracé SVG)
-- la 3D en retrait ici, priorité à la lisibilité
+- **tableau de bord** : l'année de terminale semaine par semaine (semaine en cours en citron), jauge « de la terminale déjà passée », profil TryHackMe (rooms, badges, rang, top %, relevé daté), dernière room, statut « recherche une alternance ». Dates calculées dans le navigateur, d'après le calendrier scolaire officiel.
+- **« glisse dans le temps »** : curseur par année scolaire (terminale → BTS SIO SISR 1re et 2e année), et les deux étapes en cartes
 
 ### 5.6 Rooms `#rooms`
 miray : compteur, filtres (Tout / Réseau / Challenges / Bases cyber), liste.
@@ -167,43 +159,29 @@ miray : compteur, filtres (Tout / Réseau / Challenges / Bases cyber), liste.
 - état vide soigné
 
 ### 5.7 Badges `#badges`
-miray : texte + lien.
-→ Nous : badges en **cartes holographiques** (tilt 3D + reflet irisé qui suit le pointeur), grille, lien vers TryHackMe.
+Badges en cartes de verre au reflet irisé (sans tilt), glyphes dessinés par nous, lien vers TryHackMe.
 
 ### 5.8 Contact `#reseaux`
-miray : liens + gros CTA Discord.
-→ Nous :
-- les particules convergent en **anneau / portail** ; le CTA « On se parle ? » est au centre, le portail accélère au survol
-- liens GitHub, TryHackMe, LinkedIn, email obfusqué ; handle Discord copiable avec toast « copié »
-- boutons magnétiques
+- carte sombre (logo, identité, réseaux en tuiles) + **grande carte citron** « Une *alternance* à proposer ? » avec le champ email (adresse révélée au clic, jamais en clair), lien CV
+- tous les réseaux en liste (handle Discord copiable avec toast)
 
 ### 5.9 Footer
-- wordmark géant « LUKE. » révélé par un footer sticky (la page se soulève dessus)
-- heure de Paris en direct, date du dernier build, « Retour en haut », crédit stack
+Ligne d'état (recherche une alternance · terminale · heure de Paris en direct), colonnes sections / projets / liens / le site (date du dernier build, code source, retour en haut), mentions.
 
 ### Navigation globale
-miray : barre fixe + menu overlay + lien d'évitement.
-→ Nous :
-- barre fixe minimaliste en `mix-blend-difference` ; le nom de la section courante se « décrypte » à chaque changement ; barre de progression du scroll
-- menu plein écran : liens énormes en stagger, index mono, aperçu au survol, focus trap, fermeture Échap
+- barre fixe : logo, liens au centre, pastille « recherche une alternance », boutons-icônes (terminal, mode calme, menu), CTA citron ; verre fumé dès qu'on descend ; fine barre de progression citron
+- menu plein écran : liens énormes en stagger, index, aperçu au survol, focus trap, fermeture Échap
 - lien d'évitement « Aller au contenu » conservé
-
----
 
 ## 6. Fonctionnalités signature
 
-1. **Scène 3D persistante « SIGNAL »** (§8)
-2. **Badge lanyard physique** (§5.2)
-3. **Terminal / palette de commandes** : `Ctrl+K`, `⌘K` ou `` ` `` ouvre un terminal en overlay. Commandes : `help`, `whoami`, `ls`, `cd <section>` (scroll vers la section), `cat about`, `projects`, `rooms --filter <catégorie>`, `open github|thm|discord`, `calm`, `clear`, `exit`, + easter egg `sudo hire-luke`. Autocomplétion Tab, historique ↑/↓, sortie en `aria-live`. Hint discret « ⌘K » dans la nav.
-4. **Mode calme** (toggle dans la nav, automatique si `prefers-reduced-motion`) : coupe la 3D lourde, Lenis et les pins ; reste un site éditorial beau et complet. Pensé pour les recruteurs pressés et les machines faibles.
-5. **Curseur custom** (point + anneau, `mix-blend-difference`, états lien / drag / voir) — désactivé sur tactile et en mode calme
-6. Effet « décryptage » sur labels et nav, compteurs animés, boutons magnétiques
-7. Easter egg **Konami code** (glitch de la scène + message)
-8. **Données GitHub au build** (§7)
-
-Bonus si tout le reste est fini : version anglaise (`/en`), sons d'UI discrets (désactivés par défaut).
-
----
+1. **Scène 3D persistante « FIBRE »** : ruban de fibres + rack 3D, bloom (§8)
+2. **Badge d'accès recto / verso** (§5.2)
+3. **Terminal / palette de commandes** : `Ctrl+K`, `⌘K` ou `` ` `` ouvre un terminal en overlay. Commandes : `help`, `whoami`, `ls`, `cd <section>`, `cat about`, `projects`, `rooms --filter <catégorie>`, `open github|thm|discord`, `calm`, `clear`, `exit`, + easter egg `sudo hire-luke`. Autocomplétion Tab, historique ↑/↓, sortie en `aria-live`.
+4. **Mode calme** (bouton dans la nav, automatique si `prefers-reduced-motion`) : coupe la 3D, Lenis et les pins ; reste un site complet (ruban en image statique, rack en dessin SVG).
+5. Effet « décryptage » sur les légendes, compteurs, barres et jauges animées. *(Curseur custom et boutons magnétiques retirés : rien ne suit la souris.)*
+6. Easter egg **Konami code** (glitch du ruban + message)
+7. **Données GitHub au build** (§7)
 
 ## 7. Architecture & déploiement GitHub Pages
 
@@ -218,27 +196,21 @@ Bonus si tout le reste est fini : version anglaise (`/en`), sons d'UI discrets (
 
 ---
 
-## 8. Scène 3D — spécification
+## 8. Scène 3D — spécification *(refaite le 2026-10-07, direction FIBRE)*
 
-- **Un seul `<Canvas>`** fixe en arrière-plan, monté une fois, importé en `dynamic(..., { ssr: false })` **après** le premier rendu du texte : le LCP doit être du texte, pas la 3D. Le badge lanyard et les micro-scènes passent par `<View>` de drei (un seul contexte WebGL) — sinon, justifie dans `PLAN.md`.
-- **Particules** : `THREE.Points` + `ShaderMaterial` custom. Desktop ~60–80k particules, mobile ~15–20k, ajusté en direct par `PerformanceMonitor`. Chaque forme cible est un nuage de N points **généré procéduralement** (aucun modèle 3D téléchargé), stocké en attribut ou en DataTexture :
-  1. **terrain de signal** — lignes d'onde empilées en profondeur + bruit (remplace la sphère « noyau » à la demande de Luke)
-  2. **onde** — sinus → carré (uniform de transition)
-  3. **circuit** — pistes orthogonales sur un plan + pads
-  4. **rack 10"** — boîtes échantillonnées (cadre + unités), avec des points « LED » marqués
-  5. **portail** — tore / anneau
-- **Morph** : le vertex shader mélange forme A → forme B avec un délai par particule (stagger), un bruit de curl pendant la transition, taille et luminosité modulées. La progression vient d'un ScrollTrigger en `scrub` par chapitre, écrite dans une ref lue par `useFrame` (zéro re-render React).
-- **Interaction** : parallaxe caméra douce à la souris ; le pointeur repousse / déforme localement les particules (raycast sur un plan) ; impulsions qui parcourent le circuit.
-- **Post-process** (desktop seulement, coupé si les FPS chutent) : Bloom léger (`mipmapBlur`), Noise, Vignette.
-- **Perf** : `dpr={[1, 1.75]}`, `PerformanceMonitor` + `AdaptiveDpr`, rendu en pause quand l'onglet est caché ou la scène hors champ (`frameloop="demand"` + `invalidate`), disposal propre, aucune allocation dans `useFrame`. Objectif : jamais sous 55 fps sur un laptop récent.
-- **Fallback** : WebGL indisponible ou mode calme → gradient / visuel statique soigné ; le site reste complet.
-
----
+- **Un seul `<Canvas>`** R3F fixe derrière la page, importé en `dynamic(..., { ssr: false })` quand le navigateur est libre, après le premier rendu du texte. Rendu piloté par `gsap.ticker` juste après Lenis (`frameloop="never"` + `advance`) : la 3D ne décroche jamais du texte.
+- **Caméra liée au scroll** : 10 unités monde = la hauteur de l'écran ; la caméra suit `scrollY` au pixel près, donc le ruban est « imprimé » sur la page.
+- **Ruban** : un chemin Catmull-Rom passant par des ancres posées dans chaque section (fraction de hauteur + décalage), échantillonné dans une `DataTexture` flottante (position + écartement, normale + surbrillance, tangente). ~300 fibres instanciées, extrudées à l'écran dans le vertex shader (épaisseur en pixels), torsion et dérive par fibre, impulsions lumineuses, couleurs HDR. Poussières et bokeh en `Points`. Seule la portion visible du chemin est dessinée. Apparition depuis le sommet du héros.
+- **Rack** : modélisé en code (boîtes arrondies, façades dessinées en canvas avec texture émissive), éclairé (lumières qui voyagent avec lui, environnement PMREM), posé chaque image sur la carte collante du lab ; vue éclatée et unité active pilotées par ScrollTrigger via une ref (`rackState`).
+- **Post-process** : Bloom `mipmapBlur`, tone mapping ACES, vignette. Coupé en rendu logiciel.
+- **Flou** : pas dans la 3D, en CSS (`backdrop-filter`) sur les sections denses et les panneaux.
+- **Perf** : `dpr` 1 → 1,5, aucune allocation dans `useFrame`. **Sans GPU** (rendu logiciel détecté par le nom du moteur WebGL) : pas de 3D, et le flou CSS en direct est remplacé par un verre opaque. **Téléphone : pas de 3D pour l'instant** (demande de Luke), image statique du ruban.
+- **Fallback** : WebGL indisponible, mode calme ou téléphone → ruban en SVG statique (calculé au build avec les mêmes formules) et rack isométrique SVG.
 
 ## 9. Qualité, perf, accessibilité, SEO
 
 - **Lighthouse** (build de prod) : Performance ≥ 80 mobile / ≥ 90 desktop, Accessibilité ≥ 95, Best Practices ≥ 95, SEO ≥ 95. CLS < 0,05.
-- JS initial minimal : three / R3F / rapier dans des chunks chargés après l'affichage ; rapier seulement à l'approche de la section À propos.
+- JS initial minimal : three / R3F / postprocessing dans un chunk chargé après l'affichage, et seulement sur ordinateur.
 - 60 fps visés au scroll sur desktop ; aucun à-coup pendant le chargement de la 3D.
 - Responsive impeccable de 360 px à 2560 px ; tactile pensé (rien qui n'existe qu'au survol).
 - **Accessibilité** : HTML sémantique, `lang="fr"`, un seul `h1`, focus visible stylé, tout utilisable au clavier (menu, terminal, filtres), contrastes AA, canvas `aria-hidden` avec le contenu équivalent en HTML, `prefers-reduced-motion` respecté partout.
@@ -274,8 +246,8 @@ Bonus si tout le reste est fini : version anglaise (`/en`), sons d'UI discrets (
 
 - [ ] `npm run lint`, `npm run typecheck` et `npm run build` passent ; `out/` contient le site exporté
 - [ ] Toutes les sections du §5 existent avec leurs ancres, en desktop (1440×900) et mobile (390×844)
-- [ ] Les 5 formes 3D et leurs transitions au scroll fonctionnent ; le fallback sans WebGL est propre
-- [ ] Badge lanyard draggable (souris + tactile), avec fallback
+- [ ] Le ruban 3D suit la page de section en section (net / flouté), le rack 3D s'éclate et suit les étapes ; le fallback sans WebGL est propre *(remplace les 5 formes de particules, direction FIBRE du 2026-10-07)*
+- [ ] Badge d'accès recto / verso au clic et au clavier *(remplace le lanyard, retiré à la demande de Luke)*
 - [ ] Terminal : ouverture au clavier, `help`, autocomplétion, historique, `cd`, `calm`, `sudo hire-luke`
 - [ ] Mode calme + `prefers-reduced-motion` : tout le contenu accessible, aucune animation lourde
 - [ ] Filtres, recherche et tri des rooms fonctionnels et animés
