@@ -5,24 +5,17 @@ import { defineConfig, devices } from '@playwright/test'
 const BASE = '/e2e-base'
 const PORT = 4173
 
-// WebGL logiciel (SwiftShader) pour que la scène 3D tourne aussi en headless.
-const webglArgs = ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist']
-
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  // Un seul navigateur à la fois : sans GPU (WebGL et composition en logiciel), deux en parallèle
-  // se disputent les cœurs et les délais sautent sur une petite machine.
-  workers: 1,
   timeout: 60_000,
   expect: { timeout: 10_000 },
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL: `http://localhost:${PORT}${BASE}/`,
     trace: 'retain-on-failure',
-    launchOptions: { args: webglArgs },
   },
   projects: [
     {

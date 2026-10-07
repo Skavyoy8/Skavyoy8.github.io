@@ -23,7 +23,7 @@ const server = spawn('node', ['scripts/serve-out.mjs'], { env: { ...process.env,
 await new Promise((r) => setTimeout(r, 800))
 
 const chromePath = chromium.executablePath()
-const flags = '--headless=new --no-sandbox --enable-unsafe-swiftshader --use-angle=swiftshader --ignore-gpu-blocklist'
+const flags = '--headless=new --no-sandbox'
 let failed = false
 
 try {

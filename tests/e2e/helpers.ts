@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, type Page, type TestInfo } from '@playwright/test'
 
-export const SECTIONS = ['accueil', 'a-propos', 'interets', 'lab', 'parcours', 'rooms', 'badges', 'reseaux'] as const
+export const SECTIONS = ['accueil', 'a-propos', 'interets', 'homelab', 'lab', 'parcours', 'pratique', 'reseaux'] as const
 
 /** Collecte les erreurs console et les exceptions de la page. */
 export function watchErrors(page: Page) {
@@ -13,33 +13,28 @@ export function watchErrors(page: Page) {
   return errors
 }
 
-/** Saute le préloader (déjà vu dans la session). */
-export async function skipPreloader(page: Page) {
-  await page.addInitScript(() => sessionStorage.setItem('skavyoy:booted', '1'))
-}
-
 export async function gotoHome(page: Page) {
   await page.goto('./')
   await expect(page.locator('h1')).toHaveCount(1)
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true')
 }
 
-/** Parcourt toute la page pour déclencher les révélations au scroll. */
+/** Parcourt toute la page pour déclencher les apparitions au scroll. */
 export async function scrollThrough(page: Page) {
   await page.evaluate(async () => {
     const step = Math.round(window.innerHeight * 0.6)
     for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
-      window.scrollTo(0, y)
-      await new Promise((r) => setTimeout(r, 70))
+      window.scrollTo({ top: y, behavior: 'instant' })
+      // Attendre que la position soit vraiment dessinée, même sur une machine chargée.
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
+      await new Promise((r) => setTimeout(r, 40))
     }
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, behavior: 'instant' })
   })
-  // Les apparitions au scroll doivent être finies (opacité 1) avant de mesurer quoi que ce soit.
-  await page.waitForFunction(
-    () => [...document.querySelectorAll('[data-reveal="fade"], [data-reveal="stagger"] > *')].every((el) => getComputedStyle(el).opacity === '1'),
-    undefined,
-    { timeout: 15000 },
-  )
+  // Les apparitions doivent être finies (opacité 1) avant de mesurer quoi que ce soit.
+  await page.waitForFunction(() => [...document.querySelectorAll('[data-reveal]')].every((el) => getComputedStyle(el).opacity === '1'), undefined, {
+    timeout: 15000,
+  })
 }
 
 export async function expectNoSeriousA11yViolations(page: Page, testInfo: TestInfo) {
