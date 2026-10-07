@@ -8,13 +8,16 @@ test.describe('accueil', () => {
     await gotoHome(page)
     await expect(page.locator('html')).toHaveAttribute('lang', 'fr')
     for (const id of SECTIONS) await expect(page.locator(`#${id}`)).toBeAttached()
-    await expect(page.getByRole('heading', { level: 1, name: /Skavyoy/ })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: /Luke, alias Skavyoy/ })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Skavyoy, accueil/ })).toBeVisible()
     await expect(page.locator('a[href="#contenu"]')).toBeAttached()
     await scrollThrough(page)
     expect(errors).toEqual([])
   })
 
   test('0 violation axe serious/critical', async ({ page }, testInfo) => {
+    // Parcours complet de la page puis analyse axe : long sans GPU, délai triplé.
+    test.slow()
     await skipPreloader(page)
     await gotoHome(page)
     await scrollThrough(page)

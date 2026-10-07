@@ -13,7 +13,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  workers: 2,
+  // Un seul navigateur à la fois : sans GPU (WebGL et composition en logiciel), deux en parallèle
+  // se disputent les cœurs et les délais sautent sur une petite machine.
+  workers: 1,
   timeout: 60_000,
   expect: { timeout: 10_000 },
   reporter: [['list'], ['html', { open: 'never' }]],

@@ -51,6 +51,8 @@ test.describe('rooms', () => {
 
 test.describe('terminal', () => {
   test('ouverture clavier, help, autocomplétion, historique, sudo, calm, cd', async ({ page }) => {
+    // Une quinzaine d'étapes, dont deux bascules du mode calme : test long, délai triplé.
+    test.slow()
     const errors = watchErrors(page)
     await skipPreloader(page)
     await gotoHome(page)
@@ -98,23 +100,34 @@ test.describe('terminal', () => {
 })
 
 test.describe('mode calme et 3D', () => {
-  test('le mode calme coupe la 3D et garde tout le contenu', async ({ page }, testInfo) => {
+  test('le fond 3D (ordinateur seulement) se coupe en mode calme, le contenu reste', async ({ page }, testInfo) => {
     await skipPreloader(page)
     await gotoHome(page)
+    // L'image statique du ruban est toujours là, sous la 3D.
+    await expect(page.locator('.ribbon-poster')).toBeAttached()
     if (testInfo.project.name === 'reduced-motion') {
       await expect(page.locator('html')).toHaveAttribute('data-calm', 'true')
-    } else {
-      // La 3D ne se charge qu'à l'approche du Lab.
+    } else if (testInfo.project.name === 'mobile') {
+      // Sur téléphone, pas de 3D pour l'instant : l'image statique suffit.
+      await page.waitForTimeout(2500)
       await expect(page.locator('canvas')).toHaveCount(0)
-      await page.locator('#lab').scrollIntoViewIfNeeded()
-      await expect(page.locator('canvas')).toHaveCount(1, { timeout: 20000 })
-      await page.getByRole('button', { name: /Mode calme|Calme/ }).first().click()
+      await page.getByRole('button', { name: /Mode calme/ }).first().click()
+      await expect(page.locator('html')).toHaveAttribute('data-calm', 'true')
+    } else {
+      // Sur ordinateur, la scène (ruban + rack) arrive une fois la page affichée,
+      // sauf sans GPU (rendu logiciel, comme ici en CI) : l'image statique reste, c'est voulu.
+      await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true')
+      await page.waitForTimeout(3000)
+      const software = (await page.locator('html').getAttribute('data-render')) === 'software'
+      await expect(page.locator('canvas')).toHaveCount(software ? 0 : 1, { timeout: 20000 })
+      await page.getByRole('button', { name: /Mode calme/ }).first().click()
       await expect(page.locator('html')).toHaveAttribute('data-calm', 'true')
     }
     await expect(page.locator('canvas')).toHaveCount(0)
-    await expect(page.locator('.backdrop')).toBeAttached()
     await page.locator('#lab').scrollIntoViewIfNeeded()
+    // Le rack garde son équivalent accessible, et son dessin de secours en mode calme.
     await expect(page.getByRole('img', { name: /Plan du rack/ })).toBeVisible()
+    await expect(page.locator('.rack-fallback')).toBeVisible()
     await expect(page.locator('[data-badge]')).toBeAttached()
   })
 
@@ -137,8 +150,10 @@ test.describe('mode calme et 3D', () => {
   test('Konami code', async ({ page }) => {
     await skipPreloader(page)
     await gotoHome(page)
-    await page.locator('body').click({ position: { x: 5, y: 300 } })
+    // Un clic « brut » dans la page pour lui donner le focus clavier.
+    await page.mouse.click(5, 300)
     for (const key of ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']) await page.keyboard.press(key)
-    await expect(page.getByRole('status')).toContainText('Signal intercepté')
+    // Plusieurs zones « status » existent (toasts, sortie du curseur de signal) : on vise le toast par son texte.
+    await expect(page.getByRole('status').filter({ hasText: 'Signal intercepté' })).toBeVisible()
   })
 })

@@ -34,7 +34,12 @@ export async function scrollThrough(page: Page) {
     }
     window.scrollTo(0, 0)
   })
-  await page.waitForTimeout(1500)
+  // Les apparitions au scroll doivent être finies (opacité 1) avant de mesurer quoi que ce soit.
+  await page.waitForFunction(
+    () => [...document.querySelectorAll('[data-reveal="fade"], [data-reveal="stagger"] > *')].every((el) => getComputedStyle(el).opacity === '1'),
+    undefined,
+    { timeout: 15000 },
+  )
 }
 
 export async function expectNoSeriousA11yViolations(page: Page, testInfo: TestInfo) {
