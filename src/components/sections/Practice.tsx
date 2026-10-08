@@ -1,7 +1,6 @@
 import { ArrowIcon, delay, SectionHead } from '@/components/ui/Primitives'
 import { Fill, TodoMark } from '@/components/ui/Todo'
 import { difficulties, practiceCopy, roomCategories, tryhackme } from '@/content/tryhackme'
-import { Radar } from './SkillVisual'
 
 const dateFormat = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long', timeZone: 'Europe/Paris' })
 const formatDate = (iso: string) => dateFormat.format(new Date(`${iso}T12:00:00Z`))
@@ -24,7 +23,7 @@ export function Practice() {
   ]
   return (
     <section id="pratique" aria-labelledby="pratique-title" className="container-x relative py-28 sm:py-36">
-      <SectionHead id="pratique-title" index={practiceCopy.index} title={practiceCopy.title} intro={practiceCopy.intro} />
+      <SectionHead id="pratique-title" index={practiceCopy.index} command={practiceCopy.command} title={practiceCopy.title} intro={practiceCopy.intro} />
 
       <div className="card mt-16 overflow-hidden" data-reveal>
         <div className="grid items-center gap-10 p-7 sm:p-10 md:grid-cols-[1fr_auto]">
@@ -52,8 +51,13 @@ export function Practice() {
               </Fill>
             </p>
           </div>
-          <div className="mx-auto hidden md:block" aria-hidden="true">
-            <Radar className="size-56" />
+          {/* Le drapeau qu'on récupère à la fin d'un challenge CTF. */}
+          <div className="relative hidden w-72 md:block" aria-hidden="true">
+            <svg viewBox="0 0 120 120" className="mx-auto h-36 w-auto">
+              <path d="M30 108V14" stroke="rgb(255 255 255 / .35)" strokeWidth="2.4" strokeLinecap="round" />
+              <path className="flag-wave" d="M32 16c18-8 30 8 48 0s22-4 30 0v40c-8-4-12-8-30 0s-30-8-48 0Z" fill="rgb(200 255 46 / .12)" stroke="#c8ff2e" strokeWidth="1.6" strokeLinejoin="round" />
+            </svg>
+            <p className="mt-4 rounded-lg border border-accent/25 bg-accent/[0.06] px-3 py-2 text-center font-mono text-[0.72rem] text-accent">{practiceCopy.flag}</p>
           </div>
         </div>
         <dl className="grid border-t border-line sm:grid-cols-3">
@@ -117,15 +121,20 @@ export function Practice() {
         <ul className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
           {(tryhackme.badges.length ? tryhackme.badges : Array.from({ length: 4 }, () => null)).map((badge, i) => (
             <li key={badge?.name ?? i} className="card flex flex-col items-center p-6 text-center" data-reveal style={delay(i * 0.06)}>
-              <svg viewBox="0 0 64 72" className="h-20 w-auto" aria-hidden="true">
-                <path
-                  d="M32 3 60 19v34L32 69 4 53V19Z"
+              <svg viewBox="0 0 72 72" className="h-20 w-auto" aria-hidden="true">
+                <rect
+                  x="14"
+                  y="14"
+                  width="44"
+                  height="44"
+                  rx="10"
+                  transform="rotate(45 36 36)"
                   fill={badge ? 'rgb(200 255 46 / .08)' : 'none'}
                   stroke={badge ? '#c8ff2e' : 'rgb(255 255 255 / .22)'}
                   strokeDasharray={badge ? undefined : '4 5'}
                   strokeWidth="1.3"
                 />
-                <path d="M32 24v24M20 36h24" stroke="rgb(255 255 255 / .25)" strokeWidth="1.3" strokeLinecap="round" />
+                <path d="M36 27v18M27 36h18" stroke="rgb(255 255 255 / .25)" strokeWidth="1.3" strokeLinecap="round" />
               </svg>
               <p className="mt-4 font-medium text-fg/90">{badge ? badge.name : practiceCopy.badgeSlot}</p>
               {badge ? <p className="mt-1 text-[0.85rem] text-muted">{badge.description}</p> : null}

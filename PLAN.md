@@ -141,11 +141,18 @@ tests/e2e/                       Playwright : desktop 1440×900, mobile 390×844
 - [ ] P8.7 Lighthouse — desktop 94 / 100 / 100 / 100 ✔ ; mobile 54 en simulation locale ✘ (le contenu s'affiche à 0,7 s mesuré avec le CPU ralenti 4×, mais Lighthouse compte le JS de base de React / Next comme dépendance du LCP)
 - [x] P8.8 Image OG régénérée dans le nouveau style — `npm run assets:og`
 
+### P9 — Identité propre (2026-10-08, « presque copier-coller »)
+- [x] P9.1 Fond « paysage de signal » (lignes d'onde en perspective) à la place des rubans de miray — capture 1440 px
+- [x] P9.2 Héros : `skavyoy_` avec curseur, carte « scan nmap », bandeau d'outils ; plus de carte photo inclinée, de point ni de « Descendre » — captures 1440 / 390 / reduced-motion
+- [x] P9.3 Sections ouvertes par une commande, titres en deux tons, formulations propres (plus aucun titre de miray)
+- [x] P9.4 À propos `neofetch`, compétences en bento (ports, OSI, shell, oscilloscope), drapeau CTF, contact en panneau, nav pleine largeur, pseudo géant en pied de page — captures
+- [x] P9.5 Image OG dans le nouveau style — `npm run assets:og`
+
 ## Journal
 
 - 2026-10-07, session 1 : direction SIGNAL, particules, lanyard, 22 tests e2e sur 33 verts.
 - 2026-10-07, session 2 : fond calme, badge recto / verso, puis changement de direction vers FIBRE sur la vidéo de Luke.
-- 2026-10-08, session 3 : FIBRE jugé lourd par l'entourage de Luke → direction SIMPLE d'après miray-28.github.io ; 3D et libs d'animation retirées.
+- 2026-10-08, session 3 : FIBRE jugé lourd par l'entourage de Luke → direction SIMPLE d'après miray-28.github.io ; 3D et libs d'animation retirées. Puis « presque copier-coller » → identité terminal / signal propre au site.
 
 Corrigé en route (à retenir) :
 - un texte en `background-clip: text` (couleur transparente) n'est pas compté par Chrome comme contenu visible (LCP) → dégradé métal fait avec un `mask-image`.

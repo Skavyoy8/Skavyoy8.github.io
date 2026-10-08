@@ -22,9 +22,10 @@ export type Project = {
 }
 
 export const labCopy = {
-  index: '04 / PROJETS',
-  title: 'Ce que je construis.',
-  intro: 'Des projets pour apprendre en vrai, du rack au code.',
+  index: '04',
+  command: 'ls ~/projets',
+  title: ['Ce que je construis,', 'du rack au code.'] as const,
+  intro: 'Des projets pour apprendre en vrai, pas juste en théorie.',
   reposTitle: 'Sur GitHub',
   reposIntro: 'Mes repos publics, récupérés automatiquement à chaque build.',
   details: 'Lire le détail',

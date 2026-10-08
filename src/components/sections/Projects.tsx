@@ -11,7 +11,7 @@ const linkClass = 'group/link inline-flex items-center gap-2 text-[0.9rem] text-
 export function Projects({ repos }: { repos: Repo[] }) {
   return (
     <section id="lab" aria-labelledby="lab-title" className="container-x relative py-28 sm:py-36">
-      <SectionHead id="lab-title" index={labCopy.index} title={labCopy.title} intro={labCopy.intro} />
+      <SectionHead id="lab-title" index={labCopy.index} command={labCopy.command} title={labCopy.title} intro={labCopy.intro} />
 
       <ul className="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, i) => (

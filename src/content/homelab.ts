@@ -14,8 +14,9 @@ export type RackUnit = {
 export const homelab = {
   name: 'Homelab MS-01',
   section: {
-    index: '03 / HOMELAB',
-    title: 'Mon homelab.',
+    index: '03',
+    command: 'cat homelab.conf',
+    title: ['Un vrai lab,', 'sur mon bureau.'],
     intro: 'Un rack 10 pouces de 8U, posé sur un bureau, autour d’un mini-serveur sous Proxmox. Voici le plan, unité par unité.',
     rackLabel: 'Plan du rack 8U du homelab, de haut en bas',
     servicesTitle: 'Services en continu',

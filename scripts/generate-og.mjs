@@ -12,20 +12,20 @@ canvas{position:absolute;inset:0}
 .pill{position:absolute;left:80px;top:150px;font-family:'Geist Mono',monospace;font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:rgba(241,241,243,.75);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:9px 20px;display:flex;gap:14px;align-items:center}
 .pill i{width:8px;height:8px;border-radius:50%;background:#c8ff2e;box-shadow:0 0 10px #c8ff2e}
 h1{position:absolute;left:72px;top:205px;font-size:190px;line-height:1;letter-spacing:-.065em;font-weight:600;color:#f4f4f7;-webkit-mask-image:linear-gradient(180deg,#000 20%,rgba(0,0,0,.52))}
-.dot{position:absolute;left:746px;top:354px;width:30px;height:30px;border-radius:50%;background:#c8ff2e;box-shadow:0 0 36px rgba(200,255,46,.7)}
+.dot{position:absolute;left:748px;top:372px;width:80px;height:17px;background:#c8ff2e;box-shadow:0 0 30px rgba(200,255,46,.7)}
 p{position:absolute;left:80px;top:445px;font-size:30px;line-height:1.45;color:rgba(241,241,243,.8)}
 </style></head><body><canvas id="c" width="1200" height="630"></canvas><div class="glow"></div>
-<div class="pill"><i></i>Cybersécurité / Réseaux / Bac Pro CIEL</div>
+<div class="pill"><i></i>Disponible · alternance BTS SIO SISR · 2027</div>
 <h1>skavyoy</h1><span class="dot"></span>
 <p>Moi, c’est Luke. Linux, réseaux et cybersécurité.<br>Je cherche une alternance en BTS SIO SISR.</p>
 <script>
-// Les deux rubans du fond du site, figés.
-const c=document.getElementById('c').getContext('2d');const W=1200,H=630;
-const R=[{y0:.86,slope:-.62,amp:.08,freq:2,spread:.16,twist:1.3,phase:0,alpha:1},{y0:.3,slope:.46,amp:.05,freq:2.8,spread:.08,twist:1.9,phase:2.1,alpha:.55}];
-c.lineWidth=.9;
-R.forEach((rb,r)=>{const g=c.createLinearGradient(0,0,W,0);g.addColorStop(0,'rgba(200,205,220,0)');g.addColorStop(.3,'rgba(205,212,228,.5)');g.addColorStop(.62,'rgba(218,236,190,.5)');g.addColorStop(.84,'rgba(200,255,46,.34)');g.addColorStop(1,'rgba(143,216,255,.05)');c.strokeStyle=g;
-for(let i=0;i<34;i++){const th=i/33*Math.PI;c.globalAlpha=rb.alpha*(.14+.46*Math.sin(th));c.beginPath();
-for(let x=-40;x<=W+40;x+=12){const u=x/W,t=4;const base=H*(rb.y0+rb.slope*u+rb.amp*Math.sin(u*rb.freq+rb.phase+t*.1));const sp=H*rb.spread*(.55+.45*Math.sin(u*2.2+rb.phase));const y=base+sp*Math.cos(th+u*rb.twist+t*.2)+H*.01*Math.sin(u*7+i*.37+r);x>-40?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}});
+// Le paysage de signal du fond du site, figé.
+const c=document.getElementById('c').getContext('2d');const W=1200,H=630,N=30;
+const g=c.createLinearGradient(0,0,W,0);g.addColorStop(0,'rgba(190,196,212,0)');g.addColorStop(.22,'rgba(195,202,220,.9)');g.addColorStop(.62,'rgba(200,255,46,1)');g.addColorStop(.88,'rgba(143,216,255,.75)');g.addColorStop(1,'rgba(143,216,255,0)');
+for(let i=0;i<N;i++){const d=i/(N-1),base=H*(.5+.56*Math.pow(d,1.55)),amp=H*.11*(.3+.7*d),pts=[];
+for(let x=0;x<=W;x+=10){const u=x/W,env=Math.exp(-Math.pow(u-.66,2)/(2*.17*.17)),w=.55*Math.sin(u*9+i*.55-1.4)+.3*Math.sin(u*17.5+i*1.3+2)+.45*Math.sin(u*4.2-i*.31+.8);pts.push([x,base-amp*env*(.75+.5*w)])}
+c.globalAlpha=1;c.fillStyle='#050506';c.beginPath();pts.forEach(([x,y],k)=>k?c.lineTo(x,y):c.moveTo(x,y));c.lineTo(W,base+4);c.lineTo(0,base+4);c.closePath();c.fill();
+c.globalAlpha=.07+.5*Math.pow(d,1.3);c.strokeStyle=g;c.lineWidth=1.2;c.beginPath();pts.forEach(([x,y],k)=>k?c.lineTo(x,y):c.moveTo(x,y));c.stroke()}
 </script></body></html>`
 
 const icon = `<!doctype html><html><head><style>*{margin:0}body{width:180px;height:180px;background:#050506;display:grid;place-items:center}</style></head><body>

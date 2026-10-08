@@ -1,72 +1,129 @@
 import Image from 'next/image'
-import { ArrowIcon, buttonGhost, buttonPrimary, delay, vars } from '@/components/ui/Primitives'
+import { ArrowIcon, buttonGhost, buttonPrimary, Caret, delay, vars } from '@/components/ui/Primitives'
 import { hero, site } from '@/content/site'
 import { asset } from '@/lib/asset'
 
-function ChipIcon({ kind }: { kind: 'rack' | 'target' }) {
+/** Mes domaines présentés comme les ports ouverts d'une machine, ligne par ligne. */
+function ScanCard() {
+  const s = hero.scan
   return (
-    <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" aria-hidden="true">
-      {kind === 'rack' ? (
-        <>
-          <rect x="3.5" y="3" width="13" height="4" rx="1" />
-          <rect x="3.5" y="8" width="13" height="4" rx="1" />
-          <rect x="3.5" y="13" width="13" height="4" rx="1" />
-          <path d="M6 5h.01M6 10h.01M6 15h.01" strokeWidth="2" />
-        </>
-      ) : (
-        <>
-          <circle cx="10" cy="10" r="6.5" />
-          <circle cx="10" cy="10" r="3" />
-          <path d="M10 1.5v3M10 15.5v3M1.5 10h3M15.5 10h3" />
-        </>
-      )}
-    </svg>
+    <figure className="card overflow-hidden rounded-[1.4rem] bg-[#0b0b0e] shadow-[0_50px_120px_-50px_rgb(0_0_0/0.95)]">
+      <span className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent" aria-hidden="true" />
+      <div className="flex items-center gap-3 border-b border-line px-5 py-3.5">
+        <span className="flex gap-1.5" aria-hidden="true">
+          <span className="size-2.5 rounded-full bg-white/12" />
+          <span className="size-2.5 rounded-full bg-white/12" />
+          <span className="size-2.5 rounded-full bg-accent/80" />
+        </span>
+        <span className="mono text-muted">{s.title}</span>
+      </div>
+      <div className="px-5 py-5 font-mono text-[0.7rem] leading-[1.9] sm:px-6 sm:text-[0.78rem]">
+        <p className="scan-line" style={delay(0.35)}>
+          <span className="text-accent">$</span> <span className="text-fg">{s.command}</span>
+        </p>
+        <p className="scan-line text-muted" style={delay(0.5)}>
+          {s.start}
+        </p>
+        <div className="mt-3" role="table" aria-label="Mes domaines">
+          <div role="row" className="scan-line grid grid-cols-[5rem_3.6rem_1fr] text-muted/80" style={delay(0.62)}>
+            {s.head.map((h) => (
+              <span key={h} role="columnheader">
+                {h}
+              </span>
+            ))}
+          </div>
+          {s.ports.map((row, i) => {
+            const listening = row.state === 'listen'
+            return (
+              <div
+                key={row.port}
+                role="row"
+                className={`scan-line -mx-2 grid grid-cols-[5rem_3.6rem_1fr] rounded-md px-2 ${listening ? 'bg-accent/[0.07] text-accent' : ''}`}
+                style={delay(0.75 + i * 0.12)}
+              >
+                <span role="cell" className={listening ? '' : 'text-fg/70'}>
+                  {row.port}
+                </span>
+                <span role="cell" className={listening ? 'pulse-dot' : 'text-accent'}>
+                  {row.state}
+                </span>
+                <span role="cell" className={listening ? '' : 'text-fg/90'}>
+                  {row.service}
+                  {'note' in row ? <span className="ml-2 hidden text-accent/70 sm:inline">{row.note}</span> : null}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+        <p className="scan-line mt-3 text-muted" style={delay(0.75 + s.ports.length * 0.12)}>
+          {s.done}
+        </p>
+      </div>
+      <figcaption className="flex items-center gap-3 border-t border-line px-5 py-4 sm:px-6">
+        <Image src={asset(site.avatar)} alt="" width={40} height={40} className="size-10 rounded-full border border-line-strong object-cover grayscale" />
+        <span className="min-w-0">
+          <span className="block text-[0.9rem] font-medium">{s.who}</span>
+          <span className="mono block truncate text-muted">{s.where}</span>
+        </span>
+      </figcaption>
+    </figure>
   )
 }
 
-/** L'accueil : le pseudo en grand, deux lignes pour dire qui je suis, et la carte de profil inclinée. */
+/** Bandeau d'outils qui défile doucement en bas de l'accueil (figé en mode calme). */
+function Ticker() {
+  const items = hero.ticker.map((tool) => (
+    <li key={tool} className="flex shrink-0 items-center gap-8 pr-8">
+      {tool}
+      <span className="text-accent/60" aria-hidden="true">
+        /
+      </span>
+    </li>
+  ))
+  return (
+    <div className="ticker border-y border-line py-4" aria-label="Mes outils">
+      <div className="ticker-track label flex w-max text-fg/55">
+        <ul className="flex">{items}</ul>
+        <ul className="flex" aria-hidden="true">
+          {items}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+/** L'accueil : le pseudo en grand suivi d'un curseur, qui je suis, et la carte « scan ». */
 export function Hero() {
   const letters = [...hero.name]
   return (
-    <section id="accueil" aria-labelledby="accueil-title" className="relative flex min-h-svh flex-col pt-36 sm:pt-40 lg:pt-44">
-      <div className="container-x grid flex-1 items-center gap-x-8 gap-y-16 pb-24 lg:grid-cols-12">
+    <section id="accueil" aria-labelledby="accueil-title" className="relative flex min-h-svh flex-col pt-28 sm:pt-32">
+      <div className="container-x grid flex-1 items-center gap-x-12 gap-y-14 pb-16 lg:grid-cols-12">
         <div className="lg:col-span-7">
-          <p className="fade-up label inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-line bg-white/[0.02] px-4 py-2 text-fg/75">
-            <span className="pulse-dot size-1.5 rounded-full bg-accent shadow-[0_0_8px_#c8ff2e]" aria-hidden="true" />
-            {hero.tags.map((tag, i) => (
-              <span key={tag} className={`items-center gap-3 ${i === hero.tags.length - 1 ? 'hidden sm:flex' : 'flex'}`}>
-                {i ? (
-                  <span className="text-muted/60" aria-hidden="true">
-                    /
-                  </span>
-                ) : null}
-                {tag}
-              </span>
-            ))}
+          <p className="fade-up mono flex items-center gap-3 text-fg/75">
+            <span className="pulse-dot size-2 rounded-full bg-accent shadow-[0_0_10px_#c8ff2e]" aria-hidden="true" />
+            {hero.status}
           </p>
 
-          <h1 id="accueil-title" className="mt-8 text-[clamp(4.2rem,11.5vw,10.5rem)] leading-[0.92] font-semibold tracking-[-0.065em]">
+          <h1 id="accueil-title" className="mt-7 text-[clamp(4rem,11vw,10rem)] leading-[0.95] font-semibold tracking-[-0.065em]">
             <span className="sr-only">{hero.srName}</span>
-            <span aria-hidden="true" className="inline-block pb-[0.08em]">
+            <span aria-hidden="true" className="inline-flex items-baseline pb-[0.06em]">
               {letters.map((letter, i) => (
                 <span key={i} className="rise text-metal inline-block" style={vars({ '--i': i })}>
                   {letter}
                 </span>
               ))}
-              <span
-                className="rise ml-[0.04em] inline-block size-[0.16em] rounded-full bg-accent shadow-[0_0_28px_rgb(200_255_46/0.7)]"
-                style={vars({ '--i': letters.length })}
-              />
+              <Caret className="ml-[0.06em] h-[0.09em] w-[0.42em] translate-y-[0.02em] shadow-[0_0_24px_rgb(200_255_46/0.7)]" />
             </span>
           </h1>
 
-          <div className="fade-up mt-7 space-y-1 text-[1.1rem] leading-relaxed text-fg/80 sm:text-[1.3rem]" style={delay(0.45)}>
-            {hero.lines.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-          </div>
+          <p className="fade-up mt-6 text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium tracking-[-0.03em]" style={delay(0.4)}>
+            {hero.lead}
+          </p>
+          <p className="fade-up mt-3 max-w-xl text-pretty text-[1.05rem] leading-relaxed text-muted" style={delay(0.48)}>
+            {hero.intro}
+          </p>
 
-          <div className="fade-up mt-10 flex flex-wrap gap-3" style={delay(0.55)}>
+          <div className="fade-up mt-10 flex flex-wrap gap-3" style={delay(0.56)}>
             <a href={hero.ctaPrimary.href} className={buttonPrimary}>
               {hero.ctaPrimary.label}
               <ArrowIcon direction="down" className="size-4 transition-transform duration-500 group-hover:translate-y-0.5" />
@@ -76,79 +133,14 @@ export function Hero() {
               <ArrowIcon className="size-4 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </div>
-
-          <ul className="fade-up mono mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 text-muted" style={delay(0.65)}>
-            {hero.meta.map((item, i) => (
-              <li key={item} className="flex items-center gap-4">
-                {i ? (
-                  <span className="text-accent/70" aria-hidden="true">
-                    +
-                  </span>
-                ) : null}
-                {item}
-              </li>
-            ))}
-          </ul>
         </div>
 
-        {/* Carte de profil : décorative, l'identité est déjà dans le titre. */}
-        <div className="relative mx-auto w-full max-w-[420px] lg:col-span-5 lg:mr-0" aria-hidden="true">
-          <div className="orbit -inset-[18%] hidden sm:block" />
-          <div className="orbit -inset-[38%] hidden sm:block" />
-          <div className="fade-up" style={delay(0.3)}>
-            <div className="float">
-              <div className="hero-card card overflow-hidden rounded-[1.6rem] bg-[#0d0d10] p-3">
-                <div className="flex items-center justify-between px-2 pt-1 pb-3">
-                  <span className="text-[0.95rem] font-semibold tracking-tight">{hero.card.handle}</span>
-                  <ArrowIcon className="size-4 text-muted" />
-                </div>
-                <div className="hero-card-photo relative aspect-square overflow-hidden rounded-[1.1rem] border border-line">
-                  <Image src={asset(site.avatar)} alt="" width={236} height={236} priority className="size-full object-cover contrast-[1.08] grayscale" />
-                  <span className="corners" />
-                </div>
-                <div className="label flex items-center justify-between px-2 pt-3 pb-1 text-muted">
-                  <span>{hero.card.org}</span>
-                  <span>{hero.card.index}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {hero.card.chips.map((chip, i) => (
-            <div
-              key={chip.kicker}
-              className={`fade-up absolute hidden sm:block ${i === 0 ? '-top-6 -right-4 xl:-right-10' : '-bottom-12 -left-6 xl:-left-12'}`}
-              style={delay(0.6 + i * 0.12)}
-            >
-              <div className="float" style={delay(-2 - i * 2.5)}>
-                <div className="card flex items-center gap-3 rounded-2xl bg-[#0f0f12]/95 py-3 pr-5 pl-3 shadow-[0_20px_60px_-20px_rgb(0_0_0/0.9)]">
-                  <span className="grid size-9 place-items-center rounded-xl border border-line bg-white/[0.03] text-accent">
-                    <ChipIcon kind={chip.icon} />
-                  </span>
-                  <span>
-                    <span className="label block text-[0.625rem] text-muted">{chip.kicker}</span>
-                    <span className="block text-[1.05rem] leading-tight font-semibold tracking-tight">{chip.value}</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="fade-up mx-auto w-full max-w-[30rem] lg:col-span-5 lg:mr-0" style={delay(0.25)}>
+          <ScanCard />
         </div>
       </div>
 
-      <p className="label pointer-events-none absolute top-1/2 right-5 hidden -translate-y-1/2 rotate-90 text-muted/60 xl:block" aria-hidden="true">
-        {hero.side}
-      </p>
-
-      <div className="container-x">
-        <div className="mono flex items-center justify-end border-t border-line py-6 text-muted sm:justify-between">
-          <span className="hidden sm:inline">{hero.footLeft}</span>
-          <a href="#a-propos" className="group flex items-center gap-3 transition-colors hover:text-fg">
-            {hero.scroll}
-            <ArrowIcon direction="down" className="size-4 transition-transform duration-500 group-hover:translate-y-1" />
-          </a>
-        </div>
-      </div>
+      <Ticker />
     </section>
   )
 }

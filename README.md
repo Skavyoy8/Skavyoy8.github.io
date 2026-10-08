@@ -1,7 +1,7 @@
 # Skavyoy — portfolio
 
 Le portfolio de Luke (Skavyoy), élève en Bac Pro CIEL : cybersécurité, réseaux, Linux et électronique.
-Un site d'une page en export statique, simple et fluide : un fond étoilé où ondulent des fils fins, des cartes sombres et le rack du homelab dessiné en CSS.
+Un site d'une page en export statique, simple et fluide, à l'esprit terminal : un fond où ondulent des lignes de signal, des cartes sombres et le rack du homelab dessiné en CSS.
 
 En ligne : <https://skavyoy8.github.io>
 
