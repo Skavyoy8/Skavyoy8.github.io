@@ -18,26 +18,32 @@ export const site = {
 } as const
 
 export const hero = {
-  tags: ['Cybersécurité', 'Réseaux', 'Bac Pro CIEL'],
+  status: 'Disponible · alternance BTS SIO SISR · rentrée 2027',
   // Le h1 affiche le pseudo ; les lecteurs d'écran entendent aussi le prénom.
   name: 'skavyoy',
   srName: 'Luke, alias Skavyoy',
-  lines: ['Moi, c’est Luke. Linux, réseaux et cybersécurité.', 'Je cherche une alternance en BTS SIO SISR.'],
-  ctaPrimary: { label: 'Mes projets', href: '#lab' },
+  lead: 'Moi, c’est Luke.',
+  intro: 'Élève en terminale Bac Pro CIEL, je m’entraîne en cybersécurité, je monte mon homelab et je cherche une entreprise pour mon BTS SIO SISR en alternance.',
+  ctaPrimary: { label: 'Voir mes projets', href: '#lab' },
   ctaSecondary: { label: 'Me contacter', href: '#reseaux' },
-  meta: ['Terminale Bac Pro CIEL', 'France', '@Skavyoy8'],
-  card: {
-    handle: 'skavyoy.',
-    org: 'CIEL / FR',
-    index: '01',
-    chips: [
-      { kicker: 'Homelab', value: 'Proxmox · 8U', icon: 'rack' },
-      { kicker: 'Objectif', value: 'BTS SIO SISR', icon: 'target' },
+  // La carte « scan » : mes domaines présentés comme les ports ouverts d'une machine.
+  scan: {
+    title: 'skavyoy — scan',
+    command: 'nmap -sV skavyoy.local',
+    start: 'Starting Nmap… hôte actif',
+    head: ['PORT', 'ÉTAT', 'SERVICE'],
+    ports: [
+      { port: '22/tcp', state: 'open', service: 'linux · debian' },
+      { port: '53/udp', state: 'open', service: 'réseaux · dns, lan, ipv6' },
+      { port: '443/tcp', state: 'open', service: 'cybersécurité · tryhackme' },
+      { port: '8006/tcp', state: 'open', service: 'proxmox · homelab 8U' },
+      { port: '2027/tcp', state: 'listen', service: 'alternance · bts sio sisr', note: '← je cherche' },
     ],
+    done: 'Scan terminé : 1 hôte, prêt à apprendre.',
+    who: 'Luke · Skavyoy',
+    where: 'Terminale Bac Pro CIEL · France',
   },
-  footLeft: 'Portfolio · Cybersécurité & réseaux',
-  side: '/ skavyoy · 2026',
-  scroll: 'Descendre',
+  ticker: ['Linux', 'Debian', 'Kali', 'nmap', 'Proxmox', 'VirtualBox', 'TCP/IP', 'DNS', 'VLAN', 'Git', 'Obsidian', 'Next.js'],
 } as const
 
 export const footer = {

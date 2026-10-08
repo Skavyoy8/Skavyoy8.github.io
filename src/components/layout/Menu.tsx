@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { type KeyboardEvent, useEffect, useRef } from 'react'
-import { delay, Wordmark } from '@/components/ui/Primitives'
+import { delay, LogoMark, Wordmark } from '@/components/ui/Primitives'
 import { navCopy, sections } from '@/content/nav'
 
 /** Menu plein écran (téléphone et tablette) : la liste des sections. */
@@ -50,9 +50,12 @@ export function Menu({ open, onClose, current }: { open: boolean; onClose: () =>
       onKeyDown={onKeyDown}
       className="overlay-in fixed inset-0 z-[70] flex flex-col bg-bg/[0.97]"
     >
-      <div className="container-x flex h-[5.5rem] shrink-0 items-center justify-between pt-3">
-        <Wordmark className="pl-5" />
-        <button type="button" onClick={onClose} className="mono mr-3 rounded-xl border border-line-strong px-4 py-2 hover:bg-white/5">
+      <div className="container-x flex h-16 shrink-0 items-center justify-between border-b border-line">
+        <span className="flex items-center gap-3">
+          <LogoMark className="size-7" />
+          <Wordmark className="text-[1.1rem]" />
+        </span>
+        <button type="button" onClick={onClose} className="mono rounded-full border border-line-strong px-4 py-1.5 hover:bg-white/5">
           {navCopy.close}
         </button>
       </div>

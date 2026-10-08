@@ -9,7 +9,7 @@ export function Homelab() {
   const ramUsed = homelab.services.always.reduce((sum, item) => sum + item.ram, 0)
   return (
     <section id="homelab" aria-labelledby="homelab-title" className="homelab container-x relative py-28 sm:py-36">
-      <SectionHead id="homelab-title" index={s.index} title={s.title} intro={s.intro}>
+      <SectionHead id="homelab-title" index={s.index} command={s.command} title={s.title} intro={s.intro}>
         <p className="mono mt-5 flex items-center gap-2 text-fg/80">
           <span className="pulse-dot size-1.5 rounded-full bg-accent" aria-hidden="true" />
           {homelab.status}

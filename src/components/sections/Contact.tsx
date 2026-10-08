@@ -46,74 +46,75 @@ function SocialIcon({ id }: { id: SocialId }) {
   )
 }
 
-const rowClass = 'card flex items-center gap-4 rounded-2xl px-5 py-4'
+const tileClass = 'flex h-full items-center gap-3 rounded-2xl border px-4 py-3.5'
 
+/** Contact : un grand panneau, l'appel à m'écrire à gauche, mes profils en tuiles à droite. */
 export function Contact() {
   return (
     <section id="reseaux" aria-labelledby="reseaux-title" className="container-x relative pt-28 pb-20 sm:pt-36">
-      <SectionHead id="reseaux-title" index={contactCopy.index} title={contactCopy.title} />
+      <SectionHead id="reseaux-title" index={contactCopy.index} command={contactCopy.command} title={contactCopy.title} />
 
-      <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:gap-10">
-        <div className="lg:col-span-5" data-reveal>
-          <p className="text-[clamp(1.8rem,3vw,2.6rem)] font-medium tracking-[-0.04em] text-accent">{contactCopy.handle}</p>
-          <p className="mt-4 max-w-xs text-pretty text-muted">{contactCopy.intro}</p>
-          <div className="relative mt-12 hidden size-40 lg:block" aria-hidden="true">
-            <span className="orbit inset-0" />
-            <span className="orbit inset-[22%] border-accent/30" />
-            <span className="orbit -inset-x-[30%] inset-y-[30%] rotate-[-24deg]" />
-            <span className="pulse-dot absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full bg-accent shadow-[0_0_14px_#c8ff2e]" />
+      <div className="card mt-16 grid overflow-hidden lg:grid-cols-12" data-reveal>
+        <span className="pointer-events-none absolute -top-40 -left-40 size-[28rem] rounded-full bg-accent/[0.07] blur-3xl" aria-hidden="true" />
+        <div className="relative p-8 sm:p-12 lg:col-span-7">
+          <p className="mono flex items-center gap-2.5 text-accent">
+            <span className="pulse-dot size-1.5 rounded-full bg-accent" aria-hidden="true" />
+            {contactCopy.pong}
+          </p>
+          <p className="mt-6 max-w-lg text-[1.15rem] leading-relaxed text-pretty text-fg/85">{contactCopy.intro}</p>
+          <EmailCta className="group mt-10 inline-flex items-center gap-4 rounded-full bg-accent py-5 pr-6 pl-8 text-[1.35rem] font-semibold tracking-[-0.02em] text-ink shadow-[0_18px_60px_-18px_rgb(200_255_46/0.7)] transition-[transform,background-color] duration-500 hover:-translate-y-0.5 hover:bg-[#d8ff6a]">
+            {contactCopy.cta}
+            <span className="grid size-10 place-items-center rounded-full bg-ink text-accent">
+              <ArrowIcon className="size-4 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </span>
+          </EmailCta>
+          <div className="mono mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-muted">
+            <EmailReveal className="text-fg/85 underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent" />
+            {isTodo(cv) ? (
+              <span className="flex items-center gap-2">
+                {contactCopy.cvLabel} <TodoMark hint={cv.todo} />
+              </span>
+            ) : (
+              <a href={asset(cv)} download className="text-fg/85 underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent">
+                {contactCopy.cvLabel}
+              </a>
+            )}
           </div>
         </div>
 
-        <ul className="grid gap-3 lg:col-span-7">
-          {socials.map((social, i) => (
-            <li key={social.id} data-reveal style={delay(i * 0.05)}>
-              {isTodo(social.href) ? (
-                <div className={rowClass}>
-                  <span className="grid size-10 place-items-center rounded-xl border border-line bg-white/[0.03] text-muted">
-                    <SocialIcon id={social.id} />
-                  </span>
-                  <span className="flex-1 font-medium text-fg/70">{social.label}</span>
-                  <TodoMark hint={social.href.todo} />
-                </div>
-              ) : (
-                <a href={social.href} target="_blank" rel="noopener noreferrer" className={`${rowClass} group transition-colors hover:border-white/15 hover:bg-white/[0.035]`}>
-                  <span className="grid size-10 place-items-center rounded-xl border border-line bg-white/[0.03] text-accent">
-                    <SocialIcon id={social.id} />
-                  </span>
-                  <span className="flex-1">
-                    <span className="block font-medium text-fg/95">{social.label}</span>
-                    <span className="mono block text-muted">
-                      <Fill value={social.handle}>{(handle) => handle}</Fill>
+        <div className="relative border-t border-line p-8 sm:p-12 lg:col-span-5 lg:border-t-0 lg:border-l">
+          <h3 className="label text-muted">{contactCopy.socialsTitle}</h3>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+            {socials.map((social, i) => (
+              <li key={social.id} data-reveal style={delay(0.1 + i * 0.04)}>
+                {isTodo(social.href) ? (
+                  <div className={`${tileClass} border-dashed border-white/10`}>
+                    <span className="text-muted">
+                      <SocialIcon id={social.id} />
                     </span>
-                  </span>
-                  <ArrowIcon className="size-4 text-muted transition-[transform,color] duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent" />
-                  <span className="sr-only">(nouvel onglet)</span>
-                </a>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mt-28 border-t border-line pt-14" data-reveal>
-        <p className="label text-muted">{contactCopy.kicker}</p>
-        <EmailCta className="group mt-5 inline-flex items-center gap-[0.25em] text-left text-[clamp(3rem,9vw,7.5rem)] leading-[0.95] font-medium tracking-[-0.06em] transition-colors hover:text-accent">
-          {contactCopy.cta}
-          <ArrowIcon className="size-[0.55em] text-accent transition-transform duration-500 group-hover:translate-x-2 group-hover:-translate-y-2" />
-        </EmailCta>
-        <div className="mono mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-muted">
-          <span>{contactCopy.ctaNote}</span>
-          <EmailReveal className="text-fg/85 underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent" />
-          {isTodo(cv) ? (
-            <span className="flex items-center gap-2">
-              {contactCopy.cvLabel} <TodoMark hint={cv.todo} />
-            </span>
-          ) : (
-            <a href={asset(cv)} download className="text-fg/85 underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent">
-              {contactCopy.cvLabel}
-            </a>
-          )}
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[0.9rem] text-fg/70">{social.label}</span>
+                      <TodoMark hint={social.href.todo} />
+                    </span>
+                  </div>
+                ) : (
+                  <a href={social.href} target="_blank" rel="noopener noreferrer" className={`${tileClass} group border-line-strong bg-white/[0.02] transition-colors hover:border-accent/50`}>
+                    <span className="text-accent">
+                      <SocialIcon id={social.id} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[0.9rem] font-medium text-fg/95">{social.label}</span>
+                      <span className="mono block truncate text-muted">
+                        <Fill value={social.handle}>{(handle) => handle}</Fill>
+                      </span>
+                    </span>
+                    <ArrowIcon className="size-3.5 shrink-0 text-muted transition-colors group-hover:text-accent" />
+                    <span className="sr-only">(nouvel onglet)</span>
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

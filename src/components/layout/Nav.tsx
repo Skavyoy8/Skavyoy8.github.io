@@ -3,16 +3,16 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { ArrowIcon, Wordmark } from '@/components/ui/Primitives'
+import { LogoMark, Wordmark } from '@/components/ui/Primitives'
 import { navCopy, navLinks, sections } from '@/content/nav'
 import { site } from '@/content/site'
 import { calmStore, useCalm } from '@/lib/calm'
 import { emit } from '@/lib/events'
 import { Menu } from './Menu'
 
-const iconButton = 'grid size-9 place-items-center rounded-xl border border-line text-fg/70 transition-colors hover:border-white/20 hover:text-fg'
+const iconButton = 'grid size-9 place-items-center rounded-full border border-line text-fg/70 transition-colors hover:border-white/20 hover:text-fg'
 
-/** Barre flottante en verre : le pseudo, les sections, puis terminal, mode calme et contact. */
+/** Barre fixe sur toute la largeur : le logo, les sections numérotées, puis terminal, mode calme et contact. */
 export function Nav() {
   const pathname = usePathname()
   const isHome = pathname === '/'
@@ -44,25 +44,32 @@ export function Nav() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 pt-3 sm:pt-4">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-bg/75 backdrop-blur-xl">
         <nav aria-label="Navigation principale" className="container-x">
-          <div className="flex h-16 items-center justify-between gap-4 rounded-2xl border border-line bg-[#0b0b0d]/75 pr-3 pl-5 shadow-[0_20px_50px_-30px_rgb(0_0_0/0.9)] backdrop-blur-xl sm:pl-7">
-            <Link href="/#accueil" aria-label={`${site.name}, accueil`}>
-              <Wordmark />
+          <div className="flex h-16 items-center justify-between gap-4">
+            <Link href="/#accueil" aria-label={`${site.name}, accueil`} className="flex items-center gap-3">
+              <LogoMark className="size-7" />
+              <Wordmark className="text-[1.1rem]" />
             </Link>
 
-            <ul className="hidden items-center gap-8 lg:flex">
-              {navLinks.map((link) => (
-                <li key={link.id}>
-                  <Link
-                    href={`/#${link.id}`}
-                    aria-current={isHome && current === link.id ? 'location' : undefined}
-                    className="relative py-2 text-[0.875rem] text-fg/60 transition-colors duration-300 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-fg after:transition-transform after:duration-500 hover:text-fg aria-[current=location]:text-fg aria-[current=location]:after:scale-x-100"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+            <ul className="hidden items-center gap-7 lg:flex">
+              {navLinks.map((link) => {
+                const index = sections.find((section) => section.id === link.id)?.index
+                return (
+                  <li key={link.id}>
+                    <Link
+                      href={`/#${link.id}`}
+                      aria-current={isHome && current === link.id ? 'location' : undefined}
+                      className="group flex items-baseline gap-1.5 text-[0.875rem] text-fg/60 transition-colors duration-300 hover:text-fg aria-[current=location]:text-fg"
+                    >
+                      <span className="mono text-[0.65rem] text-muted transition-colors group-aria-[current=location]:text-accent" aria-hidden="true">
+                        {index}
+                      </span>
+                      {link.label}
+                    </Link>
+                  </li>
+                )
+              })}
             </ul>
 
             <div className="flex items-center gap-2">
@@ -92,10 +99,9 @@ export function Nav() {
               </button>
               <Link
                 href="/#reseaux"
-                className="group ml-1 hidden items-center gap-3 rounded-xl border border-line-strong bg-white/[0.03] px-4 py-2 text-[0.85rem] font-medium transition-colors hover:border-white/25 hover:bg-white/[0.06] sm:inline-flex"
+                className="ml-1 hidden rounded-full bg-accent px-4 py-2 text-[0.85rem] font-semibold text-ink transition-colors hover:bg-[#d8ff6a] sm:inline-flex"
               >
                 {navCopy.cta}
-                <ArrowIcon className="size-3.5 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
               <button
                 ref={menuButton}

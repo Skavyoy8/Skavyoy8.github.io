@@ -65,13 +65,13 @@ export const email: Fillable<{ encoded: string }> = TODO('[À REMPLIR] adresse e
 export const cv: Fillable<string> = TODO('[À REMPLIR] CV en PDF (public/cv.pdf)')
 
 export const contactCopy = {
-  index: '07 / ME RETROUVER',
-  title: 'Mes profils.',
-  handle: '@Skavyoy8',
-  intro: 'Pour suivre mon parcours, ou me proposer une alternance.',
-  kicker: 'Une alternance à proposer ?',
+  index: '07',
+  command: 'ping skavyoy',
+  title: ['Parlons alternance,', 'ou juste de cyber.'] as const,
+  intro: 'Je cherche une entreprise pour mon BTS SIO SISR, dès la rentrée 2027. Une question sur le lab ou un projet : écris-moi.',
+  pong: '64 octets de skavyoy : prêt à discuter',
+  socialsTitle: 'Me retrouver',
   cta: 'Écris-moi',
-  ctaNote: 'BTS SIO SISR · dès la rentrée 2027',
   emailLabel: 'Email',
   emailReveal: 'Afficher l’email',
   copied: 'Copié dans le presse-papiers',

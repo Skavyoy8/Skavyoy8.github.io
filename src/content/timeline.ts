@@ -26,8 +26,9 @@ export const timeline: readonly TimelineStep[] = [
 ]
 
 export const timelineCopy = {
-  index: '05 / PARCOURS',
-  title: 'Mon parcours.',
+  index: '05',
+  command: 'history',
+  title: ['D’où je viens,', 'où je vais.'],
   intro: 'Le bac cette année, puis un BTS en alternance.',
   states: { 'en cours': 'En cours', visé: 'Je cherche une entreprise' },
   cta: 'Me proposer une alternance',

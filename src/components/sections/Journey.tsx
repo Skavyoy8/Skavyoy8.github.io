@@ -5,7 +5,7 @@ import { timeline, timelineCopy } from '@/content/timeline'
 export function Journey() {
   return (
     <section id="parcours" aria-labelledby="parcours-title" className="container-x relative py-28 sm:py-36">
-      <SectionHead id="parcours-title" index={timelineCopy.index} title={timelineCopy.title} intro={timelineCopy.intro} />
+      <SectionHead id="parcours-title" index={timelineCopy.index} command={timelineCopy.command} title={timelineCopy.title} intro={timelineCopy.intro} />
 
       <ol className="relative mt-16 grid gap-4 md:grid-cols-2">
         {/* Le fil entre les deux cartes. */}

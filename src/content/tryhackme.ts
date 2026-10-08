@@ -61,9 +61,11 @@ export const tryhackme = {
 }
 
 export const practiceCopy = {
-  index: '06 / LA PRATIQUE',
-  title: 'TryHackMe.',
-  intro: 'Des rooms pour apprendre, des challenges pour pratiquer.',
+  index: '06',
+  command: 'tryhackme --profil',
+  title: ['Sur le terrain,', 'room après room.'] as const,
+  intro: 'Je pratique sur TryHackMe : des rooms pour comprendre, des challenges pour m’entraîner.',
+  flag: 'THM{on_apprend_en_pratiquant}',
   profile: 'Mon profil',
   profileLink: 'Profil public',
   labels: {

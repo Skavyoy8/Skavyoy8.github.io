@@ -1,4 +1,4 @@
-export type SkillVisual = 'radar' | 'network' | 'layers' | 'wave'
+export type SkillVisual = 'ports' | 'osi' | 'shell' | 'scope'
 
 export type Pillar = {
   index: string
@@ -11,10 +11,10 @@ export type Pillar = {
 }
 
 export const interests = {
-  index: '02 / COMPÉTENCES',
-  title: 'Ce que j’apprends.',
-  intro: 'Quatre sujets que je travaille, en cours et sur mon temps libre.',
-  toolsTitle: 'Mes outils',
+  index: '02',
+  command: 'ls ~/competences',
+  title: ['Ce que je travaille,', 'en cours et chez moi.'] as const,
+  intro: 'Quatre sujets, du câble au shell. Le CIEL ajoute l’électronique aux trois classiques.',
 }
 
 export const pillars: readonly Pillar[] = [
@@ -24,7 +24,7 @@ export const pillars: readonly Pillar[] = [
     title: 'Cybersécurité',
     text: 'Je m’entraîne sur TryHackMe depuis Kali : énumération de services avec nmap, FTP et SMB, puis les premières failles web comme les IDOR.',
     tags: ['TryHackMe', 'Kali', 'nmap', 'SMB'],
-    visual: 'radar',
+    visual: 'ports',
     status: 'En pratique',
   },
   {
@@ -33,7 +33,7 @@ export const pillars: readonly Pillar[] = [
     title: 'Réseaux',
     text: 'Comprendre comment les machines communiquent : le modèle OSI couche par couche, les réseaux locaux, le DNS et l’adressage IPv6.',
     tags: ['OSI', 'LAN', 'DNS', 'IPv6'],
-    visual: 'network',
+    visual: 'osi',
     status: 'En cours',
   },
   {
@@ -42,7 +42,7 @@ export const pillars: readonly Pillar[] = [
     title: 'Linux & virtualisation',
     text: 'Linux au quotidien sous Debian, et la virtualisation pour tout tester sans rien casser : VirtualBox aujourd’hui, Proxmox demain.',
     tags: ['Debian', 'VirtualBox', 'Proxmox'],
-    visual: 'layers',
+    visual: 'shell',
     status: 'Au quotidien',
   },
   {
@@ -51,9 +51,19 @@ export const pillars: readonly Pillar[] = [
     title: 'Électronique',
     text: 'Ce qui distingue le CIEL : comprendre le signal, de l’analogique au numérique, avant qu’il ne devienne des données.',
     tags: ['Analogique', 'Numérique', 'Signal'],
-    visual: 'wave',
+    visual: 'scope',
     status: 'En cours',
   },
 ]
 
-export const tools = ['Linux (Debian)', 'Kali', 'nmap', 'Proxmox', 'VirtualBox', 'Git / GitHub', 'Obsidian', 'Next.js'] as const
+/** Textes des mini-illustrations. */
+export const visuals = {
+  ports: 'scan des ports',
+  osi: ['Application', 'Présentation', 'Session', 'Transport', 'Réseau', 'Liaison', 'Physique'],
+  shell: [
+    { cmd: 'whoami', out: 'luke' },
+    { cmd: 'sudo apt update', out: 'Tous les paquets sont à jour.' },
+    { cmd: 'qm list', out: 'les VM du lab, bientôt' },
+  ],
+  scope: { analog: 'analogique', digital: 'numérique' },
+} as const
