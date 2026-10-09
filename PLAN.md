@@ -148,10 +148,17 @@ tests/e2e/                       Playwright : desktop 1440×900, mobile 390×844
 - [x] P9.4 À propos `neofetch`, compétences en bento (ports, OSI, shell, oscilloscope), drapeau CTF, contact en panneau, nav pleine largeur, pseudo géant en pied de page — captures
 - [x] P9.5 Image OG dans le nouveau style — `npm run assets:og`
 
+### P10 — Minimaliste et complet (2026-10-09)
+- [x] P10.1 Plus aucun `[À REMPLIR]` : TryHackMe (skavyoy8, 7 rooms, 1 badge, Top 35 %, 0x3 · Pathfinder, relevé du 2026-10-09), 5 rooms listées, réseaux (Discord, Instagram, TikTok, Steam) — `grep -rn "À REMPLIR" src` vide
+- [x] P10.2 Retirés à la demande de Luke : email, CV, LinkedIn, projets CachyOS et wiki crypto, ligne « Disponible · alternance… » de l'accueil
+- [x] P10.3 Épuré : plus de bandeau d'outils, de tags, de liste de repos ni de cartes services / câblage (gardées sur la page du homelab) ; compétences en 2 × 2 ; projets et rooms en listes — captures 1440 px
+- [x] P10.4 Contact centré sur Discord (le bouton copie le pseudo)
+
 ## Journal
 
 - 2026-10-07, session 1 : direction SIGNAL, particules, lanyard, 22 tests e2e sur 33 verts.
 - 2026-10-07, session 2 : fond calme, badge recto / verso, puis changement de direction vers FIBRE sur la vidéo de Luke.
+- 2026-10-09 : site rendu minimaliste, tous les `[À REMPLIR]` complétés avec le profil TryHackMe et les réseaux de Luke.
 - 2026-10-08, session 3 : FIBRE jugé lourd par l'entourage de Luke → direction SIMPLE d'après miray-28.github.io ; 3D et libs d'animation retirées. Puis « presque copier-coller » → identité terminal / signal propre au site.
 
 Corrigé en route (à retenir) :

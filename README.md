@@ -43,7 +43,7 @@ Tout le texte du site est dans `src/content/`, un fichier par section :
 
 | Fichier | Contenu |
 | --- | --- |
-| `site.ts` | nom, héros, pied de page |
+| `site.ts` | nom, accueil, pied de page |
 | `about.ts` | « À propos » et la fiche de profil |
 | `pillars.ts` | les 4 compétences, les outils |
 | `homelab.ts` | le rack (unités), les services, le câblage |
@@ -52,28 +52,14 @@ Tout le texte du site est dans `src/content/`, un fichier par section :
 | `tryhackme.ts` | profil, stats, rooms et badges TryHackMe |
 | `links.ts` | réseaux sociaux, email, CV, contact |
 
-Les infos qui manquent encore sont marquées `TODO('[À REMPLIR] …')`. Pour les retrouver :
+Tout est rempli avec de vraies infos : rien n'est inventé. Pour mettre à jour les chiffres TryHackMe (rooms, badge, classement), modifie `tryhackme.stats` et la date `snapshotDate` dans `src/content/tryhackme.ts`. Pour ajouter une room, ajoute une entrée dans `tryhackme.rooms` (nom, catégorie, une phrase, lien).
 
-```bash
-grep -rn "À REMPLIR" src/content
-```
-
-Quand tu remplis une valeur, remplace le `TODO(...)` par la vraie valeur. Le repère « [À REMPLIR] » disparaît alors tout seul du site.
-
-**L'email** n'est jamais écrit en clair dans le site. Pour l'ajouter, encode-le puis colle la ligne obtenue dans `src/content/links.ts` :
-
-```bash
-node scripts/encode-email.mjs prenom@exemple.fr
-```
-
-**Le CV** : dépose le PDF dans `public/cv.pdf`, puis remplace la valeur `cv` par `'/cv.pdf'` dans `src/content/links.ts`.
-
-**Les rooms TryHackMe** : ajoute une entrée dans `tryhackme.rooms` (nom, catégorie, difficulté, date, ce que tu as appris, lien).
+Tes réseaux (GitHub, TryHackMe, Discord, Instagram, TikTok, Steam) sont dans `src/content/links.ts`. Il n'y a volontairement ni email ni CV sur le site : le contact passe par Discord.
 
 ## Déployer
 
 Le site se déploie tout seul sur GitHub Pages à chaque push sur `main` (workflow `.github/workflows/deploy.yml`).
-Le workflow vérifie le code, construit le site et le publie. Il tourne aussi une fois par semaine, pour rafraîchir la liste des repos GitHub.
+Le workflow vérifie le code, construit le site et le publie.
 
 ```bash
 git push origin main

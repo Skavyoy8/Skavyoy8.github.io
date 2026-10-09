@@ -17,7 +17,7 @@ Portfolio de Luke (élève en Bac Pro CIEL) — Next.js en export statique, dép
 - Avant d'utiliser l'API d'une lib, vérifie la doc de la version installée (Next, Tailwind v4, R3F, postprocessing, GSAP, Motion bougent vite).
 - Export statique : pas de route handlers dynamiques, middleware, ISR, Server Actions, `cookies()` / `headers()`, ni optimisation d'image Next.
 - Tout fichier de `public/` chargé hors `next/link` / `next/image` passe par `asset()` (`src/lib/asset.ts`) à cause du basePath.
-- Tout le texte du site vit dans `src/content/` (typé). N'invente jamais de stats, rooms, badges ou projets : laisse `[À REMPLIR]`.
+- Tout le texte du site vit dans `src/content/` (typé). N'invente jamais de stats, rooms, badges ou projets : demande à Luke.
 - Le site doit rester **simple et fluide** (direction SIMPLE, d'après miray-28.github.io) : pas de 3D, pas de lib d'animation. N'en ajoute pas sans l'accord de Luke.
 - Il a sa **propre identité** (terminal / signal : curseur `_`, commandes `$`, scan nmap, neofetch, ondes) : ne recopie ni la mise en page ni les formulations de miray.
 - Fond : un seul canvas 2D (`Ambient`), aucune allocation dans la boucle d'animation, animé seulement après le premier geste, figé en mode calme.

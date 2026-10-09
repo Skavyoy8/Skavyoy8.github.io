@@ -15,7 +15,6 @@ h1{position:absolute;left:72px;top:205px;font-size:190px;line-height:1;letter-sp
 .dot{position:absolute;left:748px;top:372px;width:80px;height:17px;background:#c8ff2e;box-shadow:0 0 30px rgba(200,255,46,.7)}
 p{position:absolute;left:80px;top:445px;font-size:30px;line-height:1.45;color:rgba(241,241,243,.8)}
 </style></head><body><canvas id="c" width="1200" height="630"></canvas><div class="glow"></div>
-<div class="pill"><i></i>Disponible · alternance BTS SIO SISR · 2027</div>
 <h1>skavyoy</h1><span class="dot"></span>
 <p>Moi, c’est Luke. Linux, réseaux et cybersécurité.<br>Je cherche une alternance en BTS SIO SISR.</p>
 <script>
