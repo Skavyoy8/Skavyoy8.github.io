@@ -83,14 +83,17 @@ test.describe('contenu', () => {
     await gotoHome(page)
     const practice = page.locator('#pratique')
     await practice.scrollIntoViewIfNeeded()
-    await expect(practice.getByRole('heading', { name: 'Anonymous' })).toBeVisible()
+    await expect(practice.getByText('Top 35 %')).toBeVisible()
     await expect(practice.getByRole('link', { name: /Voir la room : Anonymous/ })).toHaveAttribute('href', 'https://tryhackme.com/room/anonymous')
+    await expect(practice.getByRole('link', { name: /Voir mon profil TryHackMe/ })).toHaveAttribute('href', 'https://tryhackme.com/p/skavyoy8')
   })
 
-  test('contact : le grand bouton prévient tant que l’email n’est pas renseigné', async ({ page }) => {
+  test('contact : le grand bouton copie le pseudo Discord', async ({ page }) => {
     await gotoHome(page)
     await page.locator('#reseaux').scrollIntoViewIfNeeded()
-    await page.getByRole('button', { name: /Écris-moi/ }).click()
-    await expect(page.getByRole('status').filter({ hasText: /Bientôt disponible/i })).toBeVisible()
+    await page.getByRole('button', { name: /Écris-moi sur Discord/ }).click()
+    // Copié, ou affiché tel quel si le navigateur refuse le presse-papiers.
+    await expect(page.getByRole('status').filter({ hasText: 'skavyoy_' })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Instagram/ })).toHaveAttribute('href', 'https://www.instagram.com/luke_albt/')
   })
 })
