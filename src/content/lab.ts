@@ -1,5 +1,4 @@
 import { site } from './site'
-import { type Fillable, TODO } from './types'
 
 export type ProjectStatus = 'en-projet' | 'en-cours' | 'termine'
 
@@ -13,9 +12,9 @@ export type Project = {
   slug: string
   title: string
   summary: string
-  status: Fillable<ProjectStatus>
+  status: ProjectStatus
   stack: readonly string[]
-  href?: Fillable<string>
+  href?: string
   /** Une page /lab/<slug>/ existe. */
   detail?: boolean
   private?: boolean
@@ -26,8 +25,7 @@ export const labCopy = {
   command: 'ls ~/projets',
   title: ['Ce que je construis,', 'du rack au code.'] as const,
   intro: 'Des projets pour apprendre en vrai, pas juste en théorie.',
-  reposTitle: 'Sur GitHub',
-  reposIntro: 'Mes repos publics, récupérés automatiquement à chaque build.',
+  githubCta: 'Tous mes repos sur GitHub',
   details: 'Lire le détail',
   source: 'Code',
   demo: 'Démo',
@@ -56,21 +54,6 @@ export const projects: readonly Project[] = [
     private: true,
   },
   {
-    slug: 'dual-boot-cachyos',
-    title: 'Dual boot CachyOS',
-    summary: 'Linux (CachyOS, une Arch optimisée) installé à côté de Windows sur le PC gaming.',
-    status: TODO('[À REMPLIR] statut du dual boot CachyOS'),
-    stack: ['CachyOS', 'Arch Linux', 'GRUB'],
-  },
-  {
-    slug: 'wiki-crypto',
-    title: 'Wiki crypto en français',
-    summary: 'Un wiki en français pour expliquer les cryptomonnaies simplement, sans jargon ni promesses.',
-    status: TODO('[À REMPLIR] statut du wiki crypto'),
-    stack: ['Cryptomonnaies', 'Wiki'],
-    href: TODO('[À REMPLIR] lien du wiki crypto'),
-  },
-  {
     slug: 'portfolio',
     title: 'Ce portfolio',
     summary:
@@ -81,10 +64,3 @@ export const projects: readonly Project[] = [
     detail: true,
   },
 ]
-
-export const githubRepos = {
-  user: site.github.user,
-  // Ce portfolio est déjà présenté ; skavyoy-cyber ne contient qu'un README.
-  exclude: ['Skavyoy8.github.io', 'skavyoy-cyber'],
-  max: 6,
-}

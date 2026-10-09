@@ -18,12 +18,11 @@ export const site = {
 } as const
 
 export const hero = {
-  status: 'Disponible · alternance BTS SIO SISR · rentrée 2027',
   // Le h1 affiche le pseudo ; les lecteurs d'écran entendent aussi le prénom.
   name: 'skavyoy',
   srName: 'Luke, alias Skavyoy',
   lead: 'Moi, c’est Luke.',
-  intro: 'Élève en terminale Bac Pro CIEL, je m’entraîne en cybersécurité, je monte mon homelab et je cherche une entreprise pour mon BTS SIO SISR en alternance.',
+  intro: 'Élève en Bac Pro CIEL. Je m’entraîne en cybersécurité, je monte mon homelab et je cherche une alternance en BTS SIO SISR.',
   ctaPrimary: { label: 'Voir mes projets', href: '#lab' },
   ctaSecondary: { label: 'Me contacter', href: '#reseaux' },
   // La carte « scan » : mes domaines présentés comme les ports ouverts d'une machine.
@@ -43,7 +42,6 @@ export const hero = {
     who: 'Luke · Skavyoy',
     where: 'Terminale Bac Pro CIEL · France',
   },
-  ticker: ['Linux', 'Debian', 'Kali', 'nmap', 'Proxmox', 'VirtualBox', 'TCP/IP', 'DNS', 'VLAN', 'Git', 'Obsidian', 'Next.js'],
 } as const
 
 export const footer = {

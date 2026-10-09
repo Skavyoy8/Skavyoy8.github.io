@@ -1,83 +1,39 @@
 import { site } from './site'
-import { type Fillable, TODO } from './types'
 
-export type SocialId = 'github' | 'tryhackme' | 'discord' | 'linkedin' | 'instagram' | 'tiktok'
+export type SocialId = 'github' | 'tryhackme' | 'discord' | 'instagram' | 'tiktok' | 'steam'
 
 export type SocialLink = {
   id: SocialId
   label: string
-  /** Deux ou trois lettres pour les petites tuiles. */
-  short: string
-  handle: Fillable<string>
-  href: Fillable<string>
-  /** Le handle se copie au clic (Discord). */
-  copy?: boolean
+  handle: string
+  /** Pas de lien pour Discord : le pseudo se copie au clic. */
+  href?: string
 }
 
+// Steam : l'identifiant du profil = code ami + 76561197960265728.
 export const socials: readonly SocialLink[] = [
-  { id: 'github', label: 'GitHub', short: 'gh', handle: site.github.user, href: site.github.url },
-  {
-    id: 'tryhackme',
-    label: 'TryHackMe',
-    short: 'thm',
-    handle: TODO('[À REMPLIR] pseudo TryHackMe'),
-    href: TODO('[À REMPLIR] URL du profil TryHackMe'),
-  },
-  {
-    id: 'discord',
-    label: 'Discord',
-    short: 'dc',
-    handle: TODO('[À REMPLIR] pseudo Discord'),
-    href: TODO('[À REMPLIR] lien https://discord.com/users/<ID numérique>'),
-    copy: true,
-  },
-  {
-    id: 'linkedin',
-    label: 'LinkedIn',
-    short: 'in',
-    handle: TODO('[À REMPLIR] nom LinkedIn'),
-    href: TODO('[À REMPLIR] URL LinkedIn'),
-  },
-  {
-    id: 'instagram',
-    label: 'Instagram',
-    short: 'ig',
-    handle: TODO('[À REMPLIR] pseudo Instagram'),
-    href: TODO('[À REMPLIR] URL Instagram'),
-  },
-  {
-    id: 'tiktok',
-    label: 'TikTok',
-    short: 'tt',
-    handle: TODO('[À REMPLIR] pseudo TikTok'),
-    href: TODO('[À REMPLIR] URL TikTok'),
-  },
+  { id: 'github', label: 'GitHub', handle: site.github.user, href: site.github.url },
+  { id: 'tryhackme', label: 'TryHackMe', handle: 'skavyoy8', href: 'https://tryhackme.com/p/skavyoy8' },
+  { id: 'discord', label: 'Discord', handle: 'skavyoy_' },
+  { id: 'instagram', label: 'Instagram', handle: 'luke_albt', href: 'https://www.instagram.com/luke_albt/' },
+  { id: 'tiktok', label: 'TikTok', handle: 'luke_abt', href: 'https://www.tiktok.com/@luke_abt' },
+  { id: 'steam', label: 'Steam', handle: 'Skavyoy · code ami 1161545108', href: 'https://steamcommunity.com/profiles/76561199121810836' },
 ]
 
-/**
- * Email jamais en clair dans le HTML ni dans le JS.
- * Pour le remplir : node scripts/encode-email.mjs prenom@exemple.fr
- * puis colle la valeur obtenue ici : email: { encoded: '…' }
- */
-export const email: Fillable<{ encoded: string }> = TODO('[À REMPLIR] adresse email publique (de préférence dédiée)')
-
-/** Fichier attendu : public/cv.pdf, puis remplacer par '/cv.pdf'. */
-export const cv: Fillable<string> = TODO('[À REMPLIR] CV en PDF (public/cv.pdf)')
+/** Le pseudo Discord, copié par le grand bouton du contact. */
+export const discord = 'skavyoy_'
 
 export const contactCopy = {
   index: '07',
   command: 'ping skavyoy',
   title: ['Parlons alternance,', 'ou juste de cyber.'] as const,
-  intro: 'Je cherche une entreprise pour mon BTS SIO SISR, dès la rentrée 2027. Une question sur le lab ou un projet : écris-moi.',
+  intro: 'Je cherche une entreprise pour mon BTS SIO SISR, dès la rentrée 2027. Le plus simple pour me joindre : Discord.',
   pong: '64 octets de skavyoy : prêt à discuter',
   socialsTitle: 'Me retrouver',
-  cta: 'Écris-moi',
-  emailLabel: 'Email',
-  emailReveal: 'Afficher l’email',
+  cta: 'Écris-moi sur Discord',
+  ctaHint: (handle: string) => `Copie mon pseudo : ${handle}`,
   copied: 'Copié dans le presse-papiers',
   copyHandle: 'Copier le pseudo',
-  cvLabel: 'Télécharger mon CV',
-  missing: 'Bientôt disponible',
 }
 
 export const linkPage = {

@@ -2,10 +2,8 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowIcon } from '@/components/ui/Primitives'
-import { TodoMark } from '@/components/ui/Todo'
 import { linkPage, socials } from '@/content/links'
 import { site } from '@/content/site'
-import { isTodo } from '@/content/types'
 import { asset } from '@/lib/asset'
 
 export const metadata: Metadata = {
@@ -39,12 +37,7 @@ export default function LinkPage() {
           </li>
           {socials.map((link) => (
             <li key={link.id}>
-              {isTodo(link.href) ? (
-                <span className="flex items-center justify-between rounded-lg border border-line px-5 py-4">
-                  <span>{link.label}</span>
-                  <TodoMark hint={link.href.todo} />
-                </span>
-              ) : (
+              {link.href ? (
                 <a
                   href={link.href}
                   target="_blank"
@@ -52,10 +45,15 @@ export default function LinkPage() {
                   className="flex items-center justify-between rounded-lg border border-line-strong px-5 py-4 transition-colors hover:border-accent"
                 >
                   <span>
-                    {link.label} <span className="ml-2 font-mono text-sm text-muted">{isTodo(link.handle) ? '' : link.handle}</span>
+                    {link.label} <span className="ml-2 font-mono text-sm text-muted">{link.handle}</span>
                   </span>
                   <ArrowIcon className="size-4" />
                 </a>
+              ) : (
+                <span className="flex items-center justify-between rounded-lg border border-line px-5 py-4">
+                  <span>{link.label}</span>
+                  <span className="font-mono text-sm text-muted">{link.handle}</span>
+                </span>
               )}
             </li>
           ))}

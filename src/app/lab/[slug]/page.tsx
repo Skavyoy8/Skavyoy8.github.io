@@ -2,9 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowIcon } from '@/components/ui/Primitives'
-import { Fill } from '@/components/ui/Todo'
 import { labCopy, projects, statusLabel } from '@/content/lab'
-import { isTodo } from '@/content/types'
 import { PageEnter } from './PageEnter'
 
 const detailed = projects.filter((p) => p.detail)
@@ -45,7 +43,7 @@ export default async function LabPage({ params }: { params: Promise<{ slug: stri
           <div className="col-span-4 lg:col-span-8">
             <p className="label flex flex-wrap items-center gap-3 text-accent">
               <span className="size-1.5 rounded-full bg-accent" aria-hidden="true" />
-              <Fill value={project.status}>{(s) => statusLabel[s]}</Fill>
+              {statusLabel[project.status]}
               {project.private ? <span className="text-muted">· {labCopy.privateLabel}</span> : null}
             </p>
             <h1 className="text-display mt-5 text-balance" data-page-title>
@@ -61,7 +59,7 @@ export default async function LabPage({ params }: { params: Promise<{ slug: stri
                 </li>
               ))}
             </ul>
-            {project.href && !isTodo(project.href) ? (
+            {project.href ? (
               <a href={project.href} target="_blank" rel="noopener noreferrer" className="label mt-6 inline-flex items-center gap-2 hover:text-accent">
                 {labCopy.source} <ArrowIcon className="size-3.5" />
               </a>
