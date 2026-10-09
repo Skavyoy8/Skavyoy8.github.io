@@ -70,41 +70,15 @@ function ScanCard() {
   )
 }
 
-/** Bandeau d'outils qui défile doucement en bas de l'accueil (figé en mode calme). */
-function Ticker() {
-  const items = hero.ticker.map((tool) => (
-    <li key={tool} className="flex shrink-0 items-center gap-8 pr-8">
-      {tool}
-      <span className="text-accent/60" aria-hidden="true">
-        /
-      </span>
-    </li>
-  ))
-  return (
-    <div className="ticker border-y border-line py-4" aria-label="Mes outils">
-      <div className="ticker-track label flex w-max text-fg/55">
-        <ul className="flex">{items}</ul>
-        <ul className="flex" aria-hidden="true">
-          {items}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
 /** L'accueil : le pseudo en grand suivi d'un curseur, qui je suis, et la carte « scan ». */
 export function Hero() {
   const letters = [...hero.name]
   return (
-    <section id="accueil" aria-labelledby="accueil-title" className="relative flex min-h-svh flex-col pt-28 sm:pt-32">
+    <section id="accueil" aria-labelledby="accueil-title" className="relative flex min-h-svh flex-col pt-28 pb-8 sm:pt-32">
       <div className="container-x grid flex-1 items-center gap-x-12 gap-y-14 pb-16 lg:grid-cols-12">
         <div className="lg:col-span-7">
-          <p className="fade-up mono flex items-center gap-3 text-fg/75">
-            <span className="pulse-dot size-2 rounded-full bg-accent shadow-[0_0_10px_#c8ff2e]" aria-hidden="true" />
-            {hero.status}
-          </p>
 
-          <h1 id="accueil-title" className="mt-7 text-[clamp(4rem,11vw,10rem)] leading-[0.95] font-semibold tracking-[-0.065em]">
+          <h1 id="accueil-title" className="text-[clamp(4rem,11vw,10rem)] leading-[0.95] font-semibold tracking-[-0.065em]">
             <span className="sr-only">{hero.srName}</span>
             <span aria-hidden="true" className="inline-flex items-baseline pb-[0.06em]">
               {letters.map((letter, i) => (
@@ -139,8 +113,6 @@ export function Hero() {
           <ScanCard />
         </div>
       </div>
-
-      <Ticker />
     </section>
   )
 }

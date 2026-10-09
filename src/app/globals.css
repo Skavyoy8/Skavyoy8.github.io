@@ -153,24 +153,6 @@
   color: var(--color-muted);
 }
 
-/* Repère de contenu manquant */
-.todo {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.15em 0.5em;
-  border: 1px dashed rgb(200 255 46 / 0.45);
-  border-radius: 4px;
-  color: var(--color-accent);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  line-height: 1.4;
-  text-transform: uppercase;
-  white-space: nowrap;
-  vertical-align: middle;
-}
-
 /* ── Fond animé ─────────────────────────────────────────────────────── */
 .ambient {
   position: fixed;
@@ -315,7 +297,7 @@ html[data-js='true'][data-calm='false'] [data-reveal]:not([data-in]) {
 }
 
 
-/* ── Curseur, carte « scan », bandeau d'outils ───────────────────────── */
+/* ── Curseur et carte « scan » ───────────────────────── */
 .caret {
   animation: caret 1.1s steps(1, end) infinite;
 }
@@ -335,21 +317,6 @@ html[data-js='true'][data-calm='false'] [data-reveal]:not([data-in]) {
   from {
     opacity: 0;
     transform: translate3d(-6px, 0, 0);
-  }
-}
-
-.ticker {
-  overflow: hidden;
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-}
-
-.ticker-track {
-  animation: ticker 45s linear infinite;
-}
-
-@keyframes ticker {
-  to {
-    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -604,7 +571,6 @@ html[data-calm='true'] .fade-up,
 html[data-calm='true'] .pulse-dot,
 html[data-calm='true'] .caret,
 html[data-calm='true'] .scan-line,
-html[data-calm='true'] .ticker-track,
 html[data-calm='true'] .port-cell,
 html[data-calm='true'] .osi-packet,
 html[data-calm='true'] .flag-wave,

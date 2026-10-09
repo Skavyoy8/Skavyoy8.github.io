@@ -54,7 +54,7 @@ export function SectionHead({ id, index, command, title, intro, children }: { id
           </span>
         </p>
         <h2 id={id} className="text-h2 mt-6 text-balance">
-          {title[0]} <span className="text-muted">{title[1]}</span>
+          {title[0]} <span className="block text-muted">{title[1]}</span>
         </h2>
       </div>
       {intro || children ? (
