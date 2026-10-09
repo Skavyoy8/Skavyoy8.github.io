@@ -1,72 +1,23 @@
 'use client'
 
-import { type ReactNode, useState } from 'react'
-import { contactCopy, email } from '@/content/links'
-import { isTodo } from '@/content/types'
-import { decodeEmail } from '@/lib/email'
+import type { ReactNode } from 'react'
+import { contactCopy } from '@/content/links'
 import { toast } from '@/lib/events'
 
-export function CopyButton({ text, label, className = '' }: { text: string; label: string; className?: string }) {
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(text)
-      toast(`${contactCopy.copied} : ${text}`)
-    } catch {
-      toast(text)
-    }
-  }
-  return (
-    <button type="button" onClick={copy} className={className} aria-label={`${label} : ${text}`}>
-      {label}
-    </button>
-  )
-}
-
-/** L'adresse n'existe dans la page qu'après un clic : invisible pour les robots qui lisent le HTML. */
-export function EmailReveal({ className = '' }: { className?: string }) {
-  const [address, setAddress] = useState<string | null>(null)
-
-  if (address) {
-    return (
-      <a href={`mailto:${address}`} className={className}>
-        {address}
-      </a>
-    )
-  }
-
-  const reveal = () => {
-    if (isTodo(email)) {
-      toast(`${contactCopy.emailLabel} : ${contactCopy.missing.toLowerCase()}`)
-      return
-    }
-    setAddress(decodeEmail(email.encoded))
-  }
-
-  return (
-    <button type="button" onClick={reveal} className={className}>
-      {contactCopy.emailReveal}
-    </button>
-  )
-}
-
-/** Gros CTA du contact : révèle l'email puis ouvre le client mail. */
-export function useEmailAction() {
-  return () => {
-    if (isTodo(email)) {
-      toast(`${contactCopy.emailLabel} : ${contactCopy.missing.toLowerCase()}`)
-      return
-    }
-    const address = decodeEmail(email.encoded)
-    toast(address)
-    window.location.href = `mailto:${address}`
+async function copy(text: string) {
+  try {
+    await navigator.clipboard.writeText(text)
+    toast(`${contactCopy.copied} : ${text}`)
+  } catch {
+    // Presse-papiers refusé (navigateur strict) : on affiche au moins le texte.
+    toast(text)
   }
 }
 
-/** Le grand bouton du contact : ouvre le client mail (ou prévient que l'adresse arrive bientôt). */
-export function EmailCta({ className = '', children }: { className?: string; children: ReactNode }) {
-  const onClick = useEmailAction()
+/** Un bouton qui copie un texte (le pseudo Discord) et le confirme par une notification. */
+export function CopyButton({ text, label, className = '', children }: { text: string; label: string; className?: string; children: ReactNode }) {
   return (
-    <button type="button" onClick={onClick} className={className}>
+    <button type="button" onClick={() => copy(text)} className={className} aria-label={label}>
       {children}
     </button>
   )

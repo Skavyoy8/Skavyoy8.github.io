@@ -9,12 +9,8 @@ import { Skills } from '@/components/sections/Skills'
 import { socials } from '@/content/links'
 import { pillars } from '@/content/pillars'
 import { site } from '@/content/site'
-import { isTodo } from '@/content/types'
-import { getRepos } from '@/lib/github'
 
-export default async function Home() {
-  const { repos } = await getRepos()
-
+export default function Home() {
   const person = {
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -26,7 +22,7 @@ export default async function Home() {
     description: site.description,
     address: { '@type': 'PostalAddress', addressCountry: 'FR' },
     knowsAbout: pillars.map((p) => p.title),
-    sameAs: socials.flatMap((s) => (isTodo(s.href) ? [] : [s.href])),
+    sameAs: socials.flatMap((s) => (s.href ? [s.href] : [])),
   }
 
   return (
@@ -36,7 +32,7 @@ export default async function Home() {
         <About />
         <Skills />
         <Homelab />
-        <Projects repos={repos} />
+        <Projects />
         <Journey />
         <Practice />
         <Contact />

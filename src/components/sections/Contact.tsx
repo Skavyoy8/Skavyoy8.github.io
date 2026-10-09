@@ -1,10 +1,7 @@
 import type { ReactNode } from 'react'
 import { ArrowIcon, delay, SectionHead } from '@/components/ui/Primitives'
-import { EmailCta, EmailReveal } from '@/components/ui/ContactActions'
-import { Fill, TodoMark } from '@/components/ui/Todo'
-import { contactCopy, cv, type SocialId, socials } from '@/content/links'
-import { isTodo } from '@/content/types'
-import { asset } from '@/lib/asset'
+import { CopyButton } from '@/components/ui/ContactActions'
+import { contactCopy, discord, type SocialId, socials } from '@/content/links'
 
 function SocialIcon({ id }: { id: SocialId }) {
   const paths: Record<SocialId, ReactNode> = {
@@ -24,12 +21,6 @@ function SocialIcon({ id }: { id: SocialId }) {
         <circle cx="12.2" cy="10.5" r=".9" />
       </>
     ),
-    linkedin: (
-      <>
-        <rect x="3" y="3" width="14" height="14" rx="3" />
-        <path d="M7 9v5M7 6.5v.01M10 14v-5M10 11c0-1.5 3.5-2.5 3.5 0v3" />
-      </>
-    ),
     instagram: (
       <>
         <rect x="3" y="3" width="14" height="14" rx="4" />
@@ -38,6 +29,14 @@ function SocialIcon({ id }: { id: SocialId }) {
       </>
     ),
     tiktok: <path d="M11 3v9.5a2.8 2.8 0 1 1-2.8-2.8M11 3c.4 2.2 1.9 3.6 4 3.8" />,
+    steam: (
+      <>
+        <circle cx="10" cy="10" r="7.5" />
+        <circle cx="12.6" cy="8" r="2" />
+        <circle cx="7.4" cy="12.6" r="1.6" />
+        <path d="m8.8 11.9 2.2-2.6" />
+      </>
+    ),
   }
   return (
     <svg viewBox="0 0 20 20" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -46,9 +45,24 @@ function SocialIcon({ id }: { id: SocialId }) {
   )
 }
 
-const tileClass = 'flex h-full items-center gap-3 rounded-2xl border px-4 py-3.5'
+const tileClass = 'group flex h-full w-full items-center gap-3 rounded-2xl border border-line-strong bg-white/[0.02] px-4 py-3.5 text-left transition-colors hover:border-accent/50'
 
-/** Contact : un grand panneau, l'appel à m'écrire à gauche, mes profils en tuiles à droite. */
+function TileBody({ id, label, handle, external }: { id: SocialId; label: string; handle: string; external: boolean }) {
+  return (
+    <>
+      <span className="text-accent">
+        <SocialIcon id={id} />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[0.9rem] font-medium text-fg/95">{label}</span>
+        <span className="mono block break-words text-muted">{handle}</span>
+      </span>
+      <ArrowIcon className={`size-3.5 shrink-0 text-muted transition-colors group-hover:text-accent ${external ? '' : 'rotate-90'}`} />
+    </>
+  )
+}
+
+/** Contact : un grand panneau, l'appel à m'écrire sur Discord à gauche, mes profils en tuiles à droite. */
 export function Contact() {
   return (
     <section id="reseaux" aria-labelledby="reseaux-title" className="container-x relative pt-28 pb-20 sm:pt-36">
@@ -62,24 +76,17 @@ export function Contact() {
             {contactCopy.pong}
           </p>
           <p className="mt-6 max-w-lg text-[1.15rem] leading-relaxed text-pretty text-fg/85">{contactCopy.intro}</p>
-          <EmailCta className="group mt-10 inline-flex items-center gap-4 rounded-full bg-accent py-5 pr-6 pl-8 text-[1.35rem] font-semibold tracking-[-0.02em] text-ink shadow-[0_18px_60px_-18px_rgb(200_255_46/0.7)] transition-[transform,background-color] duration-500 hover:-translate-y-0.5 hover:bg-[#d8ff6a]">
+          <CopyButton
+            text={discord}
+            label={`${contactCopy.cta} : ${contactCopy.ctaHint(discord)}`}
+            className="group mt-10 inline-flex items-center gap-4 rounded-full bg-accent py-4 pr-4 pl-6 text-[1.05rem] font-semibold whitespace-nowrap sm:py-5 sm:pr-6 sm:pl-8 sm:text-[1.25rem] tracking-[-0.02em] text-ink shadow-[0_18px_60px_-18px_rgb(200_255_46/0.7)] transition-[transform,background-color] duration-500 hover:-translate-y-0.5 hover:bg-[#d8ff6a]"
+          >
             {contactCopy.cta}
             <span className="grid size-10 place-items-center rounded-full bg-ink text-accent">
-              <ArrowIcon className="size-4 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <SocialIcon id="discord" />
             </span>
-          </EmailCta>
-          <div className="mono mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-muted">
-            <EmailReveal className="text-fg/85 underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent" />
-            {isTodo(cv) ? (
-              <span className="flex items-center gap-2">
-                {contactCopy.cvLabel} <TodoMark hint={cv.todo} />
-              </span>
-            ) : (
-              <a href={asset(cv)} download className="text-fg/85 underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent">
-                {contactCopy.cvLabel}
-              </a>
-            )}
-          </div>
+          </CopyButton>
+          <p className="mono mt-5 text-muted">{contactCopy.ctaHint(discord)}</p>
         </div>
 
         <div className="relative border-t border-line p-8 sm:p-12 lg:col-span-5 lg:border-t-0 lg:border-l">
@@ -87,30 +94,15 @@ export function Contact() {
           <ul className="mt-6 grid gap-3 sm:grid-cols-2">
             {socials.map((social, i) => (
               <li key={social.id} data-reveal style={delay(0.1 + i * 0.04)}>
-                {isTodo(social.href) ? (
-                  <div className={`${tileClass} border-dashed border-white/10`}>
-                    <span className="text-muted">
-                      <SocialIcon id={social.id} />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[0.9rem] text-fg/70">{social.label}</span>
-                      <TodoMark hint={social.href.todo} />
-                    </span>
-                  </div>
-                ) : (
-                  <a href={social.href} target="_blank" rel="noopener noreferrer" className={`${tileClass} group border-line-strong bg-white/[0.02] transition-colors hover:border-accent/50`}>
-                    <span className="text-accent">
-                      <SocialIcon id={social.id} />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[0.9rem] font-medium text-fg/95">{social.label}</span>
-                      <span className="mono block truncate text-muted">
-                        <Fill value={social.handle}>{(handle) => handle}</Fill>
-                      </span>
-                    </span>
-                    <ArrowIcon className="size-3.5 shrink-0 text-muted transition-colors group-hover:text-accent" />
+                {social.href ? (
+                  <a href={social.href} target="_blank" rel="noopener noreferrer" className={tileClass}>
+                    <TileBody id={social.id} label={social.label} handle={social.handle} external />
                     <span className="sr-only">(nouvel onglet)</span>
                   </a>
+                ) : (
+                  <CopyButton text={social.handle} label={`${contactCopy.copyHandle} ${social.label} : ${social.handle}`} className={tileClass}>
+                    <TileBody id={social.id} label={social.label} handle={social.handle} external={false} />
+                  </CopyButton>
                 )}
               </li>
             ))}

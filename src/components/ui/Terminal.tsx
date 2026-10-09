@@ -8,7 +8,6 @@ import { socials } from '@/content/links'
 import { sections } from '@/content/nav'
 import { terminalCopy } from '@/content/terminal'
 import { tryhackme } from '@/content/tryhackme'
-import { isTodo } from '@/content/types'
 import { calmStore } from '@/lib/calm'
 import { on } from '@/lib/events'
 import { scrollToTarget } from '@/lib/scroll'
@@ -17,7 +16,7 @@ type Line = { id: number; kind: 'in' | 'out' | 'err' | 'ok'; text: string }
 
 const COMMANDS = ['help', 'whoami', 'ls', 'cd', 'cat', 'projects', 'rooms', 'open', 'calm', 'clear', 'exit', 'sudo'] as const
 const ALIASES: Record<string, string> = { contact: 'reseaux', about: 'a-propos', apropos: 'a-propos', home: 'accueil', competences: 'interets', apprends: 'interets', projets: 'lab', projects: 'lab', tryhackme: 'pratique', thm: 'pratique', rooms: 'pratique' }
-const OPENABLE: Record<string, string> = { github: 'github', gh: 'github', thm: 'tryhackme', tryhackme: 'tryhackme', discord: 'discord', linkedin: 'linkedin', instagram: 'instagram', tiktok: 'tiktok' }
+const OPENABLE: Record<string, string> = { github: 'github', gh: 'github', thm: 'tryhackme', tryhackme: 'tryhackme', discord: 'discord', instagram: 'instagram', insta: 'instagram', tiktok: 'tiktok', steam: 'steam' }
 
 let lineId = 0
 const make = (kind: Line['kind'], text: string): Line => ({ id: ++lineId, kind, text })
@@ -40,7 +39,7 @@ function complete(value: string): string {
   let pool: readonly string[] = []
   const prefix = `${cmd} `
   if (cmd === 'cd') pool = sections.map((s) => s.id)
-  else if (cmd === 'open') pool = ['github', 'thm', 'discord', 'linkedin', 'instagram', 'tiktok']
+  else if (cmd === 'open') pool = ['github', 'thm', 'discord', 'instagram', 'tiktok', 'steam']
   else if (cmd === 'cat') pool = ['about']
   else if (cmd === 'sudo') pool = ['hire-luke']
   const match = pool.filter((p) => p.startsWith(arg))
@@ -123,14 +122,14 @@ export function Terminal() {
         if (arg !== 'about') return [make('err', 'usage : cat about')]
         return about.paragraphs.map((t) => make('out', t))
       case 'projects':
-        return projects.map((p) => make('out', `${p.title.padEnd(26, ' ')}${isTodo(p.status) ? '[À REMPLIR]' : statusLabel[p.status]}`))
+        return projects.map((p) => make('out', `${p.title.padEnd(26, ' ')}${statusLabel[p.status]}`))
       case 'rooms':
         return tryhackme.rooms.map((r) => make('out', `${r.name.padEnd(26, ' ')}${r.learned}`))
       case 'open': {
         const id = OPENABLE[arg.toLowerCase()]
         const link = socials.find((s) => s.id === id)
         if (!link) return [make('err', terminalCopy.openUsage)]
-        if (isTodo(link.href)) return [make('err', terminalCopy.openMissing(link.label))]
+        if (!link.href) return [make('ok', terminalCopy.openHandle(link.label, link.handle))]
         window.open(link.href, '_blank', 'noopener,noreferrer')
         return [make('ok', terminalCopy.openOk(link.label))]
       }
