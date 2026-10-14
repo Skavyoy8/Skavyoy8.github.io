@@ -1,10 +1,16 @@
-import { expect, test } from '@playwright/test'
+import { expect, type Page, test } from '@playwright/test'
 import { gotoHome, watchErrors } from './helpers'
 
+/** Une page secondaire (habillage sombre : terminal, fond animé, mode calme). */
+async function gotoLab(page: Page) {
+  await page.goto('./lab/homelab/')
+  await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true')
+}
+
 test.describe('terminal', () => {
-  test('ouverture clavier, help, autocomplétion, historique, sudo, calm, cd', async ({ page }) => {
+  test('ouverture clavier, help, autocomplétion, historique, sudo, calm', async ({ page }) => {
     const errors = watchErrors(page)
-    await gotoHome(page)
+    await gotoLab(page)
     await page.keyboard.press('Control+k')
     const term = page.getByRole('dialog', { name: 'Terminal du portfolio' })
     await expect(term).toBeVisible()
@@ -38,11 +44,8 @@ test.describe('terminal', () => {
     await input.press('Enter')
     await expect(page.locator('html')).not.toHaveAttribute('data-calm', calmAfter ?? '')
 
-    await input.fill('cd homelab')
-    await input.press('Enter')
+    await page.keyboard.press('Escape')
     await expect(term).toBeHidden()
-    await expect(page.locator('#homelab')).toBeInViewport({ timeout: 6000 })
-
     await page.keyboard.press('Control+k')
     await expect(term).toBeVisible()
     await page.keyboard.press('Escape')
@@ -54,7 +57,7 @@ test.describe('terminal', () => {
 test.describe('fond animé et mode calme', () => {
   test('le fond s’anime, se fige en mode calme, et le contenu reste complet', async ({ page }, testInfo) => {
     const errors = watchErrors(page)
-    await gotoHome(page)
+    await gotoLab(page)
     const canvas = page.locator('.ambient canvas')
     await expect(canvas).toHaveCount(1)
     if (testInfo.project.name === 'reduced-motion') {
@@ -72,28 +75,35 @@ test.describe('fond animé et mode calme', () => {
     // En mode calme, rien n'attend le scroll : tout le contenu est visible tout de suite.
     const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal]')].filter((el) => getComputedStyle(el).opacity !== '1').length)
     expect(hidden).toBe(0)
-    await page.locator('#homelab').scrollIntoViewIfNeeded()
     await expect(page.getByRole('img', { name: /Plan du rack/ })).toBeVisible()
     expect(errors).toEqual([])
   })
 })
 
 test.describe('contenu', () => {
-  test('TryHackMe : la room terminée et ses liens', async ({ page }) => {
+  test('TryHackMe : les chiffres et les liens', async ({ page }) => {
     await gotoHome(page)
-    const practice = page.locator('#pratique')
-    await practice.scrollIntoViewIfNeeded()
-    await expect(practice.getByText('Top 35 %')).toBeVisible()
-    await expect(practice.getByRole('link', { name: /Voir la room : Anonymous/ })).toHaveAttribute('href', 'https://tryhackme.com/room/anonymous')
-    await expect(practice.getByRole('link', { name: /Voir mon profil TryHackMe/ })).toHaveAttribute('href', 'https://tryhackme.com/p/skavyoy8')
+    const skills = page.locator('#competences')
+    await skills.scrollIntoViewIfNeeded()
+    await expect(skills.getByText('Top 35 %', { exact: true })).toBeVisible()
+    await expect(skills.getByRole('link', { name: /Anonymous/ })).toHaveAttribute('href', 'https://tryhackme.com/room/anonymous')
+    await expect(skills.getByRole('link', { name: /Voir mon profil/ })).toHaveAttribute('href', 'https://tryhackme.com/p/skavyoy8')
   })
 
-  test('contact : le grand bouton copie le pseudo Discord', async ({ page }) => {
+  test('homelab : cliquer une pièce du rack affiche sa fiche', async ({ page }) => {
     await gotoHome(page)
-    await page.locator('#reseaux').scrollIntoViewIfNeeded()
-    await page.getByRole('button', { name: /Écris-moi sur Discord/ }).click()
-    // Copié, ou affiché tel quel si le navigateur refuse le presse-papiers.
-    await expect(page.getByRole('status').filter({ hasText: 'skavyoy_' })).toBeVisible()
-    await expect(page.getByRole('link', { name: /Instagram/ })).toHaveAttribute('href', 'https://www.instagram.com/luke_albt/')
+    const lab = page.locator('#homelab')
+    await lab.scrollIntoViewIfNeeded()
+    await lab.getByRole('button', { name: /^Switch/ }).first().click()
+    await expect(lab.getByText('Switch MokerLink').first()).toBeVisible()
+  })
+
+  test('contact : le bouton copie le pseudo Discord', async ({ page }) => {
+    await gotoHome(page)
+    const contact = page.locator('#contact')
+    await contact.scrollIntoViewIfNeeded()
+    await contact.getByRole('button', { name: /mon pseudo Discord/ }).click()
+    await expect(contact.getByText('Copié !')).toBeVisible()
+    await expect(contact.getByRole('link', { name: /Instagram/ })).toHaveAttribute('href', 'https://www.instagram.com/luke_albt/')
   })
 })

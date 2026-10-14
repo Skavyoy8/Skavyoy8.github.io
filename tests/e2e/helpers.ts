@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, type Page, type TestInfo } from '@playwright/test'
 
-export const SECTIONS = ['accueil', 'a-propos', 'interets', 'homelab', 'lab', 'parcours', 'pratique', 'reseaux'] as const
+export const SECTIONS = ['accueil', 'a-propos', 'competences', 'homelab', 'projets', 'parcours', 'contact'] as const
 
 /** Collecte les erreurs console et les exceptions de la page. */
 export function watchErrors(page: Page) {

@@ -7,8 +7,8 @@ test.describe('accueil', () => {
     await gotoHome(page)
     await expect(page.locator('html')).toHaveAttribute('lang', 'fr')
     for (const id of SECTIONS) await expect(page.locator(`#${id}`)).toBeAttached()
-    await expect(page.getByRole('heading', { level: 1, name: /Luke, alias Skavyoy/ })).toBeVisible()
-    await expect(page.getByRole('link', { name: /Skavyoy, accueil/ })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: /Cybersécurité/ })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Luke, alias Skavyoy : retour en haut/ })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Aller au contenu' })).toBeAttached()
     await scrollThrough(page)
     expect(errors).toEqual([])
@@ -20,23 +20,17 @@ test.describe('accueil', () => {
     await expectNoSeriousA11yViolations(page, testInfo)
   })
 
-  test('navigation par ancres (barre sur ordinateur, menu sur téléphone)', async ({ page }) => {
+  test('navigation par ancres', async ({ page }) => {
     await gotoHome(page)
-    const desktop = (page.viewportSize()?.width ?? 0) >= 1024
+    const desktop = (page.viewportSize()?.width ?? 0) > 700
     if (desktop) {
-      await page.getByRole('navigation', { name: 'Navigation principale' }).getByRole('link', { name: 'Homelab' }).click()
+      await page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: 'Homelab' }).click()
       await expect(page.locator('#homelab')).toBeInViewport({ timeout: 6000 })
       return
     }
-    await page.getByRole('button', { name: 'Menu' }).click()
-    const menu = page.getByRole('dialog', { name: 'Menu' })
-    await expect(menu).toBeVisible()
-    await menu.getByRole('link', { name: /TryHackMe/ }).click()
-    await expect(menu).toBeHidden()
-    await expect(page.locator('#pratique')).toBeInViewport({ timeout: 6000 })
-    await page.getByRole('button', { name: 'Menu' }).click()
-    await page.keyboard.press('Escape')
-    await expect(page.getByRole('dialog', { name: 'Menu' })).toBeHidden()
+    // Sur téléphone, le menu des sections est masqué : le bouton « Me contacter » reste.
+    await page.getByRole('link', { name: 'Me contacter' }).first().click()
+    await expect(page.locator('#contact')).toBeInViewport({ timeout: 6000 })
   })
 
   test('pages secondaires : détail du lab et /link/', async ({ page }) => {
