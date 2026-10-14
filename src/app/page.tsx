@@ -1,11 +1,4 @@
-import { About } from '@/components/sections/About'
-import { Contact } from '@/components/sections/Contact'
-import { Hero } from '@/components/sections/Hero'
-import { Homelab } from '@/components/sections/Homelab'
-import { Journey } from '@/components/sections/Journey'
-import { Practice } from '@/components/sections/Practice'
-import { Projects } from '@/components/sections/Projects'
-import { Skills } from '@/components/sections/Skills'
+import { Atelier } from '@/components/atelier/Atelier'
 import { socials } from '@/content/links'
 import { pillars } from '@/content/pillars'
 import { site } from '@/content/site'
@@ -27,16 +20,7 @@ export default function Home() {
 
   return (
     <>
-      <main id="contenu" tabIndex={-1} className="relative z-10 outline-none">
-        <Hero />
-        <About />
-        <Skills />
-        <Homelab />
-        <Projects />
-        <Journey />
-        <Practice />
-        <Contact />
-      </main>
+      <Atelier />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, '\\u003c') }} />
     </>
   )

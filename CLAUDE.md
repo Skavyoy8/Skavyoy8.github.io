@@ -5,6 +5,12 @@ Portfolio de Luke (élève en Bac Pro CIEL) — Next.js en export statique, dép
 - Spécification complète : `BRIEF.md` (source de vérité). Suivi : `PLAN.md`, à cocher au fur et à mesure.
 - Luke apprend Git et le dev web : dans tes récaps (en français), explique en une phrase chaque choix non évident.
 
+## Accueil « Atelier » (depuis octobre 2026)
+
+- L'accueil vient du design « V5 · Atelier » choisi par Luke : fond clair, accent orange, polices Red Hat, rack 3D en CSS qu'on fait tourner. Ce choix remplace, pour l'accueil seulement, les règles « pas de 3D » et « identité terminal » ci-dessous.
+- Balisage et textes : `src/components/atelier/AtelierMarkup.tsx` (exception à la règle « texte dans `src/content/` ») ; logique : `Atelier.tsx` ; styles : `atelier.css`.
+- Les pages secondaires (`/lab/…`, `/link/`) gardent l'habillage sombre, via `src/app/(legacy)/layout.tsx`.
+
 ## Commandes
 
 - `npm run dev` — serveur de dev
