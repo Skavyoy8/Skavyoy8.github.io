@@ -8,7 +8,7 @@ test.describe('accueil', () => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'fr')
     for (const id of SECTIONS) await expect(page.locator(`#${id}`)).toBeAttached()
     await expect(page.getByRole('heading', { level: 1, name: /Cybersécurité/ })).toBeVisible()
-    await expect(page.getByRole('link', { name: /Luke, alias Skavyoy : retour en haut/ })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Luke, alias Skavyoy8 : retour en haut/ })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Aller au contenu' })).toBeAttached()
     await scrollThrough(page)
     expect(errors).toEqual([])
